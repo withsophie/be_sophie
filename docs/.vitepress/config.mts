@@ -7,6 +7,8 @@ export default defineConfig({
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
+    lastUpdated: true,
+    externalLinkIcon: false,
     socialLinks: [
       { icon: 'x', link: 'https://x.com/ThinkWithSophie' },
       { icon: 'discord', link: 'https://discord.gg/93NPYytEsJ' },
