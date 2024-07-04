@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
+  rewrites: {'/index' : '/en/about/slogan'},
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
@@ -29,7 +30,8 @@ export default defineConfig({
             items: [
               { text: 'Sophie Mindmap', link: 'http://mm.withsophie.ai' },
               { text: 'Bubble Burster', link: 'http://bb.withsophie.ai' },
-              { text: 'Sophie Reader', link: 'http://reader.withsophie.ai' }
+              { text: 'Sophie Reader', link: 'http://reader.withsophie.ai' },
+              { text: 'Publish', link: 'http://blog.bizport.cn:8888/job/blog/build?token=withsophie-blog' },
             ]
           },
           { text: 'Roadmap', link: 'https://feedback.withsophie.ai/roadmap' },

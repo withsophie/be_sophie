@@ -27,5 +27,6 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
     link: /en/think/eternal_wisdom_knowledge
+
 ---
 
