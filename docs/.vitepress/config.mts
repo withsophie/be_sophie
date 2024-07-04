@@ -40,9 +40,11 @@ export default defineConfig({
           {
             text: 'ABOUT',
             items: [
-              { text: 'The Wisdom of Eternal Life, the Knowledge of Eternal Life', link: '/en/think/eternal_wisdom_knowledge' },
-              { text: 'New Magellan Project 🚀', link: '/en/think/new_magellan_project' },
-              { text: 'Reading Should Aim to Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+              { text: 'Vision and Slogans', link: '/en/about/slogan' },
+              { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+            ],
+          },
+          {
             text: 'DEEP THINK',
             items: [
               { text: 'The Wisdom of Eternal Life, the Knowledge of Eternal Life', link: '/en/think/eternal_wisdom_knowledge' },
