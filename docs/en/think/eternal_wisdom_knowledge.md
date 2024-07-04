@@ -1,4 +1,4 @@
-# The Wisdom of Eternal Life, the Knowledge of Eternal Life
+# The Eternal Wisdom
 > Ryan @ Jun 2024
 
 ![eternal\_wisdom\_knowledge](/img/eternal\_wisdom\_knowledge.jpeg)
