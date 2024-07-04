@@ -6,6 +6,7 @@ export default defineConfig({
   description: "withsophie site description",
   themeConfig: {
     logo: "/icon.png",
+    logoLink: "http://think.withsophie.ai",
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ],
@@ -42,7 +43,7 @@ export default defineConfig({
       link: '/zh/',
       themeConfig: {
         nav: [
-          { text: '首页', link: '/' },
+          { text: '首页', link: '/zh/index' },
           { text: '思考', link: '/zh/think/eternal_wisdom_knowledge' }
         ],
 
