@@ -4,7 +4,7 @@
 ​​
 ## SLOGAN
 
-May the sophie be with you.
+![May the sophie be with you.](img/slogan_social.png)
 
 ## VISION
 
