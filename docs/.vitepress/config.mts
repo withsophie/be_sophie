@@ -33,7 +33,7 @@ export default defineConfig({
               { text: 'Sophie Mindmap', link: 'http://mm.withsophie.ai' },
               { text: 'Bubble Burster', link: 'http://bb.withsophie.ai' },
               { text: 'Sophie Reader', link: 'http://reader.withsophie.ai' },
-              { text: 'Publish', link: 'http://blog.bizport.cn:8888/job/blog/build?token=withsophie-blog' },
+              { text: 'Publish', link: 'http://publish.withsophie.ai/' },
             ]
           },
           { text: 'Roadmap', link: 'https://feedback.withsophie.ai/roadmap' },
