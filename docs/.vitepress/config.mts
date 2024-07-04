@@ -45,13 +45,12 @@ export default defineConfig({
             text: 'ABOUT',
             items: [
               { text: 'Vision and Slogans', link: '/en/about/slogan' },
-              { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+              
             ],
           },
           {
             text: 'SOPHIE STORY',
             items: [
-              { text: 'Vision and Slogans', link: '/en/about/slogan' },
               { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
             ],
           },
