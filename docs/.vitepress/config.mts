@@ -49,6 +49,13 @@ export default defineConfig({
             ],
           },
           {
+            text: 'SOPHIE STORY',
+            items: [
+              { text: 'Vision and Slogans', link: '/en/about/slogan' },
+              { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+            ],
+          },
+          {
             text: 'DEEP THINK',
             items: [
               { text: 'The Wisdom of Eternal Life, the Knowledge of Eternal Life', link: '/en/think/eternal_wisdom_knowledge' },
