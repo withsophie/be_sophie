@@ -1,4 +1,4 @@
-# New Magellan Project 🚀
+# New Magellan Project
 
 > Ryan @ May 2022
 
