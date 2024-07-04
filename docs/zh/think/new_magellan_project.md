@@ -2,7 +2,7 @@
 
 > Ryan @ May 2022
 
-![New Magellan Project](../../img/new\_magellan\_project.jpeg)
+![New Magellan Project](/img/new\_magellan\_project.jpeg)
 
 ## 新麦哲伦计划
 

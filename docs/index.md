@@ -7,7 +7,7 @@ hero:
   text: "withsophie site "
   tagline: My great project tagline
   image: 
-    src: "/img/logo_txt_bk.png"
+    src: "/logo_txt_bk.png"
     alt: "bg image"
   actions:
     - theme: brand

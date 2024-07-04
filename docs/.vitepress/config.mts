@@ -5,7 +5,7 @@ export default defineConfig({
   title: "withsophie",
   description: "withsophie site description",
   themeConfig: {
-    logo: "/img/icon.png",
+    logo: "/icon.png",
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ],
