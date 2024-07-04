@@ -2,16 +2,18 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "withsophie",
-  description: "withsophie site description",
+  title: "Think with Sophie",
+  description: "May the Sophie be with you!",
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'x', link: 'https://x.com/ThinkWithSophie' },
+      { icon: 'discord', link: 'https://discord.gg/93NPYytEsJ' },
+      { icon: 'github', link: 'https://github.com/withsophie' }
     ],
     footer: {
-      copyright:"Copyright © 2023 withsophie"
+      copyright:"Copyright © 2024 WithSophie, Inc."
     }
   },
   locales: {
@@ -21,13 +23,27 @@ export default defineConfig({
       link: '/en/',
       themeConfig: {
         nav: [
-          { text: 'Home', link: '/' },
-          { text: 'Thinks', link: '/en/think/eternal_wisdom_knowledge' }
+          { text: 'Think', link: 'http://think.withsophie.ai' },
+          {
+            text: 'Applications',
+            items: [
+              { text: 'Sophie Mindmap', link: 'http://mm.withsophie.ai' },
+              { text: 'Bubble Burster', link: 'http://bb.withsophie.ai' },
+              { text: 'Sophie Reader', link: 'http://reader.withsophie.ai' }
+            ]
+          },
+          { text: 'Roadmap', link: 'https://feedback.withsophie.ai/roadmap' },
+          { text: 'Feedback', link: 'https://feedback.withsophie.ai' }
         ],
 
         sidebar: [
           {
-            text: 'Thinks',
+            text: 'ABOUT',
+            items: [
+              { text: 'The Wisdom of Eternal Life, the Knowledge of Eternal Life', link: '/en/think/eternal_wisdom_knowledge' },
+              { text: 'New Magellan Project 🚀', link: '/en/think/new_magellan_project' },
+              { text: 'Reading Should Aim to Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+            text: 'DEEP THINK',
             items: [
               { text: 'The Wisdom of Eternal Life, the Knowledge of Eternal Life', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project 🚀', link: '/en/think/new_magellan_project' },
