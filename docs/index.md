@@ -4,8 +4,11 @@ layout: home
 
 hero:
   name: "withsophie"
-  text: "withsophie site"
+  text: "withsophie site "
   tagline: My great project tagline
+  image: 
+    src: "/img/logo_txt_bk.png"
+    alt: "bg image"
   actions:
     - theme: brand
       text: thinks

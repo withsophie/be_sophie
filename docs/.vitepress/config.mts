@@ -3,7 +3,16 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "withsophie",
-  description: "withsophie site",
+  description: "withsophie site description",
+  themeConfig: {
+    logo: "/img/icon.png",
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+    ],
+    footer: {
+      copyright:"Copyright © 2023 withsophie"
+    }
+  },
   locales: {
     root: {
       label: 'English',
@@ -25,13 +34,6 @@ export default defineConfig({
             ]
           } 
         ],
-
-        socialLinks: [
-          { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-        ],
-        footer: {
-          copyright:"Copyright © 2023 withsophie"
-        }
       }
     },
     zh: {
@@ -54,16 +56,8 @@ export default defineConfig({
             ]
           } 
         ],
-
-        socialLinks: [
-          { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-        ],
-        footer: {
-          copyright:"Copyright © 2023 withsophie"
-        }
       }
     }
   },
   
- 
 })
