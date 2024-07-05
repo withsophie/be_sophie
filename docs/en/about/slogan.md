@@ -1,5 +1,3 @@
-# Vision and Slogans
-
 ## SLOGAN
 
 ![May the sophie be with you.](/img/slogan_social.png)
