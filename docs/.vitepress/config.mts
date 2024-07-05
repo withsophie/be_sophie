@@ -26,7 +26,7 @@ export default defineConfig({
       link: '/en/',
       themeConfig: {
         nav: [
-          { text: 'Think', link: 'http://think.withsophie.ai' },
+          { text: 'To Inspire', link: 'http://think.withsophie.ai' },
           {
             text: 'Applications',
             items: [
