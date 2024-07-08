@@ -59,7 +59,7 @@ export default defineConfig({
             items: [
               { text: 'The Eternal Wisdom', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
-              { text: 'Reading Should Aim to Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+              { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
             ]
           } 
         ],
