@@ -51,7 +51,7 @@ export default defineConfig({
           {
             text: 'SOPHIE STORY',
             items: [
-              { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+              { text: 'Why we create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
             ],
           },
           {
