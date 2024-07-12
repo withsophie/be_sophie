@@ -52,6 +52,7 @@ export default defineConfig({
             text: 'SOPHIE STORY',
             items: [
               { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+              { text: 'Exploring Ambiguity Reduction in Language with AI', link: '/en/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
             ],
           },
           {
