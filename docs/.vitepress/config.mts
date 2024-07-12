@@ -85,6 +85,8 @@ export default defineConfig({
               { text: '语言歧义和人工智能', link: '/zh/about/Exploring-Ambiguity-Reduction-in-Language-with-AI-CN' },
               
             ],
+          },
+          {
             text: '思考',
             items: [
               { text: '智者永生，知识永生', link: '/zh/think/eternal_wisdom_knowledge' },
