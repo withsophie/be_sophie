@@ -82,8 +82,7 @@ export default defineConfig({
             text: 'SOPHIE故事',
             items: [
               { text: 'WithSophie起源', link: '/zh/about/why-do-i-want-to-create-withsophie' },
-              { text: '语言歧义和人工智能', link: '/zh/about/Exploring-Ambiguity-Reduction-in-Language-with-AI
-                ' },
+              { text: '语言歧义和人工智能', link: '/zh/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
               
             ],
           },
