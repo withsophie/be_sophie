@@ -1,4 +1,5 @@
 
+##Exploring Ambiguity Reduction in Language with AI
 Since humans began to communicate through language, ambiguity has shadowed us. As soon as the light of expression starts to shine, the concept projected into the other’s consciousness becomes uncontrollable. Whether the initiator can accurately convey their meaning makes the role of the receiver equally important. However, both parties in the communication process seem indifferent to the attenuation of the signal because they rarely verify the transmission's effectiveness afterward. Thus, the profound insights of our ancestors might merely be ancient ambiguities repurposed by later generations in appropriate contexts.
 
 Despite the lies and poetry created by ambiguity, a dedicated group of engineers tirelessly seeks to eliminate ambiguity in language. From the three-way handshake of TCP/IP to Word Sense Disambiguation (WSD) in large language models (LLMs), efforts are made to reduce the signal-to-noise ratio and enhance transmission efficiency. The pursuit of accurate information expression remains a crucial task in communication.
