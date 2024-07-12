@@ -151,6 +151,10 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
+  - test -> https://icon-sets.iconify.design/tabler/variable/
+  - list -> https://icon-sets.iconify.design/tabler/variable/ 暂时用这个，未来做方括号x来表达。
+  - dict -> https://icon-sets.iconify.design/fluent/braces-variable-24-filled/
+
 - 必须变量，控件显示浅红色边框，当内容不为空时，消失；
 
 ## Test Floater Layout Schema
