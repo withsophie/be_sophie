@@ -3,7 +3,7 @@ description: Alex Sudo
 ---
 
 # Why do I want to create WithSophie
-
+> Alex Sudo @ Jun 2024
 Due to some well-known reasons, our startup has entered a relatively steady phase. When a nihilist finds himself in an overly quiet environment, he starts to question everything around him. The daily routine of mundane tasks fails to spark the drive to overcome overwhelming inertia. I have been in this state for about two years, and various aspects of reality have continuously reinforced this mindset, making the world seem increasingly meaningless. However, I am fortunate to have some thoughtful friends around me. Engaging in deep conversations with them has allowed me to rediscover the joy of "I think, therefore I am."
 
 Amidst conversations filled with scholars and devoid of the unlettered, discussions often drift towards the abstract. When these esoteric topics begin, differences and misunderstandings frequently arise. As participants with strong logical abilities and quick thinking, debates often linger, preventing any consensus and creating the illusion that such discussions are futile. However, I always relish these "brainstorms" and find that, unknowingly, my analytical skills gradually improve. This growth doesn't come from reaching a consensus in any particular discussion but rather from the act of brainstorming itself. Just as physical exercise stimulates the brain to release endorphins, the exercise of the mind stimulates the brain to produce wisdom.
