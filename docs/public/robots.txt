@@ -1,1 +1,1 @@
-robots.txt
+blog-robots.txt
