@@ -26,7 +26,7 @@ export default defineConfig({
       link: '/en/',
       themeConfig: {
         nav: [
-          { text: 'Think', link: 'http://think.withsophie.ai' },
+          { text: 'To Inspire', link: 'http://think.withsophie.ai' },
           {
             text: 'Applications',
             items: [
@@ -51,8 +51,9 @@ export default defineConfig({
           {
             text: 'SOPHIE STORY',
             items: [
-              { text: 'Why do I want to create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+              { text: 'Why we create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
               { text: 'Exploring Ambiguity Reduction in Language with AI', link: '/en/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
+              
             ],
           },
           {
@@ -60,7 +61,7 @@ export default defineConfig({
             items: [
               { text: 'The Eternal Wisdom', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
-              { text: 'Reading Should Aim to Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+              { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
             ]
           } 
         ],
