@@ -200,9 +200,9 @@ HSTY-ITEM -> (txt)Older Histroy Preview | (ico, right)Item Type
 - https://icon-sets.iconify.design/material-symbols/menu-book-outline-rounded/
 
 ## LLM Think Step Node & Floater
-- (NF)  TITLE: Think Step #1
+- (NFR)  TITLE: Think Step #1
 - (FR)  PARAM: LLM Model
-- (NF)  PARAM: Prompt
+- (NFR)  PARAM: Prompt
 - 键入/字符时，列表显示可用变量，最后一项为New Output Entity，点击后打开Entity Dialog
 - Entity显示：（ico）Type，Name，绿色背景为IN，蓝色背景为OUT
 - Entity Action：不能在内部走光标，hover时出现：（ico）edit，（ico）删除
