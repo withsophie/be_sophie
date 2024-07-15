@@ -9,42 +9,43 @@
 <url>
  <loc>https://www.withsophie.ai</loc>
  <lastmod>2024-07-12</lastmod>
- 
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://www.withsophie.ai/chain</loc>
  <lastmod>2024-07-12</lastmod>
-</url>
-
-<url>
- <loc>https://think.withsophie.ai</loc>
- <lastmod>2024-07-12</lastmod>
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://think.withsophie.ai/plaza</loc>
  <lastmod>2024-07-12</lastmod>
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://think.withsophie.ai/chain</loc>
  <lastmod>2024-07-12</lastmod>
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://think.withsophie.ai/knowledge</loc>
  <lastmod>2024-07-12</lastmod>
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://think.withsophie.ai/tools</loc>
  <lastmod>2024-07-12</lastmod>
+ <changefreq>monthly</changefreq>
 </url>
 
 <url>
  <loc>https://blog.withsophie.ai/</loc>
  <lastmod>2024-07-12</lastmod>
+ <changefreq>daily</changefreq>
 </url>
 
 </urlset>

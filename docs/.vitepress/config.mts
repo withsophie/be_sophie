@@ -4,7 +4,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
-  rewrites: {'/index' : '/en/about/slogan'},
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",

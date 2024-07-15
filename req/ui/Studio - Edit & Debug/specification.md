@@ -151,6 +151,10 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
+  - test -> https://icon-sets.iconify.design/tabler/variable/
+  - list -> https://icon-sets.iconify.design/tabler/variable/ 暂时用这个，未来做方括号x来表达。
+  - dict -> https://icon-sets.iconify.design/fluent/braces-variable-24-filled/
+
 - 必须变量，控件显示浅红色边框，当内容不为空时，消失；
 
 ## Test Floater Layout Schema
@@ -193,23 +197,33 @@ HSTY-ITEM -> (txt)Older Histroy Preview | (ico, right)Item Type
 - (NFR) PARAM: Query
 - (F)   PARAM: Rename
 - (NF)  OUT-ENTITY
+- https://icon-sets.iconify.design/material-symbols/menu-book-outline-rounded/
 
 ## LLM Think Step Node & Floater
-- (NF)  TITLE: Think Step #1
+- (NFR)  TITLE: Think Step #1
 - (FR)  PARAM: LLM Model
-- (NF)  PARAM: Prompt
+- (NFR)  PARAM: Prompt
 - 键入/字符时，列表显示可用变量，最后一项为New Output Entity，点击后打开Entity Dialog
 - Entity显示：（ico）Type，Name，绿色背景为IN，蓝色背景为OUT
 - Entity Action：不能在内部走光标，hover时出现：（ico）edit，（ico）删除
+- https://icon-sets.iconify.design/mage/stars-b/
 
 ## Start Control Node & Floater
 - （F）VIEWPOINT
 - （NF）USER ENTITY
+- https://icon-sets.iconify.design/material-symbols/house-outline-rounded/
 
 ## End Control
+- https://icon-sets.iconify.design/material-symbols/flag-circle-outline-rounded/
 
 ## Concurrent Control
+- https://icon-sets.iconify.design/octicon/repo-forked-24/
 
 ## If-Else Control
-
+- https://icon-sets.iconify.design/fluent/branch-fork-16-regular/
+  
 ## Tool Step
+
+
+
+
