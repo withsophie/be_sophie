@@ -62,6 +62,7 @@ export default defineConfig({
               { text: 'The Eternal Wisdom', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
               { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+              { text: 'The Story of SWOT Analysis', link: '/en/think/The_Story_of_SWOT_Analysis' },
             ]
           } 
         ],
@@ -92,6 +93,7 @@ export default defineConfig({
               { text: '智者永生，知识永生', link: '/zh/think/eternal_wisdom_knowledge' },
               { text: '新麦哲伦计划 🚀', link: '/zh/think/new_magellan_project' },
               { text: '读书要洞悉作者的用意', link: '/zh/think/reading_understand_author_intention' },
+              { text: 'SWOT分析法', link: '/en/think/The_Story_of_SWOT_Analysis' },
             ]
           } 
         ],
