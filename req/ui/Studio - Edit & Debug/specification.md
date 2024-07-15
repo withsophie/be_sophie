@@ -41,8 +41,8 @@
   - Node Selection
   - Edge Selection
 - New Node List
-- Debug Panel 
-- Difine Entity Dialog
+- Debug Result Panel 
+- Define Entity Dialog
 
 ## Edge Actions
 - Edge的hover状态下，显示Insert Node按钮，点击后显示New Node List对话框
@@ -118,6 +118,25 @@
 - End Node的Next按钮为Done按钮，点击后，清空Selection，退出Debug Mode；
 - Debug Mode下，Debug Panel始终显示；
 
+## Debug Result Panel
+- Layout
+```
+Title   -> Testcase Name(editable)
+SUMMARY -> STATUS, ELAPSED TIME, TOTAL TOKENS, Collapsed Btn
+STEPS   -> Ico, Step Name, Time, Tokens, Status, Collapsed Btn
+STEP IO -> IN Entity Table, OUT Entity Table
+PoV     -> 
+KG      ->
+Cmds    -> Close | Save
+```
+- 所有栏目均采用catalog和表单控件实现
+- Testcase Name默认是PoV的自动裁剪数据
+- Summary无需显示Catalog
+- Steps同时只有一个是展开状态
+- PoV的显示用Table
+- KG的catalog为Knowledge Graph，展现区域只需要支持缩放和移动
+- Close为普通按钮，Save只在Status为SUCCESS时才会出现，且为突出状态
+
 ## Issues Check
 - 所有Node必填字段缺失，记录一条Issue（Node ID，Field ID，Error Message）；
 - Canvas的Issues List显示当前Issue总数，点击列出Issue List；
@@ -151,7 +170,7 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
-  - test -> https://icon-sets.iconify.design/tabler/variable/
+  - text -> https://icon-sets.iconify.design/tabler/variable/
   - list -> https://icon-sets.iconify.design/tabler/variable/ 暂时用这个，未来做方括号x来表达。
   - dict -> https://icon-sets.iconify.design/fluent/braces-variable-24-filled/
 
