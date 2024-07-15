@@ -57,7 +57,7 @@ export default defineConfig({
             ],
           },
           {
-            text: 'DEEP THINK',
+            text: 'THINKING STORY',
             items: [
               { text: 'The Eternal Wisdom', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
@@ -87,7 +87,7 @@ export default defineConfig({
             ],
           },
           {
-            text: '思考',
+            text: '思考故事',
             items: [
               { text: '智者永生，知识永生', link: '/zh/think/eternal_wisdom_knowledge' },
               { text: '新麦哲伦计划 🚀', link: '/zh/think/new_magellan_project' },
