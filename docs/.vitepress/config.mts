@@ -6,7 +6,8 @@ export default defineConfig({
   description: "May the Sophie be with you!",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
   transformPageData(pageData) {
-    const canonicalUrl = `https://example.com/${pageData.relativePath}`
+    // https://blog.withsophie.ai
+    const canonicalUrl = `/${pageData.relativePath}`
       .replace(/index\.md$/, '')
       .replace(/\.md$/, '')
 
