@@ -5,6 +5,17 @@ export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  transformPageData(pageData) {
+    const canonicalUrl = `https://example.com/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push([
+      'link',
+      { rel: 'canonical', href: canonicalUrl }
+    ])
+  },
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
