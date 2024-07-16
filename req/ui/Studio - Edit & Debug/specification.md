@@ -46,6 +46,7 @@
 
 ## Edge Actions
 - Edge的hover状态下，显示Insert Node按钮，点击后显示New Node List对话框
+  - https://icon-sets.iconify.design/gridicons/add/
 - 无In Slot或无Out Slot的节点不允许插入
 - 插入后，原Edge拆成两个，分别连接到新Node的第一个In/Out Slot
 - 点击进入Selected状态（取消其他Canvas Selection），Delete和Backspace删除Edge
@@ -81,6 +82,8 @@
   - Test：进入Edit Lock Mode，自动切换到Floater Test Tab
   - Edit：进入Edit Lock Mode，当Node存在Issue时，按钮为红色底色
   - Menu：打开Node Menu
+
+## New Node Dialog
 
 ## Canvas Selection
 - Canvas同时只能有一个Edge或Node处于Selected状态
@@ -121,20 +124,27 @@
 ## Debug Result Panel
 - Layout
 ```
-Title   -> Testcase Name(editable)
-SUMMARY -> STATUS, ELAPSED TIME, TOTAL TOKENS, Collapsed Btn
-STEPS   -> Ico, Step Name, Time, Tokens, Status, Collapsed Btn
-STEP IO -> IN Entity Table, OUT Entity Table
-PoV     -> 
-KG      ->
-Cmds    -> Close | Save
+Title     -> Testcase Name(editable)
+SUMMARY   -> STATUS, ELAPSED TIME, TOTAL TOKENS, Collapsed Btn
+ STEPS    -> Ico, Step Name, Time, Tokens, Status, Collapsed Btn
+  STEP IO -> IN Entity Table, OUT Entity Table
+PoV       -> 
+KG        ->
+Cmds      -> Close | Save
 ```
 - 所有栏目均采用catalog和表单控件实现
 - Testcase Name默认是PoV的自动裁剪数据
 - Summary无需显示Catalog
-- Steps同时只有一个是展开状态
-- PoV的显示用Table
-- KG的catalog为Knowledge Graph，展现区域只需要支持缩放和移动
+  - Status: Success（绿色）, Fail（红色）, Cancel（灰色）
+  - Elapsed: 所有Step Node的运行时间总和（不包括流程时间，调试时间）
+  - Tokens：以LLM返回值为准
+- Steps同时只有一个Step运行结果是展开状态
+  - running：https://icon-sets.iconify.design/mi/clock/
+  - success：https://icon-sets.iconify.design/mi/circle-check/
+  - error：https://icon-sets.iconify.design/mi/circle-error/
+  - cancel：https://icon-sets.iconify.design/mi/circle-remove/
+- 所有IN/OUT ENTITY都用TBL显示
+- KG的catalog为Knowledge Graph，展现区域只需要支持缩放和移动，最好支持Light/Dark两个主题切换
 - Close为普通按钮，Save只在Status为SUCCESS时才会出现，且为突出状态
 
 ## Issues Check
@@ -170,11 +180,13 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
-  - text -> https://icon-sets.iconify.design/tabler/variable/
-  - list -> https://icon-sets.iconify.design/tabler/variable/ 暂时用这个，未来做方括号x来表达。
-  - dict -> https://icon-sets.iconify.design/fluent/braces-variable-24-filled/
-
+  - text -> 小括号x表示
+  - list -> 方括号x来表达
+  - dict -> 花括号x来表示
+- 在ENTITY栏目中，用左对齐代表IN，用有对齐来代表OUT；
 - 必须变量，控件显示浅红色边框，当内容不为空时，消失；
+
+## Define Entity Dialog
 
 ## Test Floater Layout Schema
 - Floater Layout
@@ -223,7 +235,7 @@ HSTY-ITEM -> (txt)Older Histroy Preview | (ico, right)Item Type
 - (FR)  PARAM: LLM Model
 - (NFR)  PARAM: Prompt
 - 键入/字符时，列表显示可用变量，最后一项为New Output Entity，点击后打开Entity Dialog
-- Entity显示：（ico）Type，Name，绿色背景为IN，蓝色背景为OUT
+- Entity显示：（ico）Type，Name，背景（绿色为IN，蓝色为OUT）
 - Entity Action：不能在内部走光标，hover时出现：（ico）edit，（ico）删除
 - https://icon-sets.iconify.design/mage/stars-b/
 
