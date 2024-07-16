@@ -61,7 +61,7 @@
 - 在Floater的修改，及时在Node中更新
 - Drag Node时，Node当前Selected状态保持不变
 - Double Click Node，进入Edit Lock Mode
-- Right Click Node，弹出Node Menu
+- Right Click Node，等价于点击Bar上的Menu，弹出Node Menu。注意，Selected状态不改变。
 
 ## Node Slot Actions
 - Click Slot，弹出Node List，新建Node
