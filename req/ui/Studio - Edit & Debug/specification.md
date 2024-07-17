@@ -181,9 +181,10 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
-  - text -> 小括号x表示
-  - list -> 方括号x来表达
-  - dict -> 花括号x来表示
+  - 类型      缩写                      全写
+  - text -> 小括号(a)               entity-name = “a”
+  - list -> 方括号[a, b, c]         entity-name = “a”\n"b"\n"c"
+  - dict -> 花括号{[a, b, c], []}   entity-name = {\n"x", "y", "z"\n"a", "b", "c"\n}
 - 在ENTITY栏目中，用左对齐代表IN，用有对齐来代表OUT；
 - 必须变量，控件显示浅红色边框，当内容不为空时，消失；
 
