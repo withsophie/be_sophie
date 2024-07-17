@@ -1,0 +1,20 @@
+# The Story of SWOT Analysis
+> Alex Sudo @ Jul 2024
+
+Strategic management has always been the most brilliant jewel in the crown of management science. It examines how an organization makes decisions and how to make the right decisions, choosing a more rational path. This might be one of the most complex things in the world, as it involves studying how a group of people with different interests makes decisions in a business society composed of many different groups, and why they make those decisions. The complexity of this academic field is evident. So far, masters of strategic management are still facing an elephant, with different schools of thought only seeing parts of the elephant from different angles. Only by integrating the views of various schools can we have a comprehensive understanding and insight into the elephant.
+
+In the process of various schools depicting the elephant, the design school was the first to outline its shape. Andrews, a representative of the design school, proposed the framework for strategic analysis. He believed that strategy is the matching of what a company might do (opportunities and threats provided by the environment) and what it can do (the company’s strengths and weaknesses). This framework is known as the famous SWOT analysis.
+
+However, SWOT is not an analysis method but a tool for organization. **SWOT analysis** summarizes the strengths, weaknesses, opportunities, and threats of the subject being analyzed. The main purpose of **SWOT analysis** is to help organizations comprehensively understand all the factors involved in business decisions. Using SWOT analysis does not directly lead to any conclusions, and even if there are conclusions, they may not be correct. During the thinking process, nothing can be added or removed. Therefore, in the eyes of those without much professional experience, the framework provided by SWOT is too broad to offer specific help for particular problems.
+
+For this reason, we utilized AI's powerful generalization capabilities to develop a SWOT approach on WithSophie. Users can present the specific problems they want to analyze using the SWOT method, and AI will help list some specific possibilities for these issues. This is more efficient than our original learning method: first understanding theoretical knowledge, then learning from examples, and finally applying these examples to our real-world problems.
+
+In 1997, a groundbreaking paper titled "SWOT Analysis: It's Time to Reconsider" was published. The author investigated 20 companies, none of which used SWOT analysis. The general content of the paper was: "SWOT analysis is nothing more than a long list, general (meaningless) explanations, without indicating priorities, and without validating the issues." All thinking frameworks and tools have their purposes and positions, and the original purpose of SWOT analysis was to organize thoughts. Verification, simplification, and prioritization of issues are tasks for the user. This should not be considered a drawback of the framework, but in the results-oriented modern thinking mode, SWOT analysis appears somewhat outdated.
+
+Therefore, after the results of the SWOT analysis, we use the USED technique to produce solutions. These solutions are thought out from the following four aspects:
+- How can we **U**se each **S**trength?
+- How can we **S**top each **W**eakness?
+- How can we **E**xploit each **O**pportunity?
+- How can we **D**efend against each **T**hreat?
+
+When AI lists these four solutions based on specific SWOT analysis situations, we hope that the real sparks of thought in the user's mind will be ignited. After all, from our original intention, we hope that each thinking tool can activate the user’s mind and lead their thinking, rather than replace people’s thinking and do the thinking for them.
