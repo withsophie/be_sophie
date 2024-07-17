@@ -5,6 +5,18 @@ export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  transformPageData(pageData) {
+    // https://blog.withsophie.ai
+    const canonicalUrl = `/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push([
+      'link',
+      { rel: 'canonical', href: canonicalUrl }
+    ])
+  },
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
@@ -63,6 +75,7 @@ export default defineConfig({
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
               { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
               { text: 'The Story of SWOT Analysis', link: '/en/think/The_Story_of_SWOT_Analysis' },
+              { text: 'The Story of Deconstructive Thinking Method', link: '/en/think/The_story_of_deconstructive_thinking_method' },
             ]
           } 
         ],
@@ -94,6 +107,7 @@ export default defineConfig({
               { text: '新麦哲伦计划 🚀', link: '/zh/think/new_magellan_project' },
               { text: '读书要洞悉作者的用意', link: '/zh/think/reading_understand_author_intention' },
               { text: 'SWOT分析法', link: '/en/think/The_Story_of_SWOT_Analysis' },
+              { text: '解构思考法的故事', link: '/zh/think/The_story_of_deconstructive_thinking_method' },
             ]
           } 
         ],
