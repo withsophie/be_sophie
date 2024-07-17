@@ -167,6 +167,10 @@ DESC       -> (desc)description
 - Layout中只定义了内容组成，具体颜色，字号，对齐等，都在其他设计图中提供；
 - 因为某些Node的布局可能是用户后续编辑的，所以布局存在设计时无法确定，需要规则辅助，如下：
   - 当一个布局的没有任何PARAM拥有Out Slot，则TITLE行添加Out Slot作为Node唯一Slot；
+- Entity Item:
+  - text -> entity name
+  - list -> entity name[]
+  - dict -> entity name{key, key}
 
 ## Edit Floater Layout Schema
 - Layout
