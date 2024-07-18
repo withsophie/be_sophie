@@ -5,6 +5,7 @@ export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  cleanUrls: true,
   transformPageData(pageData) {
     // https://blog.withsophie.ai
     const canonicalUrl = `/${pageData.relativePath}`
