@@ -1,5 +1,6 @@
 # Studio Specification of View/Edit/Debug Mode 
 
+
 ## Terms Table
 
 - **Chain**:
@@ -61,7 +62,7 @@
 - 在Floater的修改，及时在Node中更新
 - Drag Node时，Node当前Selected状态保持不变
 - Double Click Node，进入Edit Lock Mode
-- Right Click Node，弹出Node Menu
+- Right Click Node，等价于点击Bar上的Menu，弹出Node Menu。注意，Selected状态不改变。
 
 ## Node Slot Actions
 - Click Slot，弹出Node List，新建Node
@@ -166,6 +167,10 @@ DESC       -> (desc)description
 - Layout中只定义了内容组成，具体颜色，字号，对齐等，都在其他设计图中提供；
 - 因为某些Node的布局可能是用户后续编辑的，所以布局存在设计时无法确定，需要规则辅助，如下：
   - 当一个布局的没有任何PARAM拥有Out Slot，则TITLE行添加Out Slot作为Node唯一Slot；
+- Entity Item:
+  - text -> entity name
+  - list -> entity name[]
+  - dict -> entity name{key, key}
 
 ## Edit Floater Layout Schema
 - Layout
@@ -180,9 +185,10 @@ PARAM      -> (category)Item Name
 DESC       -> (description)
 ```
 - Item Value在新行显示，类型根据不同的Item类型改变，比如多行文本，单行文本，字典框
-  - text -> 小括号x表示
-  - list -> 方括号x来表达
-  - dict -> 花括号x来表示
+  - 类型      缩写                      全写
+  - text -> 小括号(a)               entity-name = “a”
+  - list -> 方括号[a, b, c]         entity-name = “a”\n"b"\n"c"
+  - dict -> 花括号{[a, b, c], []}   entity-name = {\n"x", "y", "z"\n"a", "b", "c"\n}
 - 在ENTITY栏目中，用左对齐代表IN，用有对齐来代表OUT；
 - 必须变量，控件显示浅红色边框，当内容不为空时，消失；
 
