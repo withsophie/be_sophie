@@ -2,39 +2,68 @@
 
 ## Term sheet
 
-- RDF Model: data exchange formats, Class Layer and Thought Layer
-  - Flow Graph:       Node      Edge        Model
-  - Class Graph:     Entity   Predicate     Class Translate Model 
-  - Thought Graph:   Thought  Relation      Thought Translate Model
+- Data Architecture:     Class Layer   Thought Layer  Model Layer
+  - FG/Flow Graph:       Node          Edge           MG/Model Graph
+  - CG/Class Graph:      Entity        Predicate      CMG/Class Model Graph
+  - TG/Thought Graph:    Thought       Relation       => RDF Export
+- Processtion: Edit-Time           Run-Time
+  - Canvas     Flow - 
+  - End-Node        -> CG -> MG -
+  - Tbl                         -> TG
   
-## Class Graph Translate (from Flow Node and Entity Translate to CG)
+## Flow => CG/Class Graph
 
-- think step    -> Class Graph an Edge(named step name)
-- text entity   -> Class Graph a Node(named entity name)
-- list entity   -> Class Graph a Node(named entity name)
-- dict entity   -> Class Graph a Node(entity named), some Nodes(named entity-key), some Edges(named has_property)
-- Entity Color: unique color in one CG
+- Flow               -> CG
+- think step node    -> an Edge(named step name)
+- text entity        -> a Node(named entity name)
+- list entity        -> a Node(named entity name)
+- dict entity        -> a Node(named entity name), 
+-                       some Nodes(named entity-key-name), 
+-                       some Edges(named has_property)
+- Entity Color: unique entity color in a Class Graph
+- All nodes in CG are either value or value list. 
+- Dict node is a value-combinated list(should be a brother node of all key nodes)
+- Every end-node may has a different CG
 
-## Class Translate Model (CGM Definition)
+## CG/Class Graph => MG/Class Model Graph
 
-- CGM Atom Codes
-  - Add Predicate: entity.key <-pred-> entity.key
-  - Del Predicate: -pred
-  - Merge Predicate: #pred1+pred2 (Don't delete pred1 or pred2)
+- MG Diff Codes: Diff ops ordered-list on CG
+  - Add Predicate: entity_from.key, new_pred, entity_to.key
+  - Del Predicate: old_pred
+  - Merge Predicate: pred1, pred2 (named pred1 + pred2, Don't delete pred1 or pred2)
   - Add Entity: TODO
   - Del Entity: TODO
-- CGM Actions
+  - Ref Entity: TODO
+- MG Diff Actions
   - Delete Entity: del entity, merge predicates 
   - Add Predicate: add predicate
   - Del Predicate: del predicate
+- Predictable Nodes Pair(pred can store index relastion for acceleration TG generation)
+  - value node <-> value node
+  - list node <-> value node
+  - reasonable list node -> list node
+  - dict key1 node <-> dict key2 node
 
-## Thought Grapph Translate (from CG + CGM Translate to TG)
+## MG/Model Graph Define (Tree MG & Knowledge MG)
 
-- Merge Class Translate Model
-  - exec every CGM on CG, trnaslate to TGM
-  - for every TGM translate to TG
-- Thought Graph Translate
-  - text entity        -> Thought Graph Node(named text value, entity color)
-  - list entity line   -> Thought Graph Node(named single text value, entity color)
-  - dict entity line   -> Thought Graph Node(entity named #ln), Edges(named keyname), Nodes(named value)
+- A chain can define multiple MGs with same MG type.
+- Knowledge MG Diff is a empty list. the CG is same with MG.
+- MG Diff list is a actions ordered list. Not diff codes.
+- Every end-node must define all of MG which the chain declared.
+- Define MG Diff List in every End-Node.
+- A new diff in a end-node also appears in other end-nodes, but is disabled by default.
+- Every MG type has an Edit-time Checker vs Run-time Checker
+  
+## Tbl => TG/Thought Graph
+
+- Entity Instancizations: Tbl -> TG
+  - text entity        -> Node(named text value, entity color)
+  - list entity line   -> Node(named single text value, entity color)
+  - dict entity line   -> Node(entity named #ln), Edges(named keyname), Nodes(named value)
+  - dict-key line
   - predicate          -> Thought Graph Edges(named predicate name)
+- After executing flow, choosing the CG and MG Diff by the end-node and merging the MG
+- Every Predicate in MG has a pair of index nodes ref-to Tbl's column.
+- Every Entity in MG ref-to a Tbl's column.
+- Traversal MG to generater TG
+  - Dict Root Node?
