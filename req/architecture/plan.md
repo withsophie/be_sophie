@@ -1,4 +1,5 @@
-- first run, debug
+- first run, edit, debug
+- testcase save and show
 - 知识table
 - studio数据流、studio条件流程
 

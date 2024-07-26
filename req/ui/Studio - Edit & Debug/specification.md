@@ -229,37 +229,66 @@ HSTY-ITEM -> (txt)Older Histroy Preview | (ico, right)Item Type
   - 定义中引用Layout Schema的类型
   - 用NF标志区分该行是否出现在Node或Floater中
 
-## Knowledge Retriever Step
-- (NF)  TITLE: Knowledge Retriever
+## Knowledge Retriever Step Node & Floater
+- (NF)  TITLE: KNOWLEDGE RETRIEVER
 - (NFR) PARAM: Query
 - (F)   PARAM: Rename
 - (NF)  OUT-ENTITY
 - https://icon-sets.iconify.design/material-symbols/menu-book-outline-rounded/
 
 ## LLM Think Step Node & Floater
-- (NFR)  TITLE: Think Step #1
-- (FR)  PARAM: LLM Model
-- (NFR)  PARAM: Prompt
+- (NFR) TITLE: THINK STEP #1
+- (FR)  PARAM: LLM Model(default is "default chain model", single select)
+- (NFR) PARAM: Prompt(ptxt)
 - 键入/字符时，列表显示可用变量，最后一项为New Output Entity，点击后打开Entity Dialog
-- Entity显示：（ico）Type，Name，背景（绿色为IN，蓝色为OUT）
+- Entity显示：（ico）Type，Name，背景（绿色为IN，蓝色为OUT，文字反白）
 - Entity Action：不能在内部走光标，hover时出现：（ico）edit，（ico）删除
 - https://icon-sets.iconify.design/mage/stars-b/
+- https://icon-sets.iconify.design/material-symbols/edit-outline-rounded/
+- https://icon-sets.iconify.design/material-symbols/delete-forever-outline-rounded/
 
-## Start Control Node & Floater
-- （F）VIEWPOINT
-- （NF）USER ENTITY
+## Start: Control Node & Floater
+- (NF)  TITLE: START
+- (NF)  PARAM: Default LLM Model(single select)
+- (F)   PARAM: Description(txt)
+- (F)   PARAM: Terms(txt)
+- (NFR) OUT-ENTITY: Think Points(readonly)
+- Chain Documents, Permissions, Chain Tags, all are in chain settings dialog
 - https://icon-sets.iconify.design/material-symbols/house-outline-rounded/
 
-## End Control
+## End Control Node & Floater
+- (NF)  TITLE: END
+- (NF)  PARAM: Knowledge Graph Model Name | (ico)status
+- (NF)  PARAM: Other Chain Graph Models
 - https://icon-sets.iconify.design/material-symbols/flag-circle-outline-rounded/
+- MG Layout
+  - Name | (ico)close button
+  - CG
+  - (ico, code type)MG Diff Codes List(multiple selection) | (ico)enable/disable
+  - Action Button(ico, ... ), Delete button(ico, -), Move Up/Down button(ico)
+  - MG
+- code type icons: 
+  - Node: https://icon-sets.iconify.design/material-symbols/step-rounded/
+  - Edge: https://icon-sets.iconify.design/material-symbols/step-over-rounded/
+- enable/disable: 
+  - grey text when disable
+  - enable: https://icon-sets.iconify.design/material-symbols/visibility-outline-rounded/
+  - disable: https://icon-sets.iconify.design/material-symbols/visibility-off-outline-rounded/
+- Action: refto Model.md document
+  - TODO: 
 
-## Concurrent Control
+## Concurrent Control Node & Floater
 - https://icon-sets.iconify.design/octicon/repo-forked-24/
 
-## If-Else Control
+## If-Else Control Node & Floater
 - https://icon-sets.iconify.design/fluent/branch-fork-16-regular/
   
-## Tool Step
+## Tool Step Node & Floater
+- (NF)  TITLE: (ico)Tool Name(uppercase, tool icon)
+- (NF)  IN-ENTITY: all in entities
+- (NF)  PARAM: all tool parameters(waiting for tool interface sepcification)
+- (NF)  OUT-ENTITY: all out entities
+- (N)   DESC: Tool description
 
 
 
