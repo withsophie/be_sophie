@@ -3,6 +3,7 @@ description: Alex Sudo
 ---
 
 # Why do I want to create WithSophie
+> Alex Sudo @ Jun 2024
 
 Due to some well-known reasons, our startup has entered a relatively steady phase. When a nihilist finds himself in an overly quiet environment, he starts to question everything around him. The daily routine of mundane tasks fails to spark the drive to overcome overwhelming inertia. I have been in this state for about two years, and various aspects of reality have continuously reinforced this mindset, making the world seem increasingly meaningless. However, I am fortunate to have some thoughtful friends around me. Engaging in deep conversations with them has allowed me to rediscover the joy of "I think, therefore I am."
 

@@ -4,7 +4,20 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Think with Sophie",
   description: "May the Sophie be with you!",
-  rewrites: {'/index' : '/en/about/slogan'},
+  head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
+  cleanUrls: true,
+  transformPageData(pageData) {
+    // https://blog.withsophie.ai
+    const canonicalUrl = `/${pageData.relativePath}`
+      .replace(/index\.md$/, '')
+      .replace(/\.md$/, '')
+
+    pageData.frontmatter.head ??= []
+    pageData.frontmatter.head.push([
+      'link',
+      { rel: 'canonical', href: canonicalUrl }
+    ])
+  },
   themeConfig: {
     logo: "/icon.png",
     logoLink: "http://think.withsophie.ai",
@@ -53,14 +66,18 @@ export default defineConfig({
             text: 'SOPHIE STORY',
             items: [
               { text: 'Why we create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
+              { text: 'Exploring Ambiguity Reduction in Language with AI', link: '/en/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
+              
             ],
           },
           {
-            text: 'DEEP THINK',
+            text: 'THINKING STORY',
             items: [
               { text: 'The Eternal Wisdom', link: '/en/think/eternal_wisdom_knowledge' },
               { text: 'New Magellan Project', link: '/en/think/new_magellan_project' },
               { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
+              { text: 'The Story of SWOT Analysis', link: '/en/think/The_Story_of_SWOT_Analysis' },
+              { text: 'The Story of Deconstructive Thinking Method', link: '/en/think/The_story_of_deconstructive_thinking_method' },
             ]
           } 
         ],
@@ -78,11 +95,21 @@ export default defineConfig({
 
         sidebar: [
           {
-            text: '思考',
+            text: 'SOPHIE故事',
+            items: [
+              { text: 'WithSophie起源', link: '/zh/about/why-do-i-want-to-create-withsophie' },
+              { text: '语言歧义和人工智能', link: '/zh/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
+              
+            ],
+          },
+          {
+            text: '思考故事',
             items: [
               { text: '智者永生，知识永生', link: '/zh/think/eternal_wisdom_knowledge' },
               { text: '新麦哲伦计划 🚀', link: '/zh/think/new_magellan_project' },
               { text: '读书要洞悉作者的用意', link: '/zh/think/reading_understand_author_intention' },
+              { text: 'SWOT分析法', link: '/en/think/The_Story_of_SWOT_Analysis' },
+              { text: '解构思考法的故事', link: '/zh/think/The_story_of_deconstructive_thinking_method' },
             ]
           } 
         ],
