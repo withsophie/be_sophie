@@ -45,6 +45,7 @@ export default defineConfig({
             text: 'ABOUT',
             items: [
               { text: 'Vision and Slogans', link: '/en/about/slogan' },
+              { text: 'Releases Notes', link: '/en/about/releasenotes' },
               
             ],
           },
