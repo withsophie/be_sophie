@@ -1,3 +1,6 @@
+# The Story of CLT Learning method
+> Alex Sudo @ Aug 2024
+
 **Cognitive Load Theory (CLT)** was proposed by psychologist John Sweller in the 1980 s. This theory mainly examines the process of information processing during learning, particularly how to optimize information presentation in instructional design to enhance learning efficiency.
 
 ### Three Types of Cognitive Load
