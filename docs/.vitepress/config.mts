@@ -68,6 +68,7 @@ export default defineConfig({
               { text: 'Why we create WithSophie', link: '/en/about/why-do-i-want-to-create-withsophie' },
               { text: 'Exploring Ambiguity Reduction in Language with AI', link: '/en/about/Exploring-Ambiguity-Reduction-in-Language-with-AI' },
               
+              
             ],
           },
           {
@@ -78,6 +79,7 @@ export default defineConfig({
               { text: 'Reading need Understand the Author’s Intent', link: '/en/think/reading_understand_author_intention' },
               { text: 'The Story of SWOT Analysis', link: '/en/think/The_Story_of_SWOT_Analysis' },
               { text: 'The Story of Deconstructive Thinking Method', link: '/en/think/The_story_of_deconstructive_thinking_method' },
+              { text: 'The Story of CLT Learning method', link: '/en/think/CLT-Learning-method' },
             ]
           } 
         ],
