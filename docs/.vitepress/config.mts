@@ -80,6 +80,7 @@ export default defineConfig({
               { text: 'The Story of SWOT Analysis', link: '/en/think/The_Story_of_SWOT_Analysis' },
               { text: 'The Story of Deconstructive Thinking Method', link: '/en/think/The_story_of_deconstructive_thinking_method' },
               { text: 'The Story of CLT Learning method', link: '/en/think/CLT-Learning-method' },
+              { text: 'Power to the Left, Knowledge to the Right', link: '/en/think/Power-to-the-Left-Knowledge-to-the-Right' },
             ]
           } 
         ],
