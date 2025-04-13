@@ -1,0 +1,23 @@
+# <<二阶思考分析法>> Prompts （based on 双因正交模型）
+
+- 本提示词采用“Model-Chain-Think（MCT）”的结构, MCT是一种结构化思维框架，用于通过LLM实现链式思考和清晰的结果生成。MCT会包含结构化格式要求和动作指令，LLM在执行过程中要遵守执行，其中：
+  - Model：用来定义某个高度抽象的思考模型的框架结构
+    - Data Prompt：用来定义Model所有的实体（Model Entity）和它们之间的谓词关系（Model Predict）；
+    - Graph Prompt：用来定义Model Entity和Model Predict的几何模型，展现方式等；
+    - 案例：双因正交模型，三角互斥模型都是思考模型；
+  - Chain：用来定义符合某个思考模型框架的具体的思考方法流程
+    - 组成：由若干个思考步骤（Think Step）和流程控制（Control Step）组成；
+    - 实体变量：每个步骤都包括1或多个Input Entity和1个Output Entity，这代表Input Entity是Output Entity的生成来源；
+    - ThinkPoint：Chain的第一步需传入单值类型的ThinkPoint作为输入；
+    - 实体定义：一个Entity包含：名称，说明，格式，类型（单值 String，多值 List，字典 Dict）；
+    - 实体格式：Entity的格式TBL是一种多记录表格，可记录每条记录的生成来源；
+    - 谓词：一个思考步骤的Input Entity和Output Entity之间的关系是一个谓词关系，用该思考步骤来命名；
+    - Model映射：
+      - 每个Chain都必须声明他对应遵守的Model；
+      - 该Model的所有Model Entity都必须在Chain中有对应的Chain Entity；
+      - 被Model Entity修饰的Chain Entity之间，增加Model Predict为Chain Predict；
+    - 案例：符合双因正交模型的SWOT分析法，符合三角互斥模型的PEST分析法，都是思考方法链。
+  - Think：是LLM针对某个思考点（ThinkPoint），按照MCT的要求执行，并生成的结果
+    - Think Entity：LLM执行MCT后，按照Chain的要求输出的Chain Entity对应的TBL结果，就是Think Entity；
+    - Chain映射：每个Think Entity都可以映射到Chain Entity和对应的Model Entity；
+    - 案例：用SWOT分析法（符合双因正交模型的一个Chain）来分析用户提出的ThinkPoint（在当下反全球化的趋势下，将债券和股票置换成美元和黄金），并获取的RDF结果。
