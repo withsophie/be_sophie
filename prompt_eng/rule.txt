@@ -1,0 +1,50 @@
+1）LLM将根据模版草稿，按照下面的规范生成模版组件库文件；
+2）模拟将一个不规范的Prompt，按照模版组件库的要求，转换成规范的Prompt。
+   - **最终Prompt生成规则**：在生成最终的规范化Prompt（如 `prompt_new.txt`）时，应使用 `components.txt` 中的组件。此过程涉及将主模板（如 `main_prompt`）中的占位符（例如 `<<component:copyright>>`, `<<component:*terms>>`）替换为相应组件的**内容**。重要的是，组件边界注释（`<!-- component start: ... -->` 和 `<!-- component end: ... -->`）本身**不得**包含在最终生成的Prompt文件中；仅应插入边界注释之间的内容。对于带有重复符号（*、+）的占位符，应根据需要多次插入相应组件的内容（同样不含边界注释）。
+   - **内容限制**：所有通过占位符（包括 `<<data_id>>`, `{{entity_id}}`, `[[term_id]]` 以及组件占位符如 `<<component:component_name>>`）插入到最终Prompt的内容，**不得**包含Markdown的标题标记（`#`）。标题标记仅用于Prompt文件的顶层结构。
+3）草稿和组件库为标准文件，严禁LLM在使用标准文件处理Prompt时，修改标准文件！
+4）**语言规范**：
+   - 模版草稿（Sketch）和模版组件库（Component Library）中的所有文本内容（包括组件名称和组件内容）**必须**使用英文。
+   - 在生成最终Prompt时，通过占位符（如 `<<data_id>>`, `{{entity_id}}`, `[[term_id]]`）替换的内容，应使用其**原始语言**。
+
+以下是本模版草稿的规则和约定，其中：
+- <<data_id>>: 代表程序用数据库数据在执行时替换的占位符，格式为自由文本，LLM需保留。
+- {{entity_id}}: 代表程序用Model和Chain的思路实体变量 (chain_entity)在执行时替换的占位符，LLM需保留。
+- [[term_id]]: 代表程序用Chain的思路术语 (chain_term)在执行时替换的占位符，LLM需保留。
+- 模版组件的边界标识符：如果一个注释内容是“component start或end”，则该注释是一个模版组件的边界标识符，注释内包含组件的唯一名称。
+  - `start` 标签格式为 `<!-- component start: [symbol]component_name -->`。
+  - `end` 标签格式为 `<!-- component end: component_name -->` (注意：end标签不包含symbol)。
+  - `component_name` 是组件的唯一名称。
+  - `[symbol]` 是可选的出现次数约束符号，仅出现在`start`标签中，定义了引用该组件时的约束：
+    - `?`: 表示引用该组件时，最多引用1次（0或1次）。
+    - `*`: 表示引用该组件时，可以引用任意次数（0或多次）。
+    - `+`: 表示引用该组件时，至少引用1次（1或多次）。
+    - 无符号: 表示引用该组件时，必须恰好引用1次。
+  - LLM需将这对边界标识符内部的内容，认定为一个模版组件，并以本模版草稿为最新数据，更新模版组件库的对应组件。严禁LLM在更新组件库时，修改组件库标识范围内的内容。
+- 模版组件占位符：当模版草稿中的一个模版组件标识符内部出现其他模版组件标识符（嵌套），说明存在模版组件的引用。生成组件库时：
+  1）被嵌套的模版组件必须提取为独立组件，其在组件库中的定义不包含约束符号（例如 `<!-- component: component_name -->`）。
+  2）在外层组件中，用带约束符号的占位符格式“<<component:[symbol]component_name>>”替代“被嵌套组件”的内容。如果原始`start`标签无符号，则占位符为“<<component:component_name>>”。
+  3）外层组件中不得保留被嵌套组件的边界标识符。
+- 组件引用方式：组件库中的组件引用方式统一为占位符格式“<<component:[symbol]component_name>>”，其中`[symbol]`来自于嵌套时模版草稿中定义的约束符号。无符号表示恰好一次，占位符为“<<component:component_name>>”。具体内容由独立的组件定义。
+- `format_conversion` 组件：此组件用于指定最终输出的格式。它本身是一个占位符，实际内容将由以下三个具体格式组件之一替换：`svg_format_conversion`, `tdf_format_conversion`, 或 `chat_format_conversion`。
+
+示例：
+模版草稿：
+<!-- component start: main_prompt -->
+# Main Prompt
+<!-- component start: ?copyright -->
+> Copyright Info
+<!-- component end: copyright -->
+<!-- component end: main_prompt -->
+
+生成的组件库：
+1. 独立的 `copyright` 组件 (组件自身无约束):
+<!-- component: copyright -->
+> Copyright Info
+<!-- component end: copyright -->
+
+2. 独立的 `main_prompt` 组件 (引用copyright时约束为最多一次):
+<!-- component: main_prompt -->
+# Main Prompt
+<<component:?copyright>>
+<!-- component end: main_prompt -->
