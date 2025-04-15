@@ -1,0 +1,64 @@
+MCP Server: Think with Sophie
+
+Tool: inspire_chain_of_think_from_thinkpoint
+Description: [This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain).] The function retrieves the most relevant structured Chains from the built-in repository according to the user's question or thinkpoint (ThinkPoint). These candidate Chains serve as structured frameworks for subsequent reasoning and prompt generation.
+
+Parameters:
+  - question_or_thinkpoint (str): The topic or thinkpoint (ThinkPoint) to be explored. The system will use this input to search for multiple high-level structured Chains, providing options for professional and in-depth structured thinking.
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: export_prompt_of_a_chain
+Description: This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain). It converts a selected Chain into a structured prompt that can be executed by a language model. The exported prompt strictly follows the MCT structural specification, including variable placeholders and step execution logic, but does not include the rule or sketch itself—only the final executable structured prompt. Some Chains may include tool invocation instructions to enhance reasoning or provide additional context. Each advanced Chain must have an input parameter {ThinkPoint}, which typically corresponds to the question or ThinkPoint provided to inspire_chain_of_think_from_thinkpoint.
+
+Parameters:
+  - format (Literal["chat", "svg", "rdf"]): The target format of the exported prompt. Possible values:
+      • chat: for structured prompts in human-LLM conversations,
+      • svg: for visual/diagrammatic structured prompts,
+      • rdf: for RDF triple-based semantic reasoning structured prompts.
+  - name_of_chain (str): The name or ID of the Chain to be exported.
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: exec_aux_tool_for_chain
+Description: This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain). It executes auxiliary tools referenced in the prompt exported from a Chain, such as knowledge base retrieval, data extraction, information filtering, or custom utilities. These tools work in coordination with the exported prompt to ensure complex reasoning tasks have access to the required supporting data and context. Auxiliary tools must be explicitly declared in the exported prompt using the format [tool:tool_name].
+
+Parameters:
+  - name_of_tool (str): The name or ID of the auxiliary tool required during the execution of the Chain.
+  - args_list (Dict[str, Any]): Arguments to be passed to the auxiliary tool, as defined in the exported prompt.
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: search_chains_by_keyword
+Description: [This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain).] It searches for structured thinking Chains on the Think with Sophie platform using a keyword.
+
+Parameters:
+  - keyword (str): The keyword to search for Chains.
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: list_my_used_chains
+Description: [This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain).] It lists all the structured thinking Chains the user has used before in Think with Sophie.
+
+Parameters:
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: list_my_favorite_chains
+Description: [This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain).] It lists all the user's favorite structured thinking Chains in Think with Sophie.
+
+Parameters:
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
+
+---
+
+Tool: list_my_chains
+Description: [This function belongs to the MCP Server "Think with Sophie™", based on the Model-Chain-Think (MCT) framework. It helps users conduct professional and in-depth thinking using high-quality structured thinking chains (Chain).] It lists all the structured thinking Chains the user has in Think with Sophie.
+
+Parameters:
+  - optional_arg (Optional[Dict[str, Any]]): Optional arguments.
