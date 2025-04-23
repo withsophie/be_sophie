@@ -154,9 +154,17 @@ You are an expert skilled in <<role_of_expert>>, please think about:
 - {{<<entity_name>>}}:
   - Variable description is as follows:
      <<entity_description>>
+  - 'Dict' type sub-entity are as follows:
+    <<component:*sub_entity>>
   - format examples:
      <<entity_format_example>>
 <!-- component end: entity -->
+
+<!-- component start: sub_entity -->
+      - {{<<sub_entity_name>>}}:
+        - Sub-entity variable description is as follows:
+          <<sub_entity_description>>
+<!-- component end: sub_entity -->
 
 <!-- component start: think_step -->
 - Step ID: <<step_id>>
@@ -180,25 +188,11 @@ You are an expert skilled in <<role_of_expert>>, please think about:
 <!-- component end: execute -->
 
 <!-- component start: format_conversion -->
-<<component:?rdf_format_conversion>>
-<<component:?svg_format_conversion>>
-<<component:?chat_format_conversion>>
+<<component:?format_conversion>>
 <!-- component end: format_conversion -->
 
-<!-- component start: rdf_format_conversion -->
+<!-- component start: format_conversion -->
 Format Conversion Instructions
-Convert the final output into Resource Description Framework (RDF) format. This involves representing the data as triples (subject-predicate-object), suitable for semantic web applications.
 <<conversion_prompt>>
-<!-- component end: rdf_format_conversion -->
+<!-- component end: format_conversion -->
 
-<!-- component start: svg_format_conversion -->
-Format Conversion Instructions
-Instructions for converting the final output to SVG format.
-<<conversion_prompt>>
-<!-- component end: svg_format_conversion -->
-
-<!-- component start: chat_format_conversion -->
-Format Conversion Instructions
-Instructions for converting the final output to a chat-friendly format.
-<<conversion_prompt>>
-<!-- component end: chat_format_conversion -->
