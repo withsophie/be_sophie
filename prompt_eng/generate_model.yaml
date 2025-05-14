@@ -1,0 +1,418 @@
+---
+model:
+  id: base_model            # Unique identifier for the model, e.g., "G1_BinaryOrthogonal"
+  name: Base Model          # Model name, e.g., "Binary Orthogonal"
+  ref_domain: geometry      # Domain of reference, e.g., "geometry", "management", "matrix"
+  visual: none              # Visualization type, must use a term from the ref_domain, e.g., "quadrant" for geometry, "grid" for matrix
+  description: Base structure for all models.  # Model description
+  inherits: null            # Inherit from another model, e.g., "G1_BinaryOrthogonal", or null
+  entities:
+    - id: base_point        # Unique identifier for the entity, must use a term from ref_domain and match prototype, e.g., "axis_x", "dimension_row"
+      prototype: point      # Entity type, must use a term from ref_domain, e.g., "axis", "vector", "quadrant" for geometry
+      define_baseset: []    # Base set for the entity, e.g., ["primitive"], ["axis_x"], ["dimension_row", "dimension_col"]
+      define_prompt: ""     # Description or prompt for the entity
+      occur: 1              # Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
+  relations:
+    - id: base_edge         # Unique identifier for the relation, must use a term from ref_domain and match prototype, e.g., "x_flip", "matrix_comparison"
+      prototype: edge       # Relation type, must use a term from the ref_domain, e.g., "relation", "symmetry" for geometry
+      define_baseset: []    # Base set for the relation, e.g., ["quadrant_I", "quadrant_II"]
+      define_prompt: ""     # Description or prompt for the relation
+      occur: 1*              # Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
+
+---
+# G1_BinaryOrthogonal: A quadrant model with two orthogonal axes (X and Y), each with positive and negative directions.
+# The four quadrants represent all combinations of X/Y positive/negative.
+#
+#   axis_y
+#    ↑                    y_positive
+#   -+→ axis_x                  ↑
+#                 quadrant_II   |   quadrant_I
+#                 (x_negative,  |  (x_positive,
+#                  y_positive)  |   y_positive)
+#     x_negative ←--------------+--------------→ x_positive
+#                 quadrant_III  |   quadrant_IV
+#                 (x_negative,  |  (x_positive,
+#                  y_negative)  |   y_negative)
+#                               ↓
+#                         y_negative
+#
+#   x_flip:        quadrant_I  <-->  quadrant_IV
+#                  quadrant_II <--> quadrant_III
+#
+#   y_flip:        quadrant_I  <-->  quadrant_II
+#                  quadrant_IV <--> quadrant_III
+#
+#   diagonal_reverse: quadrant_I <--> quadrant_III
+#   diagonal_swap:    quadrant_II <--> quadrant_IV
+#
+# Each axis and vector is defined as an entity, and each quadrant is a composite entity.
+# Symmetry relations describe possible transformations between quadrants.
+#
+model:
+  id: G1_BinaryOrthogonal  # Unique identifier for the model
+  name: Binary Orthogonal  # Model name
+  ref_domain: geometry     # Domain of reference, must use domain term
+  visual: quadrant         # Visualization type, must use a term from ref_domain, e.g., "quadrant"
+  description: A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.  # Model description
+  inherits: base_model     # Inherit from base_model
+  entities:
+    - id: axis_x           # Unique identifier for the entity
+      prototype: axis      # Entity type, must use a term from ref_domain, e.g., "axis"
+      define_baseset: [primitive]  # Base set for the entity
+      define_prompt: The X-axis representing opposing conceptual vectors.  # Entity description
+      occur: 1             # Must have exactly one
+    - id: axis_y
+      prototype: axis
+      define_baseset: [primitive]
+      define_prompt: The Y-axis representing another set of conceptual vectors.
+      occur: 1
+    - id: x_positive
+      prototype: vector
+      define_baseset: [axis_x]
+      define_prompt: Positive direction on X-axis. (e.g., future on a time axis, advantage in a competition)
+      occur: 1
+    - id: x_negative
+      prototype: vector
+      define_baseset: [axis_x]
+      define_prompt: Negative direction on X-axis. (e.g., past on a time axis, disadvantage in a competition)
+      occur: 1
+    - id: y_positive
+      prototype: vector
+      define_baseset: [axis_y]
+      define_prompt: Positive direction on Y-axis. (e.g., growth, opportunity)
+      occur: 1
+    - id: y_negative
+      prototype: vector
+      define_baseset: [axis_y]
+      define_prompt: Negative direction on Y-axis. (e.g., decline, threat)
+      occur: 1
+    - id: quadrant_I
+      prototype: quadrant
+      define_baseset: [x_positive, y_positive]
+      define_prompt: First quadrant (X positive, Y positive).
+      occur: 1
+    - id: quadrant_II
+      prototype: quadrant
+      define_baseset: [x_negative, y_positive]
+      define_prompt: Second quadrant (X negative, Y positive).
+      occur: 1
+    - id: quadrant_III
+      prototype: quadrant
+      define_baseset: [x_negative, y_negative]
+      define_prompt: Third quadrant (X negative, Y negative).
+      occur: 1
+    - id: quadrant_IV
+      prototype: quadrant
+      define_baseset: [x_positive, y_negative]
+      define_prompt: Fourth quadrant (X positive, Y negative).
+      occur: 1
+  relations:
+    - id: x_flip
+      prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
+      define_baseset: [quadrant_I, quadrant_IV, quadrant_II, quadrant_III]
+      define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
+      occur: 1+
+    - id: y_flip
+      prototype: symmetry
+      define_baseset: [quadrant_I, quadrant_II, quadrant_III, quadrant_IV]
+      define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
+      occur: 1+
+    - id: diagonal_reverse
+      prototype: symmetry
+      define_baseset: [quadrant_I, quadrant_III]
+      define_prompt: Diagonal symmetry—conversion between Quadrant I (++), and Quadrant III (--).
+      occur: 1+
+    - id: diagonal_swap
+      prototype: symmetry
+      define_baseset: [quadrant_II, quadrant_IV]
+      define_prompt: Diagonal symmetry—conversion between Quadrant II (-+), and Quadrant IV (+-).
+      occur: 1+
+
+---
+# G2_TrinaryTriangle: A triangle model with three nodes and three edges, representing trinary interconnection.
+#
+#        node_a
+#          ▲
+#         / \
+#   edge_ca  \ edge_ab
+#       /     \
+# node_c ————— node_b
+#        edge_bc
+#
+# Each node is defined as an entity, and each edge is a relation connecting two nodes.
+#
+model:
+  id: G2_TrinaryTriangle
+  name: Trinary Interconnection
+  ref_domain: geometry    # Domain of reference, must use domain term
+  visual: triangle       # Visualization type, must use a term from ref_domain, e.g., "triangle"
+  description: A triangular model showing interaction among three conceptual entities.
+  inherits: base_model   # Inherit from base_model
+  entities:
+    - id: node_a         # Entity id must use a term from ref_domain and match prototype, e.g., "node_a"
+      prototype: node    # Entity type, must use a term from ref_domain, e.g., "node"
+      define_baseset: [primitive]  # Base set for the entity
+      define_prompt: Vertex A in the triangle.
+      occur: 1
+    - id: node_b         # Entity id must use a term from ref_domain and match prototype, e.g., "node_b"
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Vertex B in the triangle.
+      occur: 1
+    - id: node_c         # Entity id must use a term from ref_domain and match prototype, e.g., "node_c"
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Vertex C in the triangle.
+      occur: 1
+  relations:
+    - id: edge_ab        # Relation id must use a term from ref_domain and match prototype, e.g., "edge_ab"
+      prototype: edge    # Relation type, must use a term from ref_domain, e.g., "edge"
+      define_baseset: [node_a, node_b]
+      define_prompt: Edge between node A and node B.
+      occur: 1+
+    - id: edge_bc
+      prototype: edge
+      define_baseset: [node_b, node_c]
+      define_prompt: Edge between node B and node C.
+      occur: 1+
+    - id: edge_ca
+      prototype: edge
+      define_baseset: [node_c, node_a]
+      define_prompt: Edge between node C and node A.
+      occur: 1+
+
+---
+# G3_NegativeFeedbackOpposition: A binary opposition model with negative feedback driving both nodes toward equilibrium.
+#
+#     (a excess)                          (b excess)
+#        ↑    ┌─────negative feedback──────┐   ↑
+#      node_a │        equilibrium         │ node_b
+#        ↓    └──←──────────────────────→──┘   ↓
+#                   
+#
+# - node_a and node_b are in opposition, each can be in excess.
+# - When node_a is in excess, negative feedback acts to reduce node_a and promote node_b, driving the system toward equilibrium.
+# - When node_b is in excess, negative feedback acts to reduce node_b and promote node_a, driving the system toward equilibrium.
+# - equilibrium is the dynamic balance point between node_a and node_b.
+#
+# Relations:
+#   - negative_feedback_a_to_b: node_a → node_b (negative feedback from a excess)
+#   - negative_feedback_b_to_a: node_b → node_a (negative feedback from b excess)
+#   - to_equilibrium_a: node_a → equilibrium (a adjusts toward equilibrium)
+#   - to_equilibrium_b: node_b → equilibrium (b adjusts toward equilibrium)
+#
+model:
+  id: G3_NegativeFeedbackOpposition
+  name: Binary Negative Feedback Opposition
+  ref_domain: geometry
+  visual: line_with_center
+  description: Two opposing nodes interact via negative feedback, driving the system toward a dynamic equilibrium.
+  inherits: base_model
+  entities:
+    - id: node_a
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Opposing Node A.
+      occur: 1
+    - id: node_b
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Opposing Node B.
+      occur: 1
+    - id: equilibrium
+      prototype: equilibrium
+      define_baseset: [node_a, node_b]
+      define_prompt: Dynamic equilibrium point between Node A and Node B.
+      occur: 1
+  relations:
+    - id: negative_feedback_a_to_b
+      prototype: feedback
+      define_baseset: [node_a, node_b]
+      define_prompt: Negative feedback from Node A to Node B (when A is in excess, suppresses A and promotes B).
+      occur: 1
+    - id: negative_feedback_b_to_a
+      prototype: feedback
+      define_baseset: [node_b, node_a]
+      define_prompt: Negative feedback from Node B to Node A (when B is in excess, suppresses B and promotes A).
+      occur: 1
+    - id: to_equilibrium_a
+      prototype: relation
+      define_baseset: [node_a, equilibrium]
+      define_prompt: Node A adjusts toward equilibrium.
+      occur: 1
+    - id: to_equilibrium_b
+      prototype: relation
+      define_baseset: [node_b, equilibrium]
+      define_prompt: Node B adjusts toward equilibrium.
+      occur: 1
+
+---
+# G4_Closure: Internal-External Set Structure Model
+#
+#   +-----------------------------------------+
+#   |              internal_set               |
+#   |            ● internal_entity            |
+#   |                                         |
+#   |    ↑                          |         |
+#   +----|--------------------------|---------+
+#        |                          |
+# external_to_internal         internal_to_external
+#        |                          |
+#        |       external_set       |
+#        |    ○ external_entity     ↓
+#
+# Diagram notes:
+# - The box represents the internal_set, containing internal_entity.
+# - Outside the box is the external_set, containing external_entity.
+# - external_to_internal: Arrow from external_entity (outside) to internal_entity (inside).
+# - internal_to_external: Arrow from internal_entity (inside) to external_entity (outside).
+#
+model:
+  id: G4_Closure
+  name: Closure Structure
+  ref_domain: set         # Use "set" or "system" to match the prototype terms
+  visual: set
+  description: Models internal vs external entities and their mutual influence.
+  inherits: base_model
+  entities:
+    - id: internal_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set that defines all internal entities (e.g., system, organization).
+      occur: 1
+    - id: external_set
+      prototype: set
+      define_baseset: [internal_set]
+      define_prompt: The set that defines all external entities, defined relative to the internal set (e.g., environment outside the system).
+      occur: 1
+    - id: internal_entity
+      prototype: element
+      define_baseset: [internal_set]
+      define_prompt: An entity from the internal set.
+      occur: n+
+    - id: external_entity
+      prototype: element
+      define_baseset: [external_set]
+      define_prompt: An entity from the external set.
+      occur: n+
+  relations:
+    - id: external_to_internal
+      prototype: relation
+      define_baseset: [external_entity, internal_entity]
+      define_prompt: Influence from external entity to internal entity.
+      occur: n*
+    - id: internal_to_external
+      prototype: relation
+      define_baseset: [internal_entity, external_entity]
+      define_prompt: Feedback or projection from internal entity to external entity.
+      occur: n*
+
+---
+# G5_HybridMatrix: A 2D matrix where row and column are defined by different sets.
+#
+#   col1   col2   col3  ←-- col_define_set
+# +------+------+------+
+# |      |      |      |  row1
+# +------+------+------+
+# |      |      |      |  row2
+# +------+------+------+
+# |      |      |      |  row3
+# +------+------+------+   ↑
+#  ...   ...    ...       (row_define_set)
+#
+# - row_define_set: defines all possible row entities (e.g., countries, products)
+# - col_define_set: defines all possible column entities (e.g., years, indicators)
+# - dimension_row: each row entity from row_define_set
+# - dimension_col: each column entity from col_define_set
+# - cell_entity: intersection of a row and a column
+# - matrix_cross: relation between row and column in the matrix
+#
+model:
+  id: G5_HybridMatrix
+  name: 2D Hybrid Matrix
+  ref_domain: matrix
+  visual: grid
+  description: Matrix where row and column are defined by different sets, and each cell represents the intersection.
+  inherits: base_model
+  entities:
+    - id: row_define_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set that defines all possible row entities (e.g., countries, products).
+      occur: 1
+    - id: col_define_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set that defines all possible column entities (e.g., years, indicators).
+      occur: 1
+    - id: dimension_row
+      prototype: dimension
+      define_baseset: [row_define_set]
+      define_prompt: Row dimension, each value is an entity from row_define_set.
+      occur: n+
+    - id: dimension_col
+      prototype: dimension
+      define_baseset: [col_define_set]
+      define_prompt: Column dimension, each value is an entity from col_define_set.
+      occur: n+
+    - id: cell_entity
+      prototype: cell
+      define_baseset: [dimension_row, dimension_col]
+      define_prompt: A cell defined by the intersection of a row entity and a column entity.
+      occur: n+
+  relations:
+    - id: matrix_cross
+      prototype: relation
+      define_baseset: [dimension_row, dimension_col]
+      define_prompt: Cross-dimension relation between row and column in the matrix.
+      occur: 1
+
+---
+# G6_SymmetricMatrix: A 2D symmetric matrix where both row and column are enumerations of the same set.
+#
+#  define_set
+#  ↑
+#  ↑ ←-  dim1   dim2   dim3   ...
+#  ↑   +------+------+------+
+# dim1 |      |      |      |
+#      +------+------+------+
+# dim2 |      |      |      |
+#      +------+------+------+
+# dim3 |      |      |      |
+#      +------+------+------+
+#  ...   ...    ...    ...
+#
+# - define_set: defines both row and column entities (e.g., countries, people)
+# - dimension: each value is an entity from define_set, used for both row and column
+# - cell_entity: intersection of two entities from define_set (symmetric relationship)
+# - matrix_comparison: symmetric comparison relation between two entities in each cell
+#
+model:
+  id: G6_SymmetricMatrix
+  name: 2D Symmetric Matrix
+  ref_domain: matrix
+  visual: grid
+  description: A symmetric matrix where both row and column are enumerations of the same set, and each cell represents a symmetric relationship.
+  inherits: base_model
+  entities:
+    - id: define_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set that defines both row and column entities (e.g., countries, people).
+      occur: 1
+    - id: dimension
+      prototype: dimension
+      define_baseset: [define_set]
+      define_prompt: Both row and column dimensions, each value is an entity from define_set.
+      occur: n+
+    - id: cell_entity
+      prototype: cell
+      define_baseset: [dimension, dimension]
+      define_prompt: Cell representing the symmetric relationship between two entities from define_set.
+      occur: 1+
+  relations:
+    - id: matrix_comparison
+      prototype: relation
+      define_baseset: [dimension, dimension]
+      define_prompt: Symmetric comparison relation between two entities in each cell.
+      occur: 1

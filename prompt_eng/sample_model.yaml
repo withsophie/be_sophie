@@ -1,0 +1,658 @@
+---
+# ==========================================
+#   SWOT Quadrant Model (Business, G1_BinaryOrthogonal Structure)
+#
+#            axis_advantage (Strength ↑ / Weakness ↓)
+#                            ↑
+#         S (Now+Strength)   |   O (Future+Strength)
+#   ------------------------ + ------------------------→ axis_time (Now ← / → Future)
+#         W (Now+Weakness)   |   T (Future+Weakness)
+#                            ↓
+#
+# Explanation:
+# - X axis (axis_time): Time (Now ←→ Future)
+# - Y axis (axis_advantage): Advantage (Strength ↑, Weakness ↓)
+# - Four quadrants:
+#     S: Now + Strength (Current Strength)
+#     W: Now + Weakness (Current Weakness)
+#     O: Future + Strength (Future Opportunity)
+#     T: Future + Weakness (Future Threat)
+# ==========================================
+model:
+  id: SWOT
+  name: SWOT Quadrant (Business, G1 Structure)
+  ref_domain: business
+  visual: quadrant
+  description: >
+    SWOT analysis in business, strictly following G1_BinaryOrthogonal structure.
+    Axes: Time (Now/Future), Advantage (Strength/Weakness).
+    S = Now+Strength, W = Now+Weakness, O = Future+Strength, T = Future+Weakness.
+  inherits: G1_BinaryOrthogonal
+
+  entities:
+    - id: axis_time
+      prototype: axis
+      define_prompt: Time axis (Now vs Future)
+      occur: 1
+    - id: axis_advantage
+      prototype: axis
+      define_prompt: Advantage axis (Strength vs Weakness)
+      occur: 1
+    - id: now
+      prototype: vector
+      define_baseset: [axis_time]
+      define_prompt: Now
+      occur: 1
+    - id: future
+      prototype: vector
+      define_baseset: [axis_time]
+      define_prompt: Future
+      occur: 1
+    - id: strength
+      prototype: vector
+      define_baseset: [axis_advantage]
+      define_prompt: Strength
+      occur: 1
+    - id: weakness
+      prototype: vector
+      define_baseset: [axis_advantage]
+      define_prompt: Weakness
+      occur: 1
+    - id: S
+      prototype: quadrant
+      define_baseset: [now, strength]
+      define_prompt: S (Now + Strength)
+      occur: 1
+    - id: W
+      prototype: quadrant
+      define_baseset: [now, weakness]
+      define_prompt: W (Now + Weakness)
+      occur: 1
+    - id: O
+      prototype: quadrant
+      define_baseset: [future, strength]
+      define_prompt: O (Future + Strength)
+      occur: 1
+    - id: T
+      prototype: quadrant
+      define_baseset: [future, weakness]
+      define_prompt: T (Future + Weakness)
+      occur: 1
+
+  relations:
+    - id: time_flip
+      prototype: symmetry
+      define_baseset: [S, W, O, T]
+      define_prompt: Flip Time (Now <-> Future)
+      occur: 1+
+    - id: advantage_flip
+      prototype: symmetry
+      define_baseset: [S, O, W, T]
+      define_prompt: Flip Advantage (Strength <-> Weakness)
+      occur: 1+
+    - id: diagonal_reverse
+      prototype: symmetry
+      define_baseset: [S, T]
+      define_prompt: Diagonal symmetry (S <-> T)
+      occur: 1+
+    - id: diagonal_swap
+      prototype: symmetry
+      define_baseset: [W, O]
+      define_prompt: Diagonal symmetry (W <-> O)
+      occur: 1+
+
+
+---
+# ==========================================
+#   Religion Quadrant Model (G1_BinaryOrthogonal Structure)
+#
+#        axis_seek_who (Seek Others ↑ / Seek Self ↓)
+#                                   ↑
+#           this_world_other_help   |   afterlife_other_help
+#          ------------------------ + ------------------------→ axis_destination (This World ← / → Afterlife)
+#           this_world_self_help    |   afterlife_self_help
+#                                   ↓
+#
+# Explanation:
+# - X axis (axis_destination): Destination (This World ←→ Afterlife)
+# - Y axis (axis_seek_who): Who is being sought (Seek Others ↑, Seek Self ↓)
+# - Four quadrants (with examples):
+#     this_world_other_help: Seek Others + This World (此岸他救)  
+#         Example: Traditional Chinese folk religions where people pray to local deities for blessings in this life.
+#     this_world_self_help: Seek Self + This World (此岸自救)  
+#         Example: Confucianism, Stoicism (focus on self-cultivation and virtue in this life).
+#     afterlife_other_help: Seek Others + Afterlife (彼岸他救)  
+#         Example: Christianity (salvation by God), Pure Land Buddhism (salvation by Amitabha Buddha).
+#     afterlife_self_help: Seek Self + Afterlife (彼岸自救)  
+#         Example: Buddhism (Theravada, Zen—enlightenment through self-practice).
+# ==========================================
+model:
+  id: religion_quadrant
+  name: Religion Quadrant (G1 Structure)
+  ref_domain: religion
+  visual: quadrant
+  description: >
+    A quadrant model for religion based on two axes: Who is being sought (Seek Others/Seek Self) and Destination (This World/Afterlife). Each quadrant represents a combination of religious orientation and goal.
+  inherits: G1_BinaryOrthogonal
+
+  entities:
+    - id: axis_seek_who
+      prototype: axis
+      define_prompt: Who is being sought axis (Seek Others vs Seek Self)
+      occur: 1
+    - id: axis_destination
+      prototype: axis
+      define_prompt: Destination axis (This World vs Afterlife)
+      occur: 1
+    - id: seek_others
+      prototype: vector
+      define_baseset: [axis_seek_who]
+      define_prompt: Seek Others (e.g., deities, external forces)
+      occur: 1
+    - id: seek_self
+      prototype: vector
+      define_baseset: [axis_seek_who]
+      define_prompt: Seek Self (e.g., self-cultivation, inner power)
+      occur: 1
+    - id: this_world
+      prototype: vector
+      define_baseset: [axis_destination]
+      define_prompt: This World (focus on present life)
+      occur: 1
+    - id: afterlife
+      prototype: vector
+      define_baseset: [axis_destination]
+      define_prompt: Afterlife (focus on salvation or liberation after death)
+      occur: 1
+    - id: this_world_self_help
+      prototype: quadrant
+      define_baseset: [seek_self, this_world]
+      define_prompt: This World Self-Help (此岸自救)
+      occur: 1
+    - id: this_world_other_help
+      prototype: quadrant
+      define_baseset: [seek_others, this_world]
+      define_prompt: This World Other-Help (此岸他救)
+      occur: 1
+    - id: afterlife_self_help
+      prototype: quadrant
+      define_baseset: [seek_self, afterlife]
+      define_prompt: Afterlife Self-Help (彼岸自救)
+      occur: 1
+    - id: afterlife_other_help
+      prototype: quadrant
+      define_baseset: [seek_others, afterlife]
+      define_prompt: Afterlife Other-Help (彼岸他救)
+      occur: 1
+
+  relations:
+    - id: seek_who_flip
+      prototype: symmetry
+      define_baseset: [this_world_self_help, this_world_other_help, afterlife_self_help, afterlife_other_help]
+      define_prompt: Flip Who is being sought (Seek Others <-> Seek Self)
+      occur: 1+
+    - id: destination_flip
+      prototype: symmetry
+      define_baseset: [this_world_self_help, afterlife_self_help, this_world_other_help, afterlife_other_help]
+      define_prompt: Flip Destination (This World <-> Afterlife)
+      occur: 1+
+    - id: diagonal_reverse
+      prototype: symmetry
+      define_baseset: [this_world_other_help, afterlife_self_help]
+      define_prompt: Diagonal symmetry (This World Other-Help <-> Afterlife Self-Help)
+      occur: 1+
+    - id: diagonal_swap
+      prototype: symmetry
+      define_baseset: [this_world_self_help, afterlife_other_help]
+      define_prompt: Diagonal symmetry (This World Self-Help <-> Afterlife Other-Help)
+      occur: 1+
+
+
+---
+# ==========================================
+#   Impossible Trinity (International Trade, G2_TrinaryTriangle Structure)
+#
+#                  capital_mobility
+#                         ▲
+#                        / \
+#                       /   \
+#                      /     \
+#                     /       \
+#                    /         \
+#  exchange_rate_stability —— monetary_policy_independence
+#
+# Diagram:
+# - Each vertex represents one of the three policy goals:
+#     capital_mobility: Free capital mobility (no capital controls)
+#     monetary_policy_independence: Independent monetary policy (control over domestic interest rates)
+#     exchange_rate_stability: Stable/fixed exchange rate
+# - Each edge represents the trade-off between two goals.
+# - The trilemma: only two of the three can be achieved at the same time.
+# ==========================================
+model:
+  id: impossible_triangle_trade
+  name: Impossible Trinity (International Trade)
+  ref_domain: international_trade
+  visual: triangle
+  description: >
+    The Impossible Trinity (Trilemma) in international trade: a country cannot simultaneously achieve free capital mobility, independent monetary policy, and a fixed exchange rate. Only two of the three can be realized at the same time.
+  inherits: G2_TrinaryTriangle
+
+  entities:
+    - id: capital_mobility
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Free capital mobility (no capital controls)
+      occur: 1
+    - id: monetary_policy_independence
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Independent monetary policy (control over domestic interest rates)
+      occur: 1
+    - id: exchange_rate_stability
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Stable/fixed exchange rate
+      occur: 1
+
+  relations:
+    - id: edge_capital_mobility_monetary_policy
+      prototype: edge
+      define_baseset: [capital_mobility, monetary_policy_independence]
+      define_prompt: Trade-off between capital mobility and monetary policy independence
+      occur: 1
+    - id: edge_monetary_policy_exchange_rate
+      prototype: edge
+      define_baseset: [monetary_policy_independence, exchange_rate_stability]
+      define_prompt: Trade-off between monetary policy independence and exchange rate stability
+      occur: 1
+    - id: edge_exchange_rate_capital_mobility
+      prototype: edge
+      define_baseset: [exchange_rate_stability, capital_mobility]
+      define_prompt: Trade-off between exchange rate stability and capital mobility
+      occur: 1
+
+---
+---
+# ==========================================
+#   Impossible Triangle of Family Life (G2_TrinaryTriangle Structure)
+#
+#                sex
+#                 ▲
+#                / \
+#               /   \
+#              /     \
+#             /       \
+#            /         \
+#      love_life —— career
+#
+# Diagram:
+# - Each vertex represents one of the three core aspects of family life:
+#     sex: Sexual satisfaction and intimacy
+#     love_life: Romantic relationship and emotional connection
+#     career: Career success and financial stability
+# - Each edge represents the trade-off and mutual influence between two aspects.
+# - The trilemma: only two of the three can be fully achieved at the same time.
+# ==========================================
+model:
+  id: impossible_triangle_family_life
+  name: Impossible Triangle (Family Life)
+  ref_domain: family_life
+  visual: triangle
+  description: >
+    The Impossible Triangle in family life: one cannot fully achieve sexual satisfaction, romantic love, and career/financial success at the same time. Only two of the three can be fully realized simultaneously. Each aspect influences the others, often in a negative way when one is prioritized.
+  inherits: G2_TrinaryTriangle
+
+  entities:
+    - id: sex
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Sexual satisfaction and intimacy
+      occur: 1
+    - id: love_life
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Romantic relationship and emotional connection
+      occur: 1
+    - id: career
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: Career success and financial stability
+      occur: 1
+
+  relations:
+    - id: edge_sex_love_life
+      prototype: edge
+      define_baseset: [sex, love_life]
+      define_prompt: >
+        Mutual influence between sex and romantic love. 
+        For example, lack of emotional connection can reduce sexual satisfaction, and vice versa.
+      occur: 1
+    - id: edge_love_life_career
+      prototype: edge
+      define_baseset: [love_life, career]
+      define_prompt: >
+        Trade-off and influence between romantic love and career. 
+        More focus on career may reduce time and energy for love life, while relationship issues can affect work performance.
+      occur: 1
+    - id: edge_career_sex
+      prototype: edge
+      define_baseset: [career, sex]
+      define_prompt: >
+        Trade-off and influence between career and sex. 
+        High work pressure or long hours may reduce desire or time for sex; lack of sexual satisfaction may affect work mood and motivation.
+      occur: 1
+
+
+---
+# ==========================================
+#   Dynamic Chemical Reaction Model (G3_BinaryOpposition Structure)
+#
+#      (Reactant excess)                      (Product excess)
+#            ↑                                    ↑
+#         reactant    ←——  equilibrium  ——→  product
+#            ↓                                    ↓
+#      (to equilibrium)                     (to equilibrium)
+#
+# Explanation:
+# - reactant: The chemical reactant(s) in the system.
+# - product: The chemical product(s) in the system.
+# - equilibrium: The dynamic equilibrium point between reactant and product.
+# - flow_reactant_to_product: Net reaction proceeds from reactant to product when reactant is in excess.
+# - flow_product_to_reactant: Net reaction proceeds from product to reactant when product is in excess (reverse reaction).
+# - to_equilibrium_reactant: Reactant moves toward equilibrium (rate depends on excess reactant).
+# - to_equilibrium_product: Product moves toward equilibrium (rate depends on excess product).
+# ==========================================
+model:
+  id: dynamic_chemical_reaction
+  name: Dynamic Chemical Reaction (G3 Structure)
+  ref_domain: chemistry
+  visual: line_with_center
+  description: >
+    A dynamic model of a reversible chemical reaction, showing the flow between reactant and product and the establishment of equilibrium. Inherits the binary opposition with equilibrium structure.
+  inherits: G3_BinaryOpposition
+
+  entities:
+    - id: reactant
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: The chemical reactant(s) in the reaction.
+      occur: 1
+    - id: product
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: The chemical product(s) in the reaction.
+      occur: 1
+    - id: equilibrium
+      prototype: equilibrium
+      define_baseset: [reactant, product]
+      define_prompt: The dynamic equilibrium point between reactant and product.
+      occur: 1
+
+  relations:
+    - id: flow_reactant_to_product
+      prototype: relation
+      define_baseset: [reactant, product]
+      define_prompt: Net flow from reactant to product when reactant is in excess (forward reaction).
+      occur: 1
+    - id: flow_product_to_reactant
+      prototype: relation
+      define_baseset: [product, reactant]
+      define_prompt: Net flow from product to reactant when product is in excess (reverse reaction).
+      occur: 1
+    - id: to_equilibrium_reactant
+      prototype: relation
+      define_baseset: [reactant, equilibrium]
+      define_prompt: Reactant moves toward equilibrium; rate depends on reactant excess.
+      occur: 1
+    - id: to_equilibrium_product
+      prototype: relation
+      define_baseset: [product, equilibrium]
+      define_prompt: Product moves toward equilibrium; rate depends on product excess.
+      occur: 1
+
+
+# ==========================================
+#   Market Price Formation Model (G3_NegativeFeedbackOpposition Structure)
+#
+#      (Excess Supply)                        (Excess Demand)
+#            ↑                                    ↑
+#         supply        ←——  equilibrium  ——→  demand
+#            ↓                                    ↓
+#      (adjust to equilibrium)             (adjust to equilibrium)
+#
+# Explanation:
+# - supply: The total supply of a good in the market.
+# - demand: The total demand for a good in the market.
+# - equilibrium: The market equilibrium price/quantity where supply equals demand.
+# - negative_feedback_supply_to_demand: When supply exceeds demand, price tends to fall, stimulating demand and reducing supply.
+# - negative_feedback_demand_to_supply: When demand exceeds supply, price tends to rise, stimulating supply and reducing demand.
+# - to_equilibrium_supply: Supply adjusts toward equilibrium.
+# - to_equilibrium_demand: Demand adjusts toward equilibrium.
+# ==========================================
+model:
+  id: market_price_formation
+  name: Market Price Formation Model
+  ref_domain: economics
+  visual: line_with_center
+  description: >
+    A binary opposition model for market price formation, where supply and demand interact via negative feedback, driving the system toward market equilibrium.
+  inherits: G3_NegativeFeedbackOpposition
+
+  entities:
+    - id: supply
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: The total supply of a good in the market.
+      occur: 1
+    - id: demand
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: The total demand for a good in the market.
+      occur: 1
+    - id: equilibrium
+      prototype: equilibrium
+      define_baseset: [supply, demand]
+      define_prompt: The market equilibrium point where supply equals demand.
+      occur: 1
+
+  relations:
+    - id: negative_feedback_supply_to_demand
+      prototype: feedback
+      define_baseset: [supply, demand]
+      define_prompt: Negative feedback from supply to demand (excess supply lowers price, increases demand, reduces supply).
+      occur: 1
+    - id: negative_feedback_demand_to_supply
+      prototype: feedback
+      define_baseset: [demand, supply]
+      define_prompt: Negative feedback from demand to supply (excess demand raises price, increases supply, reduces demand).
+      occur: 1
+    - id: to_equilibrium_supply
+      prototype: relation
+      define_baseset: [supply, equilibrium]
+      define_prompt: Supply adjusts toward equilibrium.
+      occur: 1
+    - id: to_equilibrium_demand
+      prototype: relation
+      define_baseset: [demand, equilibrium]
+      define_prompt: Demand adjusts toward equilibrium.
+      occur: 1
+
+---
+# ==========================================
+#   Science vs Religion Model (G4_Closure Structure)
+#
+#   +-----------------------------------------+
+#   |              science_set                |
+#   |            ● science_entity             |
+#   |                                         |
+#   |    ↑                          |         |
+#   +----|--------------------------|---------+
+#        |                          |
+# religion_to_science         science_to_religion
+#        |                          |
+#        |         religion_set      |
+#        |    ○ religion_entity      ↓
+#
+# Diagram:
+# - The box represents the science_set, containing science_entity (e.g., scientific knowledge, methods, practitioners).
+# - Outside the box is the religion_set, containing religion_entity (e.g., religious beliefs, practices, communities).
+# - religion_to_science: Influence from religion to science (e.g., religious values shaping scientific ethics).
+# - science_to_religion: Feedback or influence from science to religion (e.g., scientific discoveries impacting religious interpretations).
+# ==========================================
+model:
+  id: science_vs_religion
+  name: Science vs Religion (Closure Structure)
+  ref_domain: philosophy
+  visual: set
+  description: >
+    A closure model describing the interaction between science (internal set) and religion (external set), and their mutual influences.
+  inherits: G4_Closure
+
+  entities:
+    - id: science_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set representing science, including scientific knowledge, methods, and practitioners.
+      occur: 1
+    - id: religion_set
+      prototype: set
+      define_baseset: [science_set]
+      define_prompt: The set representing religion, including beliefs, practices, and communities, defined relative to science.
+      occur: 1
+    - id: science_entity
+      prototype: element
+      define_baseset: [science_set]
+      define_prompt: An entity from the science set (e.g., a scientific theory, scientist, or method).
+      occur: n+
+    - id: religion_entity
+      prototype: element
+      define_baseset: [religion_set]
+      define_prompt: An entity from the religion set (e.g., a religious doctrine, ritual, or leader).
+      occur: n+
+
+  relations:
+    - id: religion_to_science
+      prototype: relation
+      define_baseset: [religion_entity, science_entity]
+      define_prompt: Influence from religion to science, such as religious values shaping scientific ethics or research priorities.
+      occur: n*
+    - id: science_to_religion
+      prototype: relation
+      define_baseset: [science_entity, religion_entity]
+      define_prompt: Feedback or influence from science to religion, such as scientific discoveries impacting religious interpretations or practices.
+      occur: n*
+
+
+---
+# ==========================================
+#   National Power Matrix Model (G5_HybridMatrix Structure)
+#
+#   geo   econ   military   religion   ideology  ←-- col_define_set
+# +------+------+---------+----------+----------+
+# |      |      |         |          |          |  country_1
+# +------+------+---------+----------+----------+
+# |      |      |         |          |          |  country_2
+# +------+------+---------+----------+----------+
+# |      |      |         |          |          |  country_3
+# +------+------+---------+----------+----------+
+#  ...   ...    ...       ...        ...        (row_define_set)
+#
+# Diagram:
+# - Each row represents a country.
+# - Each column represents a dimension: geopolitics, economy, military, religion, ideology.
+# - Each cell describes the intersection of a country and a dimension (e.g., China's economic power, US military power).
+# ==========================================
+model:
+  id: national_power_matrix
+  name: National Power Matrix
+  ref_domain: geopolitics
+  visual: grid
+  description: >
+    A hybrid matrix model for analyzing countries across five dimensions: geopolitics, economy, military, religion, and ideology. Each cell represents a country's status or influence in a specific dimension.
+  inherits: G5_HybridMatrix
+
+  entities:
+    - id: country_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set of all countries under analysis.
+      occur: 1
+    - id: dimension_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set of all dimensions: geopolitics, economy, military, religion, ideology.
+      occur: 1
+    - id: country
+      prototype: dimension
+      define_baseset: [country_set]
+      define_prompt: A country entity (e.g., China, US, Russia).
+      occur: n+
+    - id: dimension
+      prototype: dimension
+      define_baseset: [dimension_set]
+      define_prompt: A dimension entity (geo, econ, military, religion, ideology).
+      occur: 5
+    - id: cell_entity
+      prototype: cell
+      define_baseset: [country, dimension]
+      define_prompt: The intersection of a country and a dimension, describing the country's status or influence in that dimension.
+      occur: n+
+
+  relations:
+    - id: matrix_cross
+      prototype: relation
+      define_baseset: [country, dimension]
+      define_prompt: The relationship or value at the intersection of a country and a dimension (e.g., military strength, economic size, religious influence, ideological stance).
+      occur: 1
+
+---
+# ==========================================
+#   Team Situation Symmetric Comparison Model (G6_SymmetricMatrix Structure)
+#
+#         team_1   team_2   team_3   ...   team_n   ←-- define_set (columns)
+#       +--------+--------+--------+-----+--------+
+# team_1|        |        |        |     |        |
+#       +--------+--------+--------+-----+--------+
+# team_2|        |        |        |     |        |
+#       +--------+--------+--------+-----+--------+
+# team_3|        |        |        |     |        |
+#       +--------+--------+--------+-----+--------+
+#  ...    ...      ...      ...     ...    ...    (rows)
+#
+# Diagram:
+# - Both rows and columns are teams from the same set.
+# - Each cell describes the symmetric comparison or relationship between two teams (e.g., head-to-head record, relative strength, tactical matchup).
+# ==========================================
+model:
+  id: team_symmetric_comparison_matrix
+  name: Team Symmetric Comparison Matrix
+  ref_domain: sports
+  visual: grid
+  description: >
+    A symmetric matrix model for comparing multiple teams against each other. Each cell represents the relationship or comparison between two teams, such as head-to-head results, relative strength, or matchup analysis.
+  inherits: G6_SymmetricMatrix
+
+  entities:
+    - id: team_set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: The set of all teams under analysis.
+      occur: 1
+    - id: team
+      prototype: dimension
+      define_baseset: [team_set]
+      define_prompt: Both row and column dimensions, each value is a team from team_set.
+      occur: n+
+    - id: cell_entity
+      prototype: cell
+      define_baseset: [team, team]
+      define_prompt: Cell representing the symmetric relationship or comparison between two teams.
+      occur: 1+
+
+  relations:
+    - id: matrix_comparison
+      prototype: relation
+      define_baseset: [team, team]
+      define_prompt: Symmetric comparison relation between two teams in each cell (e.g., head-to-head record, matchup analysis).
+      occur: 1
