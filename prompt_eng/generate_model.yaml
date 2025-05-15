@@ -1,5 +1,6 @@
 ---
 model:
+  index: G0
   id: base_model            # Unique identifier for the model, e.g., "G1_BinaryOrthogonal"
   name: Base Model          # Model name, e.g., "Binary Orthogonal"
   ref_domain: geometry      # Domain of reference, e.g., "geometry", "management", "matrix"
@@ -20,7 +21,7 @@ model:
       occur: 1*              # Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
 
 ---
-# G1_BinaryOrthogonal: A quadrant model with two orthogonal axes (X and Y), each with positive and negative directions.
+# binary_orthogonal: A quadrant model with two orthogonal axes (X and Y), each with positive and negative directions.
 # The four quadrants represent all combinations of X/Y positive/negative.
 #
 #   axis_y
@@ -49,7 +50,8 @@ model:
 # Symmetry relations describe possible transformations between quadrants.
 #
 model:
-  id: G1_BinaryOrthogonal  # Unique identifier for the model
+  index: G1
+  id: binary_orthogonal  # Unique identifier for the model
   name: Binary Orthogonal  # Model name
   ref_domain: geometry     # Domain of reference, must use domain term
   visual: quadrant         # Visualization type, must use a term from ref_domain, e.g., "quadrant"
@@ -129,7 +131,7 @@ model:
       occur: 1+
 
 ---
-# G2_TrinaryTriangle: A triangle model with three nodes and three edges, representing trinary interconnection.
+# trinary_triangle: A triangle model with three nodes and three edges, representing trinary interconnection.
 #
 #        node_a
 #          ▲
@@ -142,7 +144,8 @@ model:
 # Each node is defined as an entity, and each edge is a relation connecting two nodes.
 #
 model:
-  id: G2_TrinaryTriangle
+  index: G2
+  id: trinary_triangle
   name: Trinary Interconnection
   ref_domain: geometry    # Domain of reference, must use domain term
   visual: triangle       # Visualization type, must use a term from ref_domain, e.g., "triangle"
@@ -182,7 +185,7 @@ model:
       occur: 1+
 
 ---
-# G3_NegativeFeedbackOpposition: A binary opposition model with negative feedback driving both nodes toward equilibrium.
+# negative_feedback_opposition: A binary opposition model with negative feedback driving both nodes toward equilibrium.
 #
 #     (a excess)                          (b excess)
 #        ↑    ┌─────negative feedback──────┐   ↑
@@ -202,52 +205,58 @@ model:
 #   - to_equilibrium_b: node_b → equilibrium (b adjusts toward equilibrium)
 #
 model:
-  id: G3_NegativeFeedbackOpposition
+  index: G3
+  id: negative_feedback_opposition
   name: Binary Negative Feedback Opposition
-  ref_domain: geometry
+  ref_domain: analytic_geometry
   visual: line_with_center
-  description: Two opposing nodes interact via negative feedback, driving the system toward a dynamic equilibrium.
+  description: Two opposing nodes interact via negative feedback functions, driving the system toward a dynamic equilibrium.
   inherits: base_model
   entities:
     - id: node_a
-      prototype: node
+      prototype: point
       define_baseset: [primitive]
       define_prompt: Opposing Node A.
       occur: 1
     - id: node_b
-      prototype: node
+      prototype: point
       define_baseset: [primitive]
       define_prompt: Opposing Node B.
       occur: 1
-    - id: equilibrium
-      prototype: equilibrium
+    - id: change_path
+      prototype: segment
       define_baseset: [node_a, node_b]
+      define_prompt: The path of change (line segment) connecting Node A and Node B.
+      occur: 1      
+    - id: equilibrium
+      prototype: point
+      define_baseset: [node_a, node_b, change_path]
       define_prompt: Dynamic equilibrium point between Node A and Node B.
       occur: 1
   relations:
+    - id: activation_a_to_b
+      prototype: function
+      define_baseset: [node_a]
+      define_prompt: Function mapping from Node A to Node B (A influences B).
+      occur: 1
+    - id: activation_b_to_a
+      prototype: function
+      define_baseset: [node_b]
+      define_prompt: Function mapping from Node B to Node A (B influences A).
+      occur: 1
     - id: negative_feedback_a_to_b
-      prototype: feedback
-      define_baseset: [node_a, node_b]
-      define_prompt: Negative feedback from Node A to Node B (when A is in excess, suppresses A and promotes B).
+      prototype: function
+      define_baseset: [node_a]
+      define_prompt: Negative feedback from Node A to Node B (suppresses A, promotes B).
       occur: 1
     - id: negative_feedback_b_to_a
-      prototype: feedback
-      define_baseset: [node_b, node_a]
-      define_prompt: Negative feedback from Node B to Node A (when B is in excess, suppresses B and promotes A).
-      occur: 1
-    - id: to_equilibrium_a
-      prototype: relation
-      define_baseset: [node_a, equilibrium]
-      define_prompt: Node A adjusts toward equilibrium.
-      occur: 1
-    - id: to_equilibrium_b
-      prototype: relation
-      define_baseset: [node_b, equilibrium]
-      define_prompt: Node B adjusts toward equilibrium.
+      prototype: function
+      define_baseset: [node_b]
+      define_prompt: Negative feedback from Node B to Node A (suppresses B, promotes A).
       occur: 1
 
 ---
-# G4_Closure: Internal-External Set Structure Model
+# closure: Internal-External Set Structure Model
 #
 #   +-----------------------------------------+
 #   |              internal_set               |
@@ -268,7 +277,8 @@ model:
 # - internal_to_external: Arrow from internal_entity (inside) to external_entity (outside).
 #
 model:
-  id: G4_Closure
+  index: G4
+  id: closure
   name: Closure Structure
   ref_domain: set         # Use "set" or "system" to match the prototype terms
   visual: set
@@ -308,7 +318,80 @@ model:
       occur: n*
 
 ---
-# G5_HybridMatrix: A 2D matrix where row and column are defined by different sets.
+# central_expansion: Central Expansion Model
+#
+#         (exterior)
+#         , - ~ ~ ~ - ,
+#     , '               ' ,
+#   ,                       ,
+#  ,                         ,
+# ,           ● (origin)      ,
+# ,         /   |   \         ,
+# ,       /     |     \       ,
+#  ,    /      |radius \     ,
+#   , /        |        \   ,
+#     ,                  , '
+#       ' - , _ _ _ ,  '
+#      (interior)   boundary (circle)
+#
+# - origin: The central point of the circle (center).
+# - radius: The segment from the origin to the boundary (expansion).
+# - boundary: The circumference of the circle (limit of expansion).
+# - interior: The region inside the boundary.
+# - exterior: The region outside the boundary.
+#
+# Relations:
+#   - expansion: From origin to boundary (expanding outward).
+#   - contraction: From boundary to origin (contracting inward).
+model:
+  index: G5
+  id: central_expansion
+  name: Central Expansion Model
+  ref_domain: geometry
+  visual: circle
+  description: A model with a center (origin), expansion (radius), boundary (circumference), interior, and exterior. Relations include expansion and contraction.
+  inherits: base_model
+  entities:
+    - id: origin
+      prototype: point
+      define_baseset: [primitive]
+      define_prompt: The central point (origin) of the circle.
+      occur: 1
+    - id: radius
+      prototype: segment
+      define_baseset: [origin, boundary]
+      define_prompt: The expansion from the center to the boundary (radius).
+      occur: 1
+    - id: boundary
+      prototype: circle
+      define_baseset: [origin, radius]
+      define_prompt: The boundary (circumference) of the circle.
+      occur: 1
+    - id: interior
+      prototype: region
+      define_baseset: [boundary]
+      define_prompt: The interior region within the boundary.
+      occur: 1
+    - id: exterior
+      prototype: region
+      define_baseset: [boundary]
+      define_prompt: The exterior region outside the boundary.
+      occur: 1
+  relations:
+    - id: expansion
+      prototype: function
+      define_baseset: [origin, boundary]
+      define_prompt: Expansion from the center toward the boundary.
+      occur: 1
+    - id: contraction
+      prototype: function
+      define_baseset: [boundary, origin]
+      define_prompt: Contraction from the boundary toward the center.
+      occur: 1
+
+
+---
+# hybrid_matrix: A 2D matrix where row and column are defined by different sets.
 #
 #   col1   col2   col3  ←-- col_define_set
 # +------+------+------+
@@ -328,7 +411,8 @@ model:
 # - matrix_cross: relation between row and column in the matrix
 #
 model:
-  id: G5_HybridMatrix
+  index: G6
+  id: hybrid_matrix
   name: 2D Hybrid Matrix
   ref_domain: matrix
   visual: grid
@@ -368,7 +452,7 @@ model:
       occur: 1
 
 ---
-# G6_SymmetricMatrix: A 2D symmetric matrix where both row and column are enumerations of the same set.
+# symmetric_matrix: A 2D symmetric matrix where both row and column are enumerations of the same set.
 #
 #  define_set
 #  ↑
@@ -388,7 +472,8 @@ model:
 # - matrix_comparison: symmetric comparison relation between two entities in each cell
 #
 model:
-  id: G6_SymmetricMatrix
+  index: G7
+  id: symmetric_matrix
   name: 2D Symmetric Matrix
   ref_domain: matrix
   visual: grid
@@ -416,3 +501,4 @@ model:
       define_baseset: [dimension, dimension]
       define_prompt: Symmetric comparison relation between two entities in each cell.
       occur: 1
+
