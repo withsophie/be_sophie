@@ -1,0 +1,132 @@
+# 数据字典
+
+## 根对象 (Root Object)
+
+
+| 字段名称       | 数据类型      | 描述                                    | 默认值                                                | 说明                                                                                                    | 例子                                    |
+| -------------- | ------------- | --------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| id             | String        | 思路ID                                  | 未指定                                                | 唯一标识一个思路。                                                                                      | "思路ID"                                |
+| gptModel       | String        | 大模型名称                              | 从 "gpt-4o", "gemini/gemini-2.0-flash-exp" 中选择一个 | 指定思路运行时使用的大型语言模型。                                                                      | "gpt-4o"                                |
+| gptTemperature | String        | 大模型温度                              | 未指定                                                | 控制模型输出的随机性，根据 prompt 的作用匹配合适的温度值以确保输出效果。                                | "0.7"                                   |
+| trainName      | String        | 思路名                                  | 未指定                                                | 根据 prompt 的作用，设计一个简短易记的名称。                                                            | "内容总结助手"                          |
+| trainDesc      | String        | 思路描述                                | 未指定                                                | 根据 prompt 的作用，描述其具体功能和应用场景。                                                          | "此思路用于快速总结长文本的主要内容。"  |
+| welcomeMessage | String        | 思路欢迎语                              | 未指定                                                | 主要向用户表达，希望他们输入的内容或如何开始使用该思路。                                                | "请输入您想总结的文本内容："            |
+| bpmnData       | String        | 坐标                                    | 未指定                                                | BPMN (Business Process Model and Notation) 数据，通常用于流程的可视化表示。                             | `{"x":100, "y":200, "nodes":[]}` (示意) |
+| summary        | String        | 思路总结                                | 未指定                                                | 对整个思路的功能或成果的总结性描述。                                                                    |                                         |
+| modeId         | String        | 模式ID                                  | 未指定                                                | 如果该思路是基于某个特定模式创建的，则记录模式的ID。                                                    | "模式ID"                                |
+| stepList       | Array<Object> | 思路过程中的步骤列表。                  | `[]` (空数组)                                         | 定义了思路执行的具体步骤和逻辑。详细信息请参见下方的**步骤对象 (Step Object)** 部分。                   |                                         |
+| varList        | Array<Object> | 实体变量列表 - 步骤使用到的变量。       | `[]` (空数组)                                         | 存储在思路执行过程中，步骤间传递和使用的变量。详细信息请参见下方的**变量对象 (Variable Object)** 部分。 |                                         |
+| totalVarList   | Array<Object> | 实体变量列表 - 当前思路定义的全量变量。 | `[]` (空数组)                                         | 包含此思路中定义的所有变量的完整列表。详细信息请参见下方的**变量对象 (Variable Object)** 部分。         |                                         |
+| termList       | Array<Object> | 术语列表 - 当前思路使用到的术语。       | `[]` (空数组)                                         | 定义在当前思路的 prompt 或步骤中明确使用的术语。详细信息请参见下方的**术语对象 (Term Object)** 部分。   |                                         |
+| totalTermList  | Array<Object> | 术语列表 - 当前思路定义的全量术语。     | `[]` (空数组)                                         | 包含此思路中定义的所有术语的完整列表。详细信息请参见下方的**术语对象 (Term Object)** 部分。             |                                         |
+| tagIds         | Array<Number> | 思路标签                                | `[]` (空数组)                                         | 用于分类和检索思路的标签ID数组。                                                                        | `[1, 2, 3]`                             |
+
+## 步骤对象 (Step Object) (位于 `stepList` 内)
+
+
+| 字段名称             | 数据类型      | 描述                                 | 默认值           | 说明                                                                                                                                                        | 例子                                                                                           |
+| -------------------- | ------------- | ------------------------------------ | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| id                   | String        | 步骤ID                               | 未指定           | 唯一标识一个步骤。                                                                                                                                          | "步骤ID"                                                                                       |
+| preId                | String        | 前步骤ID,分隔多个                    | 空字符串或`null` | 指向当前步骤的前一个或多个步骤的ID，用逗号分隔。                                                                                                            | "stepId_A,stepId_B"                                                                            |
+| nextId               | String        | 后步骤ID,分隔多个                    | 空字符串或`null` | 指向当前步骤的后一个或多个步骤的ID，用逗号分隔。                                                                                                            | "stepId_C,stepId_D"                                                                            |
+| gptModelInfo         | String        | 步骤使用的大模型信息                 | 未指定           | 如果此步骤使用特定的大模型配置（可能覆盖思路的全局配置），在此处注明。                                                                                      | "gemini/gemini-2.0-flash-exp"                                                                  |
+| trainId              | String        | 思路标识                             | 未指定           | 所属思路的ID。                                                                                                                                              | "思路ID"                                                                                       |
+| stepIndex            | Null/Number   | 步骤索引                             | `null`           | 步骤在序列中的顺序索引。                                                                                                                                    | `1`                                                                                            |
+| stepType             | String/Number | 步骤类型                             | 未指定           | 1-普通步骤, 2-总结, 3-取图步骤, 4-归纳步骤, 5-摘要步骤, 6-归属, 7-搜索步骤, 8-工具步骤, 9-起始节点, 10-结束节点, 11-知识库步骤, 12-if-else步骤。            | `1` (普通步骤)                                                                                 |
+| stepName             | String        | 步骤名称                             | 未指定           | 当前步骤的名称。                                                                                                                                            | "提取关键信息"                                                                                 |
+| stepDesc             | String        | 步骤描述                             | 未指定           | 对当前步骤功能的详细描述。                                                                                                                                  | "此步骤用于从输入文本中提取关键信息点。"                                                       |
+| stepInVars           | String/Array  | 输入变量数组                         | `[]`             | 步骤执行所需的输入变量名称列表。文档中描述为数组，示例中为字符串，应以实际JSON为准。                                                                        | `["inputText"]`                                                                                |
+| stepOutVars          | Array<String> | 输出变量数组                         | `[]`             | 步骤执行后产生的输出变量名称列表。                                                                                                                          | `["keyInfo"]`                                                                                  |
+| stepTerms            | Array<String> | 步骤用到的术语数组                   | `[]`             | 此步骤的 prompt 或逻辑中用到的特定术语列表。                                                                                                                | `["核心观点", "主要论据"]`                                                                     |
+| stepPrompt           | String        | 步骤prompt                           | 未指定           | 用于指导大模型生成内容的具体提示文本。                                                                                                                      | "请总结以下文本的主要观点：{{inputText}}"                                                      |
+| stepPromptOrg        | String        | 步骤prompt界面显示的格式             | null             | 通常是一个JSON字符串，表示在富文本编辑器中原始的、带格式的prompt内容。                                                                                      | `{"root":{"children":[{"type":"paragraph","children":[{"text":"请总结以下文本："}]}]}}` (示意) |
+| cases                | Array<Object> | 条件列表 (if-else步骤类型的条件列表) | `[]`             | 仅当`stepType` 为 12 (if-else步骤) 时适用。详细信息请参见下方的 **Case 对象 (Case Object)** 部分。                                                          |                                                                                                |
+| knowledgeId          | String        | 知识库ID                             | `null`           | 如果步骤需要从特定知识库检索信息，则指定知识库ID。                                                                                                          | "kb_12345"                                                                                     |
+| knowledgeTopK        | Null/Number   | 从知识库检索信息的数量上限           | `null`           | 指定从知识库检索信息时，返回最相关的K个结果。                                                                                                               | `5`                                                                                            |
+| knowledgeTableInfo   | Null/Object   | 知识库表格信息                       | `null`           | 如果知识库是表格形式，可能包含表格的特定信息。                                                                                                              |                                                                                                |
+| stepBpmnData         | String        | 界面坐标信息                         | 未指定           | 步骤在BPMN流程图上的位置坐标等界面信息，通常是JSON字符串。                                                                                                  | `{"position":{"x":1335,"y":825}}`                                                              |
+| modeVarMap           | Array<Object> | 变量映射关系 (END类型的结点)         | `[]`             | 仅当`stepType` 为 10 (结束节点) 时适用。定义了思路的输出变量如何映射到模式变量。详细信息请参见下方的 **模式变量映射对象 (Mode Variable Map Object)** 部分。 |                                                                                                |
+| trainModeGraphPrompt | String        | 使用模式的graphprompt                | 未指定           | 如果步骤使用了模式中的 graphprompt，在此处记录。                                                                                                            |                                                                                                |
+| generationPrompts    | Array<Object> | 多种graphprompt                      | `[]`             | 如果一个步骤内有多种生成方式或 prompt 变体，在此定义。详细信息请参见下方的**生成提示对象 (Generation Prompt Object)** 部分。                                |                                                                                                |
+
+## Case 对象 (Case Object) (位于步骤对象的 `cases` 数组内, 当 `stepType` 为 12 时)
+
+
+| 字段名称        | 数据类型      | 描述                   | 默认值 | 说明                                                                                             | 例子                                          |
+| --------------- | ------------- | ---------------------- | ------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------- |
+| nextId          | String        | 指向步骤ID             | 未指定 | 当前条件分支满足后，流程应跳转到的下一个步骤的ID。                                               | "stepId_TrueBranch"                           |
+| logicalOperator | String        | 逻辑类型               | "and"  | 定义多个条件之间的逻辑关系。                                                                     | "and", "or"                                   |
+| id              | String        | if-else case的唯一ID。 | 未指定 | 当前 case（条件分支）的唯一标识符。                                                              | "ifElse_688adffe-4d8d-4d16-8f20-20f2880f2587" |
+| conditions      | Array<Object> | 条件                   | `[]`   | 定义了当前 case 的一个或多个具体条件。详细信息请参见下方的**条件对象 (Condition Object)** 部分。 |                                               |
+| caseType        | String/Number | Case 类型。            | 未指定 | 标识当前 case 是 "if", "else_if" 还是 "else"。                                                   | `0` (if), `1` (else_if), `2` (else)           |
+
+## 条件对象 (Condition Object) (位于Case对象的 `conditions` 数组内)
+
+
+| 字段名称           | 数据类型 | 描述           | 默认值   | 说明                             | 例子             |
+| ------------------ | -------- | -------------- | -------- | -------------------------------- | ---------------- |
+| varType            | String   | 变量类型。     | 未指定   | 条件判断中涉及的变量的类型。     | "1"              |
+| varName            | String   | 变量名称。     | 未指定   | 条件判断中涉及的变量的名称。     | "ThinkPoint"     |
+| comparisonOperator | String   | 比较操作符。   | 未指定   | 用于比较变量值与目标值的操作符。 | "contains", "==" |
+| value              | String   | 用于比较的值。 | 空字符串 | 与变量值进行比较的目标值。       | "keyword"        |
+
+## 模式变量映射对象 (Mode Variable Map Object) (位于步骤对象的 `modeVarMap` 数组内, 当 `stepType` 为 10 时)
+
+
+| 字段名称    | 数据类型 | 描述         | 默认值 | 说明                                                 | 例子            |
+| ----------- | -------- | ------------ | ------ | ---------------------------------------------------- | --------------- |
+| varName     | String   | 实体变量名   | 未指定 | 当前思路中定义的实体变量的名称。                     | "总结结果"      |
+| modeVarId   | String   | 模式变量ID   | 未指定 | 对应模式中定义的变量的ID，需要使用真实的模式变量ID。 | "mode_var_abc"  |
+| modeVarName | String   | 模式变量名称 | 未指定 | 对应模式中定义的变量的名称。                         | "模式输出变量1" |
+| varId       | String   | 实体变量ID   | 未指定 | 当前思路中定义的实体变量的ID。                       | "var_xyz"       |
+
+## 生成提示对象 (Generation Prompt Object) (位于步骤对象的 `generationPrompts` 数组内)
+
+
+| 字段名称       | 数据类型 | 描述                 | 默认值 | 说明                                                                   | 例子                                                                                                                                            |
+| -------------- | -------- | -------------------- | ------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| id             | Number   | 唯一ID。             | 未指定 | 当前生成提示配置的唯一标识。                                           | `123`                                                                                                                                           |
+| trainId        | Number   | 思路标识。           | 未指定 | 所属思路的ID。                                                         | `417`                                                                                                                                           |
+| stepId         | String   | 步骤ID。             | 未指定 | 所属步骤的ID。                                                         | "1919683135748886528"                                                                                                                           |
+| generationType | String   | 生成类型。           | 未指定 | 指定生成内容的类型或格式。                                             | "Chat", "SVG", "RDF", "Chat\|SVG\|RDF"                                                                                                          |
+| stepInVars     | Array    | 此提示的输入变量。   | `[]`   | 此特定生成提示所使用的输入变量列表。                                   | `["sourceText"]`                                                                                                                                |
+| stepTerms      | Array    | 此提示中使用的术语。 | `[]`   | 此特定生成提示中使用的术语列表。                                       | `["AI", "机器学习"]`                                                                                                                            |
+| stepPrompt     | String   | 提示文本。           | 未指定 | 用于指导模型生成内容的具体提示文本。                                   | "请根据以下内容生成一张SVG图：{{sourceText}}"                                                                                                   |
+| stepPromptOrg  | String   | UI的原始提示格式。   | 未指定 | 通常是一个JSON字符串，表示在富文本编辑器中原始的、带格式的prompt内容。 | `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"aaadfadfdfadf","type":"text","version":1}], ...}}` |
+| editStatus     | Number   | 编辑状态。           | 未指定 | 标记当前生成提示的编辑状态，例如是否已修改或保存。                     | `1`                                                                                                                                             |
+
+## 变量对象 (Variable Object) (位于 `varList` 和 `totalVarList` 内)
+
+
+| 字段名称        | 数据类型    | 描述                      | 默认值   | 说明                                                             | 例子                                                         |
+| --------------- | ----------- | ------------------------- | -------- | ---------------------------------------------------------------- | ------------------------------------------------------------ |
+| id              | Number      | 唯一ID。                  | 未指定   | 变量的唯一标识符。                                               | `15104`                                                      |
+| trainId         | Number      | 思路标识                  | 未指定   | 所属思路的ID。                                                   | `417`                                                        |
+| parentId        | Null/String | 父ID。                    | `null`   | 如果变量具有层级关系，则记录其父变量的ID。                       |                                                              |
+| stepId          | String      | 与此变量关联的步骤ID。    | 未指定   | 标识此变量主要在哪个步骤中被定义或使用。                         | "1909528709373546496"                                        |
+| knowledgeId     | Null/String | 知识库ID。                | `null`   | 如果变量内容来源于知识库，则记录知识库ID。                       |                                                              |
+| varType         | Number      | 变量类型。                | 未指定   | 标识变量的数据类型或用途分类。                                   | `1`                                                          |
+| varLevel        | Number      | 变量级别。                | `0`      | 变量在层级结构中的级别。                                         | `0` (顶层), `1` (子层)                                       |
+| dataName        | Null/String | 数据名称。                | `null`   | 变量的别名或在特定上下文中的名称。                               |                                                              |
+| varName         | String      | 变量名称。                | 未指定   | 变量的正式名称，在prompt中通常用`{{varName}}` 的形式引用。       | "ThinkPoint", "inputText"                                    |
+| varDescType     | Number      | 变量描述类型。            | `0`      | 变量描述的类型或格式。                                           | `0`                                                          |
+| varDesc         | String      | 变量描述。                | 未指定   | 对变量用途、内容或格式的详细说明。                               | "Anything you wish to think about using a chain of thought." |
+| varDescRefId    | Null/String | 变量描述引用ID。          | `null`   | 如果变量描述引用了外部资源，则记录其ID。                         |                                                              |
+| varFormat       | String      | 变量格式。                | 空字符串 | 描述变量内容的具体格式，例如日期格式、JSON结构等。               | "YYYY-MM-DD"                                                 |
+| defaultValue    | Null/String | 默认值。                  | `null`   | 变量的初始值或在未提供输入时的默认值。                           |                                                              |
+| userVarId       | Null/String | 用户变量ID。              | `null`   | 如果变量是用户自定义的，则可能有关联的用户变量ID。               |                                                              |
+| userVarParentId | Null/String | 用户变量父ID。            | `null`   | 如果用户自定义变量存在层级关系，则记录其父ID。                   |                                                              |
+| deleted         | Number      | 删除状态 (0 表示未删除)。 | `0`      | 标记变量是否已被删除（逻辑删除）。此字段主要出现在`varList` 中。 | `0` (未删除), `1` (已删除)                                   |
+| version         | Null/String | 版本。                    | `null`   | 变量的版本信息。此字段主要出现在`varList` 中。                   | "v1.2"                                                       |
+| tmpDelete       | Number      | 临时删除状态。            | `0`      | 标记变量是否被临时删除。此字段主要出现在`varList` 中。           | `0` (未临时删除), `1` (已临时删除)                           |
+| childs          | Null/Array  | 子变量 (用于层级数据)。   | `null`   | 如果变量包含子变量，则在此处列出。                               | `[{"varName": "subPoint1", ...}]`                            |
+
+## 术语对象 (Term Object) (位于 `termList` 和 `totalTermList` 内)
+
+
+| 字段名称    | 数据类型 | 描述       | 默认值   | 说明                         | 例子             |
+| ----------- | -------- | ---------- | -------- | ---------------------------- | ---------------- |
+| id          | Number   | 唯一ID。   | 未指定   | 术语的唯一标识符。           | `767`            |
+| trainId     | Number   | 思路标识。 | 未指定   | 所属思路的ID。               | `417`            |
+| name        | String   | 术语名称。 | 未指定   | 术语的具体名称。             | "terrrrrr", "AI" |
+| description | String   | 术语描述。 | 空字符串 | 对术语含义或用法的详细说明。 | "人工智能的简称" |
