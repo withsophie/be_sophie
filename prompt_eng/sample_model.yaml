@@ -546,6 +546,82 @@ model:
 
 ---
 # ==========================================
+#   Science and Religion Evolution Model (Central Expansion Structure)
+#
+#         (宗教领域)
+#         , - ~ ~ ~ - ,
+#     , '               ' ,
+#   ,                       ,
+#  ,                         ,
+# ,       ● (empiricism)      ,
+# ,         /   |   \         ,
+# ,       /     |     \       ,
+#  ,    /   scientific   \   ,
+#   , /   exploration     \ ,
+#     ,                  , '
+#       ' - , _ _ _ ,  '
+#      (科学领域)   boundary (circle)
+#
+# - empiricism: 圆心，代表科学的实证法基础
+# - scientific_exploration: 半径，代表科学探索的过程
+# - boundary: 圆周，科学与宗教的分界
+# - science_domain: 圆内，科学领域
+# - religion_domain: 圆外，宗教领域
+#
+# Relations:
+#   - expansion: 从实证法向科学边界扩展（科学探索）
+#   - contraction: 从科学边界向实证法收敛（反思/归纳）
+model:
+  id: science_religion_evolution
+  name: Science and Religion Evolution Model
+  ref_domain: philosophy
+  visual: circle
+  description: >
+    A central expansion model for the evolution of science and religion. The center (empiricism) represents the foundation of scientific method, the radius (scientific exploration) represents the process of scientific inquiry, the interior (science_domain) is the domain of science, and the exterior (religion_domain) is the domain of religion. The boundary marks the interface between science and religion.
+  inherits: central_expansion
+
+  entities:
+    - id: empiricism
+      prototype: point
+      define_baseset: [primitive]
+      define_prompt: The center point representing empiricism, the foundation of scientific method.
+      occur: 1
+    - id: scientific_exploration
+      prototype: segment
+      define_baseset: [empiricism, boundary]
+      define_prompt: The process of scientific exploration from empiricism to the boundary of science.
+      occur: 1
+    - id: boundary
+      prototype: circle
+      define_baseset: [empiricism, scientific_exploration]
+      define_prompt: The boundary between science and religion.
+      occur: 1
+    - id: science_domain
+      prototype: region
+      define_baseset: [boundary]
+      define_prompt: The interior region within the boundary, representing the domain of science.
+      occur: 1
+    - id: religion_domain
+      prototype: region
+      define_baseset: [boundary]
+      define_prompt: The exterior region outside the boundary, representing the domain of religion.
+      occur: 1
+
+  relations:
+    - id: expansion
+      prototype: function
+      define_baseset: [empiricism, boundary]
+      define_prompt: Expansion from empiricism toward the boundary (scientific exploration).
+      occur: 1
+    - id: contraction
+      prototype: function
+      define_baseset: [boundary, empiricism]
+      define_prompt: Contraction from the boundary toward empiricism (reflection or induction).
+      occur: 1
+
+
+---
+# ==========================================
 #   National Power Matrix Model (G5_HybridMatrix Structure)
 #
 #   geo   econ   military   religion   ideology  ←-- col_define_set
@@ -656,3 +732,4 @@ model:
       define_baseset: [team, team]
       define_prompt: Symmetric comparison relation between two teams in each cell (e.g., head-to-head record, matchup analysis).
       occur: 1
+
