@@ -8,17 +8,19 @@ model:
   description: Base structure for all models.  # Model description
   inherits: null            # Inherit from another model, e.g., "G1_BinaryOrthogonal", or null
   entities:
-    - id: base_point        # Unique identifier for the entity, must use a term from ref_domain and match prototype, e.g., "axis_x", "dimension_row"
+    - id: base_entity        # Unique identifier for the entity, must use a term from ref_domain and match prototype, e.g., "axis_x", "dimension_row"
       prototype: point      # Entity type, must use a term from ref_domain, e.g., "axis", "vector", "quadrant" for geometry
       define_baseset: []    # Base set for the entity, e.g., ["primitive"], ["axis_x"], ["dimension_row", "dimension_col"]
       define_prompt: ""     # Description or prompt for the entity
       occur: 1              # Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
+      inherits: null
   relations:
-    - id: base_edge         # Unique identifier for the relation, must use a term from ref_domain and match prototype, e.g., "x_flip", "matrix_comparison"
+    - id: base_relation         # Unique identifier for the relation, must use a term from ref_domain and match prototype, e.g., "x_flip", "matrix_comparison"
       prototype: edge       # Relation type, must use a term from the ref_domain, e.g., "relation", "symmetry" for geometry
       define_baseset: []    # Base set for the relation, e.g., ["quadrant_I", "quadrant_II"]
       define_prompt: ""     # Description or prompt for the relation
       occur: 1*              # Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
+      inherits: null
 
 ---
 # binary_orthogonal: A quadrant model with two orthogonal axes (X and Y), each with positive and negative directions.
@@ -63,72 +65,86 @@ model:
       define_baseset: [primitive]  # Base set for the entity
       define_prompt: The X-axis representing opposing conceptual vectors.  # Entity description
       occur: 1             # Must have exactly one
+      inherits: base_entity
     - id: axis_y
       prototype: axis
       define_baseset: [primitive]
       define_prompt: The Y-axis representing another set of conceptual vectors.
       occur: 1
+      inherits: base_entity
     - id: x_positive
       prototype: vector
       define_baseset: [axis_x]
       define_prompt: Positive direction on X-axis. (e.g., future on a time axis, advantage in a competition)
       occur: 1
+      inherits: base_entity
     - id: x_negative
       prototype: vector
       define_baseset: [axis_x]
       define_prompt: Negative direction on X-axis. (e.g., past on a time axis, disadvantage in a competition)
       occur: 1
+      inherits: base_entity
     - id: y_positive
       prototype: vector
       define_baseset: [axis_y]
       define_prompt: Positive direction on Y-axis. (e.g., growth, opportunity)
       occur: 1
+      inherits: base_entity
     - id: y_negative
       prototype: vector
       define_baseset: [axis_y]
       define_prompt: Negative direction on Y-axis. (e.g., decline, threat)
       occur: 1
+      inherits: base_entity
     - id: quadrant_I
       prototype: quadrant
       define_baseset: [x_positive, y_positive]
       define_prompt: First quadrant (X positive, Y positive).
       occur: 1
+      inherits: base_entity
     - id: quadrant_II
       prototype: quadrant
       define_baseset: [x_negative, y_positive]
       define_prompt: Second quadrant (X negative, Y positive).
       occur: 1
+      inherits: base_entity
     - id: quadrant_III
       prototype: quadrant
       define_baseset: [x_negative, y_negative]
       define_prompt: Third quadrant (X negative, Y negative).
       occur: 1
+      inherits: base_entity
     - id: quadrant_IV
       prototype: quadrant
       define_baseset: [x_positive, y_negative]
       define_prompt: Fourth quadrant (X positive, Y negative).
       occur: 1
+      inherits: base_entity
   relations:
     - id: x_flip
       prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
       define_baseset: [quadrant_I, quadrant_IV, quadrant_II, quadrant_III]
       define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
       occur: 1+
+      inherits: base_relation
     - id: y_flip
       prototype: symmetry
       define_baseset: [quadrant_I, quadrant_II, quadrant_III, quadrant_IV]
       define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
       occur: 1+
+      inherits: base_relation
     - id: diagonal_reverse
       prototype: symmetry
       define_baseset: [quadrant_I, quadrant_III]
       define_prompt: Diagonal symmetry—conversion between Quadrant I (++), and Quadrant III (--).
       occur: 1+
+      inherits: base_relation
     - id: diagonal_swap
       prototype: symmetry
       define_baseset: [quadrant_II, quadrant_IV]
       define_prompt: Diagonal symmetry—conversion between Quadrant II (-+), and Quadrant IV (+-).
       occur: 1+
+      inherits: base_relation
 
 ---
 # trinary_triangle: A triangle model with three nodes and three edges, representing trinary interconnection.
@@ -157,32 +173,38 @@ model:
       define_baseset: [primitive]  # Base set for the entity
       define_prompt: Vertex A in the triangle.
       occur: 1
+      inherits: base_entity
     - id: node_b         # Entity id must use a term from ref_domain and match prototype, e.g., "node_b"
       prototype: node
       define_baseset: [primitive]
       define_prompt: Vertex B in the triangle.
       occur: 1
+      inherits: base_entity
     - id: node_c         # Entity id must use a term from ref_domain and match prototype, e.g., "node_c"
       prototype: node
       define_baseset: [primitive]
       define_prompt: Vertex C in the triangle.
       occur: 1
+      inherits: base_entity
   relations:
     - id: edge_ab        # Relation id must use a term from ref_domain and match prototype, e.g., "edge_ab"
       prototype: edge    # Relation type, must use a term from ref_domain, e.g., "edge"
       define_baseset: [node_a, node_b]
       define_prompt: Edge between node A and node B.
       occur: 1+
+      inherits: base_relation
     - id: edge_bc
       prototype: edge
       define_baseset: [node_b, node_c]
       define_prompt: Edge between node B and node C.
       occur: 1+
+      inherits: base_relation
     - id: edge_ca
       prototype: edge
       define_baseset: [node_c, node_a]
       define_prompt: Edge between node C and node A.
       occur: 1+
+      inherits: base_relation
 
 ---
 # negative_feedback_opposition: A binary opposition model with negative feedback driving both nodes toward equilibrium.
@@ -218,42 +240,50 @@ model:
       define_baseset: [primitive]
       define_prompt: Opposing Node A.
       occur: 1
+      inherits: base_entity
     - id: node_b
       prototype: point
       define_baseset: [primitive]
       define_prompt: Opposing Node B.
       occur: 1
+      inherits: base_entity
     - id: change_path
       prototype: segment
       define_baseset: [node_a, node_b]
       define_prompt: The path of change (line segment) connecting Node A and Node B.
       occur: 1      
+      inherits: base_relation
     - id: equilibrium
       prototype: point
       define_baseset: [node_a, node_b, change_path]
       define_prompt: Dynamic equilibrium point between Node A and Node B.
       occur: 1
+      inherits: base_entity
   relations:
     - id: activation_a_to_b
       prototype: function
       define_baseset: [node_a]
       define_prompt: Function mapping from Node A to Node B (A influences B).
       occur: 1
+      inherits: base_relation
     - id: activation_b_to_a
       prototype: function
       define_baseset: [node_b]
       define_prompt: Function mapping from Node B to Node A (B influences A).
       occur: 1
+      inherits: base_relation
     - id: negative_feedback_a_to_b
       prototype: function
       define_baseset: [node_a]
       define_prompt: Negative feedback from Node A to Node B (suppresses A, promotes B).
       occur: 1
+      inherits: base_relation
     - id: negative_feedback_b_to_a
       prototype: function
       define_baseset: [node_b]
       define_prompt: Negative feedback from Node B to Node A (suppresses B, promotes A).
       occur: 1
+      inherits: base_relation
 
 ---
 # closure: Internal-External Set Structure Model
@@ -290,32 +320,38 @@ model:
       define_baseset: [primitive]
       define_prompt: The set that defines all internal entities (e.g., system, organization).
       occur: 1
+      inherits: base_entity
     - id: external_set
       prototype: set
       define_baseset: [internal_set]
       define_prompt: The set that defines all external entities, defined relative to the internal set (e.g., environment outside the system).
       occur: 1
+      inherits: base_entity
     - id: internal_entity
       prototype: element
       define_baseset: [internal_set]
       define_prompt: An entity from the internal set.
       occur: n+
+      inherits: base_entity
     - id: external_entity
       prototype: element
       define_baseset: [external_set]
       define_prompt: An entity from the external set.
       occur: n+
+      inherits: base_entity
   relations:
     - id: external_to_internal
       prototype: relation
       define_baseset: [external_entity, internal_entity]
       define_prompt: Influence from external entity to internal entity.
       occur: n*
+      inherits: base_relation
     - id: internal_to_external
       prototype: relation
       define_baseset: [internal_entity, external_entity]
       define_prompt: Feedback or projection from internal entity to external entity.
       occur: n*
+      inherits: base_relation
 
 ---
 # central_expansion: Central Expansion Model
@@ -357,38 +393,44 @@ model:
       define_baseset: [primitive]
       define_prompt: The central point (origin) of the circle.
       occur: 1
+      inherits: base_entity
     - id: radius
       prototype: segment
       define_baseset: [origin, boundary]
       define_prompt: The expansion from the center to the boundary (radius).
       occur: 1
+      inherits: base_relation
     - id: boundary
       prototype: circle
       define_baseset: [origin, radius]
       define_prompt: The boundary (circumference) of the circle.
       occur: 1
+      inherits: base_entity
     - id: interior
       prototype: region
       define_baseset: [boundary]
       define_prompt: The interior region within the boundary.
       occur: 1
+      inherits: base_entity
     - id: exterior
       prototype: region
       define_baseset: [boundary]
       define_prompt: The exterior region outside the boundary.
       occur: 1
+      inherits: base_entity
   relations:
     - id: expansion
       prototype: function
       define_baseset: [origin, boundary]
       define_prompt: Expansion from the center toward the boundary.
       occur: 1
+      inherits: base_relation
     - id: contraction
       prototype: function
       define_baseset: [boundary, origin]
       define_prompt: Contraction from the boundary toward the center.
       occur: 1
-
+      inherits: base_relation
 
 ---
 # hybrid_matrix: A 2D matrix where row and column are defined by different sets.
@@ -424,32 +466,38 @@ model:
       define_baseset: [primitive]
       define_prompt: The set that defines all possible row entities (e.g., countries, products).
       occur: 1
+      inherits: base_entity
     - id: col_define_set
       prototype: set
       define_baseset: [primitive]
       define_prompt: The set that defines all possible column entities (e.g., years, indicators).
       occur: 1
+      inherits: base_entity
     - id: dimension_row
       prototype: dimension
       define_baseset: [row_define_set]
       define_prompt: Row dimension, each value is an entity from row_define_set.
       occur: n+
+      inherits: base_entity
     - id: dimension_col
       prototype: dimension
       define_baseset: [col_define_set]
       define_prompt: Column dimension, each value is an entity from col_define_set.
       occur: n+
+      inherits: base_entity
     - id: cell_entity
       prototype: cell
       define_baseset: [dimension_row, dimension_col]
       define_prompt: A cell defined by the intersection of a row entity and a column entity.
       occur: n+
+      inherits: base_entity
   relations:
     - id: matrix_cross
       prototype: relation
       define_baseset: [dimension_row, dimension_col]
       define_prompt: Cross-dimension relation between row and column in the matrix.
       occur: 1
+      inherits: base_relation
 
 ---
 # symmetric_matrix: A 2D symmetric matrix where both row and column are enumerations of the same set.
@@ -485,20 +533,24 @@ model:
       define_baseset: [primitive]
       define_prompt: The set that defines both row and column entities (e.g., countries, people).
       occur: 1
+      inherits: base_entity
     - id: dimension
       prototype: dimension
       define_baseset: [define_set]
       define_prompt: Both row and column dimensions, each value is an entity from define_set.
       occur: n+
+      inherits: base_entity
     - id: cell_entity
       prototype: cell
       define_baseset: [dimension, dimension]
       define_prompt: Cell representing the symmetric relationship between two entities from define_set.
       occur: 1+
+      inherits: base_entity
   relations:
     - id: matrix_comparison
       prototype: relation
       define_baseset: [dimension, dimension]
       define_prompt: Symmetric comparison relation between two entities in each cell.
       occur: 1
+      inherits: base_relation
 

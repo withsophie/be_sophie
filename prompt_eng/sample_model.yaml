@@ -34,50 +34,60 @@ model:
       prototype: axis
       define_prompt: Time axis (Now vs Future)
       occur: 1
+      inherits: axis_x
     - id: axis_advantage
       prototype: axis
       define_prompt: Advantage axis (Strength vs Weakness)
       occur: 1
+      inherits: axis_y
     - id: now
       prototype: vector
       define_baseset: [axis_time]
       define_prompt: Now
       occur: 1
+      inherits: x_negative
     - id: future
       prototype: vector
       define_baseset: [axis_time]
       define_prompt: Future
       occur: 1
+      inherits: x_positive
     - id: strength
       prototype: vector
       define_baseset: [axis_advantage]
       define_prompt: Strength
       occur: 1
+      inherits: y_positive
     - id: weakness
       prototype: vector
       define_baseset: [axis_advantage]
       define_prompt: Weakness
       occur: 1
+      inherits: y_negative
     - id: S
       prototype: quadrant
       define_baseset: [now, strength]
       define_prompt: S (Now + Strength)
       occur: 1
+      inherits: quadrant_II
     - id: W
       prototype: quadrant
       define_baseset: [now, weakness]
       define_prompt: W (Now + Weakness)
       occur: 1
+      inherits: quadrant_III
     - id: O
       prototype: quadrant
       define_baseset: [future, strength]
       define_prompt: O (Future + Strength)
       occur: 1
+      inherits: quadrant_I
     - id: T
       prototype: quadrant
       define_baseset: [future, weakness]
       define_prompt: T (Future + Weakness)
       occur: 1
+      inherits: quadrant_IV
 
   relations:
     - id: time_flip
@@ -85,21 +95,25 @@ model:
       define_baseset: [S, W, O, T]
       define_prompt: Flip Time (Now <-> Future)
       occur: 1+
+      inherits: x_flip
     - id: advantage_flip
       prototype: symmetry
       define_baseset: [S, O, W, T]
       define_prompt: Flip Advantage (Strength <-> Weakness)
       occur: 1+
+      inherits: y_flip
     - id: diagonal_reverse
       prototype: symmetry
       define_baseset: [S, T]
       define_prompt: Diagonal symmetry (S <-> T)
       occur: 1+
+      inherits: diagonal_reverse
     - id: diagonal_swap
       prototype: symmetry
       define_baseset: [W, O]
       define_prompt: Diagonal symmetry (W <-> O)
       occur: 1+
+      inherits: diagonal_swap
 
 
 ---
@@ -140,50 +154,60 @@ model:
       prototype: axis
       define_prompt: Who is being sought axis (Seek Others vs Seek Self)
       occur: 1
+      inherits: axis_y
     - id: axis_destination
       prototype: axis
       define_prompt: Destination axis (This World vs Afterlife)
       occur: 1
+      inherits: axis_x
     - id: seek_others
       prototype: vector
       define_baseset: [axis_seek_who]
       define_prompt: Seek Others (e.g., deities, external forces)
       occur: 1
+      inherits: y_positive
     - id: seek_self
       prototype: vector
       define_baseset: [axis_seek_who]
       define_prompt: Seek Self (e.g., self-cultivation, inner power)
       occur: 1
+      inherits: y_negative
     - id: this_world
       prototype: vector
       define_baseset: [axis_destination]
       define_prompt: This World (focus on present life)
       occur: 1
+      inherits: x_negative
     - id: afterlife
       prototype: vector
       define_baseset: [axis_destination]
       define_prompt: Afterlife (focus on salvation or liberation after death)
       occur: 1
+      inherits: x_positive
     - id: this_world_self_help
       prototype: quadrant
       define_baseset: [seek_self, this_world]
       define_prompt: This World Self-Help (此岸自救)
       occur: 1
+      inherits: quadrant_III
     - id: this_world_other_help
       prototype: quadrant
       define_baseset: [seek_others, this_world]
       define_prompt: This World Other-Help (此岸他救)
       occur: 1
+      inherits: quadrant_II
     - id: afterlife_self_help
       prototype: quadrant
       define_baseset: [seek_self, afterlife]
       define_prompt: Afterlife Self-Help (彼岸自救)
       occur: 1
+      inherits: quadrant_IV
     - id: afterlife_other_help
       prototype: quadrant
       define_baseset: [seek_others, afterlife]
       define_prompt: Afterlife Other-Help (彼岸他救)
       occur: 1
+      inherits: quadrant_I
 
   relations:
     - id: seek_who_flip
@@ -191,21 +215,25 @@ model:
       define_baseset: [this_world_self_help, this_world_other_help, afterlife_self_help, afterlife_other_help]
       define_prompt: Flip Who is being sought (Seek Others <-> Seek Self)
       occur: 1+
+      inherits: y_flip
     - id: destination_flip
       prototype: symmetry
       define_baseset: [this_world_self_help, afterlife_self_help, this_world_other_help, afterlife_other_help]
       define_prompt: Flip Destination (This World <-> Afterlife)
       occur: 1+
+      inherits: x_flip
     - id: diagonal_reverse
       prototype: symmetry
       define_baseset: [this_world_other_help, afterlife_self_help]
       define_prompt: Diagonal symmetry (This World Other-Help <-> Afterlife Self-Help)
       occur: 1+
+      inherits: diagonal_reverse
     - id: diagonal_swap
       prototype: symmetry
       define_baseset: [this_world_self_help, afterlife_other_help]
       define_prompt: Diagonal symmetry (This World Self-Help <-> Afterlife Other-Help)
       occur: 1+
+      inherits: diagonal_swap
 
 
 ---
@@ -244,16 +272,19 @@ model:
       define_baseset: [primitive]
       define_prompt: Free capital mobility (no capital controls)
       occur: 1
+      inherits: node_a
     - id: monetary_policy_independence
       prototype: node
       define_baseset: [primitive]
       define_prompt: Independent monetary policy (control over domestic interest rates)
       occur: 1
+      inherits: node_b
     - id: exchange_rate_stability
       prototype: node
       define_baseset: [primitive]
       define_prompt: Stable/fixed exchange rate
       occur: 1
+      inherits: node_c
 
   relations:
     - id: edge_capital_mobility_monetary_policy
@@ -261,18 +292,21 @@ model:
       define_baseset: [capital_mobility, monetary_policy_independence]
       define_prompt: Trade-off between capital mobility and monetary policy independence
       occur: 1
+      inherits: edge_ab
     - id: edge_monetary_policy_exchange_rate
       prototype: edge
       define_baseset: [monetary_policy_independence, exchange_rate_stability]
       define_prompt: Trade-off between monetary policy independence and exchange rate stability
       occur: 1
+      inherits: edge_bc
     - id: edge_exchange_rate_capital_mobility
       prototype: edge
       define_baseset: [exchange_rate_stability, capital_mobility]
       define_prompt: Trade-off between exchange rate stability and capital mobility
       occur: 1
+      inherits: edge_ca
 
----
+
 ---
 # ==========================================
 #   Impossible Triangle of Family Life (G2_TrinaryTriangle Structure)
@@ -309,16 +343,19 @@ model:
       define_baseset: [primitive]
       define_prompt: Sexual satisfaction and intimacy
       occur: 1
+      inherits: node_a
     - id: love_life
       prototype: node
       define_baseset: [primitive]
       define_prompt: Romantic relationship and emotional connection
       occur: 1
+      inherits: node_b
     - id: career
       prototype: node
       define_baseset: [primitive]
       define_prompt: Career success and financial stability
       occur: 1
+      inherits: node_c
 
   relations:
     - id: edge_sex_love_life
@@ -328,6 +365,7 @@ model:
         Mutual influence between sex and romantic love. 
         For example, lack of emotional connection can reduce sexual satisfaction, and vice versa.
       occur: 1
+      inherits: edge_ab
     - id: edge_love_life_career
       prototype: edge
       define_baseset: [love_life, career]
@@ -335,6 +373,7 @@ model:
         Trade-off and influence between romantic love and career. 
         More focus on career may reduce time and energy for love life, while relationship issues can affect work performance.
       occur: 1
+      inherits: edge_bc
     - id: edge_career_sex
       prototype: edge
       define_baseset: [career, sex]
@@ -342,6 +381,7 @@ model:
         Trade-off and influence between career and sex. 
         High work pressure or long hours may reduce desire or time for sex; lack of sexual satisfaction may affect work mood and motivation.
       occur: 1
+      inherits: edge_ca
 
 
 ---
@@ -378,16 +418,19 @@ model:
       define_baseset: [primitive]
       define_prompt: The chemical reactant(s) in the reaction.
       occur: 1
+      inherits: node_a
     - id: product
       prototype: node
       define_baseset: [primitive]
       define_prompt: The chemical product(s) in the reaction.
       occur: 1
+      inherits: node_b
     - id: equilibrium
       prototype: equilibrium
       define_baseset: [reactant, product]
       define_prompt: The dynamic equilibrium point between reactant and product.
       occur: 1
+      inherits: equilibrium
 
   relations:
     - id: flow_reactant_to_product
@@ -395,21 +438,25 @@ model:
       define_baseset: [reactant, product]
       define_prompt: Net flow from reactant to product when reactant is in excess (forward reaction).
       occur: 1
+      inherits: activation_a_to_b
     - id: flow_product_to_reactant
       prototype: relation
       define_baseset: [product, reactant]
       define_prompt: Net flow from product to reactant when product is in excess (reverse reaction).
       occur: 1
+      inherits: activation_b_to_a
     - id: to_equilibrium_reactant
       prototype: relation
       define_baseset: [reactant, equilibrium]
       define_prompt: Reactant moves toward equilibrium; rate depends on reactant excess.
       occur: 1
+      inherits: negative_feedback_a_to_b
     - id: to_equilibrium_product
       prototype: relation
       define_baseset: [product, equilibrium]
       define_prompt: Product moves toward equilibrium; rate depends on product excess.
       occur: 1
+      inherits: negative_feedback_b_to_a
 
 
 # ==========================================
@@ -445,16 +492,19 @@ model:
       define_baseset: [primitive]
       define_prompt: The total supply of a good in the market.
       occur: 1
+      inherits: node_a
     - id: demand
       prototype: node
       define_baseset: [primitive]
       define_prompt: The total demand for a good in the market.
       occur: 1
+      inherits: node_b
     - id: equilibrium
       prototype: equilibrium
       define_baseset: [supply, demand]
       define_prompt: The market equilibrium point where supply equals demand.
       occur: 1
+      inherits: equilibrium
 
   relations:
     - id: negative_feedback_supply_to_demand
@@ -462,21 +512,26 @@ model:
       define_baseset: [supply, demand]
       define_prompt: Negative feedback from supply to demand (excess supply lowers price, increases demand, reduces supply).
       occur: 1
+      inherits: negative_feedback_a_to_b
     - id: negative_feedback_demand_to_supply
       prototype: feedback
       define_baseset: [demand, supply]
       define_prompt: Negative feedback from demand to supply (excess demand raises price, increases supply, reduces demand).
       occur: 1
+      inherits: negative_feedback_b_to_a
     - id: to_equilibrium_supply
       prototype: relation
       define_baseset: [supply, equilibrium]
       define_prompt: Supply adjusts toward equilibrium.
       occur: 1
+      inherits: activation_a_to_b
     - id: to_equilibrium_demand
       prototype: relation
       define_baseset: [demand, equilibrium]
       define_prompt: Demand adjusts toward equilibrium.
       occur: 1
+      inherits: activation_b_to_a
+
 
 ---
 # ==========================================
@@ -515,21 +570,25 @@ model:
       define_baseset: [primitive]
       define_prompt: The set representing science, including scientific knowledge, methods, and practitioners.
       occur: 1
+      inherits: internal_set
     - id: religion_set
       prototype: set
       define_baseset: [science_set]
       define_prompt: The set representing religion, including beliefs, practices, and communities, defined relative to science.
       occur: 1
+      inherits: external_set
     - id: science_entity
       prototype: element
       define_baseset: [science_set]
       define_prompt: An entity from the science set (e.g., a scientific theory, scientist, or method).
       occur: n+
+      inherits: internal_entity
     - id: religion_entity
       prototype: element
       define_baseset: [religion_set]
       define_prompt: An entity from the religion set (e.g., a religious doctrine, ritual, or leader).
       occur: n+
+      inherits: external_entity
 
   relations:
     - id: religion_to_science
@@ -537,11 +596,13 @@ model:
       define_baseset: [religion_entity, science_entity]
       define_prompt: Influence from religion to science, such as religious values shaping scientific ethics or research priorities.
       occur: n*
+      inherits: external_to_internal
     - id: science_to_religion
       prototype: relation
       define_baseset: [science_entity, religion_entity]
       define_prompt: Feedback or influence from science to religion, such as scientific discoveries impacting religious interpretations or practices.
       occur: n*
+      inherits: internal_to_external
 
 
 ---
@@ -586,26 +647,31 @@ model:
       define_baseset: [primitive]
       define_prompt: The center point representing empiricism, the foundation of scientific method.
       occur: 1
+      inherits: origin
     - id: scientific_exploration
       prototype: segment
       define_baseset: [empiricism, boundary]
       define_prompt: The process of scientific exploration from empiricism to the boundary of science.
       occur: 1
+      inherits: radius
     - id: boundary
       prototype: circle
       define_baseset: [empiricism, scientific_exploration]
       define_prompt: The boundary between science and religion.
       occur: 1
+      inherits: boundary
     - id: science_domain
       prototype: region
       define_baseset: [boundary]
       define_prompt: The interior region within the boundary, representing the domain of science.
       occur: 1
+      inherits: interior
     - id: religion_domain
       prototype: region
       define_baseset: [boundary]
       define_prompt: The exterior region outside the boundary, representing the domain of religion.
       occur: 1
+      inherits: exterior
 
   relations:
     - id: expansion
@@ -613,11 +679,13 @@ model:
       define_baseset: [empiricism, boundary]
       define_prompt: Expansion from empiricism toward the boundary (scientific exploration).
       occur: 1
+      inherits: expansion
     - id: contraction
       prototype: function
       define_baseset: [boundary, empiricism]
       define_prompt: Contraction from the boundary toward empiricism (reflection or induction).
       occur: 1
+      inherits: contraction
 
 
 ---
@@ -654,26 +722,31 @@ model:
       define_baseset: [primitive]
       define_prompt: The set of all countries under analysis.
       occur: 1
+      inherits: row_define_set
     - id: dimension_set
       prototype: set
       define_baseset: [primitive]
       define_prompt: The set of all dimensions: geopolitics, economy, military, religion, ideology.
       occur: 1
+      inherits: col_define_set
     - id: country
       prototype: dimension
       define_baseset: [country_set]
       define_prompt: A country entity (e.g., China, US, Russia).
       occur: n+
+      inherits: dimension_row
     - id: dimension
       prototype: dimension
       define_baseset: [dimension_set]
       define_prompt: A dimension entity (geo, econ, military, religion, ideology).
       occur: 5
+      inherits: dimension_col
     - id: cell_entity
       prototype: cell
       define_baseset: [country, dimension]
       define_prompt: The intersection of a country and a dimension, describing the country's status or influence in that dimension.
       occur: n+
+      inherits: cell_entity
 
   relations:
     - id: matrix_cross
@@ -681,6 +754,8 @@ model:
       define_baseset: [country, dimension]
       define_prompt: The relationship or value at the intersection of a country and a dimension (e.g., military strength, economic size, religious influence, ideological stance).
       occur: 1
+      inherits: matrix_cross
+
 
 ---
 # ==========================================
@@ -715,16 +790,19 @@ model:
       define_baseset: [primitive]
       define_prompt: The set of all teams under analysis.
       occur: 1
+      inherits: define_set
     - id: team
       prototype: dimension
       define_baseset: [team_set]
       define_prompt: Both row and column dimensions, each value is a team from team_set.
       occur: n+
+      inherits: dimension
     - id: cell_entity
       prototype: cell
       define_baseset: [team, team]
       define_prompt: Cell representing the symmetric relationship or comparison between two teams.
       occur: 1+
+      inherits: cell_entity
 
   relations:
     - id: matrix_comparison
@@ -732,4 +810,5 @@ model:
       define_baseset: [team, team]
       define_prompt: Symmetric comparison relation between two teams in each cell (e.g., head-to-head record, matchup analysis).
       occur: 1
+      inherits: matrix_comparison
 
