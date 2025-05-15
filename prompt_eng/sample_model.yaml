@@ -19,7 +19,7 @@
 #     T: Future + Weakness (Future Threat)
 # ==========================================
 model:
-  id: SWOT
+  id: swot
   name: SWOT Quadrant (Business, G1 Structure)
   ref_domain: business
   visual: quadrant
@@ -27,7 +27,7 @@ model:
     SWOT analysis in business, strictly following G1_BinaryOrthogonal structure.
     Axes: Time (Now/Future), Advantage (Strength/Weakness).
     S = Now+Strength, W = Now+Weakness, O = Future+Strength, T = Future+Weakness.
-  inherits: G1_BinaryOrthogonal
+  inherits: binary_orthogonal
 
   entities:
     - id: axis_time
@@ -133,7 +133,7 @@ model:
   visual: quadrant
   description: >
     A quadrant model for religion based on two axes: Who is being sought (Seek Others/Seek Self) and Destination (This World/Afterlife). Each quadrant represents a combination of religious orientation and goal.
-  inherits: G1_BinaryOrthogonal
+  inherits: binary_orthogonal
 
   entities:
     - id: axis_seek_who
@@ -236,7 +236,7 @@ model:
   visual: triangle
   description: >
     The Impossible Trinity (Trilemma) in international trade: a country cannot simultaneously achieve free capital mobility, independent monetary policy, and a fixed exchange rate. Only two of the three can be realized at the same time.
-  inherits: G2_TrinaryTriangle
+  inherits: trinary_triangle
 
   entities:
     - id: capital_mobility
@@ -301,7 +301,7 @@ model:
   visual: triangle
   description: >
     The Impossible Triangle in family life: one cannot fully achieve sexual satisfaction, romantic love, and career/financial success at the same time. Only two of the three can be fully realized simultaneously. Each aspect influences the others, often in a negative way when one is prioritized.
-  inherits: G2_TrinaryTriangle
+  inherits: trinary_triangle
 
   entities:
     - id: sex
@@ -370,7 +370,7 @@ model:
   visual: line_with_center
   description: >
     A dynamic model of a reversible chemical reaction, showing the flow between reactant and product and the establishment of equilibrium. Inherits the binary opposition with equilibrium structure.
-  inherits: G3_BinaryOpposition
+  inherits: binary_opposition
 
   entities:
     - id: reactant
@@ -437,7 +437,7 @@ model:
   visual: line_with_center
   description: >
     A binary opposition model for market price formation, where supply and demand interact via negative feedback, driving the system toward market equilibrium.
-  inherits: G3_NegativeFeedbackOpposition
+  inherits: negative_feedback_opposition
 
   entities:
     - id: supply
@@ -507,7 +507,7 @@ model:
   visual: set
   description: >
     A closure model describing the interaction between science (internal set) and religion (external set), and their mutual influences.
-  inherits: G4_Closure
+  inherits: closure
 
   entities:
     - id: science_set
@@ -570,7 +570,7 @@ model:
   visual: grid
   description: >
     A hybrid matrix model for analyzing countries across five dimensions: geopolitics, economy, military, religion, and ideology. Each cell represents a country's status or influence in a specific dimension.
-  inherits: G5_HybridMatrix
+  inherits: hybrid_matrix
 
   entities:
     - id: country_set
@@ -631,7 +631,7 @@ model:
   visual: grid
   description: >
     A symmetric matrix model for comparing multiple teams against each other. Each cell represents the relationship or comparison between two teams, such as head-to-head results, relative strength, or matchup analysis.
-  inherits: G6_SymmetricMatrix
+  inherits: symmetric_matrix
 
   entities:
     - id: team_set
