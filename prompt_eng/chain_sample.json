@@ -1,0 +1,166 @@
+{
+	"id": "思路ID",
+	"gptModel": "大模型名称",#默认从gpt-4o，gemini/gemini-2.0-flash-exp中选择一个
+	"gptTemperature": "大模型温度",#根据prompt的作用，为了确保prompt的输出效果，匹配合适的温度值
+	"trainName": "思路名",#根据prompt的作用，设计一个简短易记的名称
+	"trainDesc": "思路描述",#根据prompt的作用，描述一下其作用
+	"welcomeMessage": "思路欢迎语",#主要向用户表达，希望他们输入的内容
+	"bpmnData": "坐标",
+	"summary": "思路总结",
+	"modeId": "模式ID",
+	"stepList": [{
+			"id": "步骤ID",
+			"preId": "前步骤ID,分隔多个",
+			"nextId": "后步骤ID,分隔多个",
+			"gptModelInfo": "步骤使用的大模型信息"
+			"trainId": "思路标识",
+			"stepIndex": null,
+			"stepType": "步骤类型：1-普通步骤，2-总结，3-取图步骤，4-归纳步骤，5-摘要步骤，6-归属，7-搜索步骤，8-工具步骤，9-起始节点，10-结束节点，11-知识库步骤， 12-if-else步骤",
+			"stepName": "步骤名称",
+			"stepDesc": "步骤描述",
+			"stepInVars": "输入变量数组",
+			"stepOutVars": [
+				"输出变量"
+			],
+			"stepTerms": [
+				"步骤用到的术语数组"
+			],
+			"stepPrompt": "步骤prompt",
+			"stepPromptOrg":"步骤prompt界面显示的格式" 
+			"cases": "cases": [{   #if-else步骤类型的条件列表，jsonArray数据内容
+					"nextId": "1913154596451045376",  #指向步骤ID
+					"logicalOperator": "and", #逻辑类型
+					"id": "ifElse_688adffe-4d8d-4d16-8f20-20f2880f2587",
+					"conditions": [{  #条件
+							"varType": "1",
+							"varName": "ThinkPoint",
+							"comparisonOperator": "contains",
+							"value": ""
+						},
+						{
+							"varType": "1",
+							"varName": "ThinkPoint",
+							"comparisonOperator": "contains",
+							"value": ""
+						},
+						{
+							"varType": "1",
+							"varName": "ThinkPoint",
+							"comparisonOperator": "contains",
+							"value": ""
+						},
+						{
+							"varType": "1",
+							"varName": "ThinkPoint",
+							"comparisonOperator": "contains",
+							"value": ""
+						},
+						{
+							"varType": "1",
+							"varName": "ThinkPoint",
+							"comparisonOperator": "contains",
+							"value": ""
+						}
+					],
+					"caseType": "0" #0:if 1：else_if 2 else
+				},
+				{
+					"logicalOperator": "and",
+					"nextId": "stepId_2",  #指向步骤ID
+					"id": "ifElse_daf8c0e8-75ac-46c2-bef1-ecdeca0f9c15",
+					"caseType": "1"
+				},
+				{
+					"logicalOperator": "and",
+					"nextId": "stepId_3",  #指向步骤ID
+					"id": "ifElse_ac0e892f-bb84-4158-a44e-3c096b8bc863",
+					"caseType": "2"
+				}
+			],
+			"knowledgeId": "知识库ID",
+			"knowledgeTopK": null,
+			"knowledgeTableInfo": null,
+			"stepBpmnData":"{\"position\":{\"x\":1335,\"y\":825}}", #界面坐标信息,
+			"modeVarMap": [{  #stepType=10 即 END 类型的结点 变量映射关系
+					"varName": "实体变量名",
+					"modeVarId": "模式变量ID", #这个需要使用真实的模式变量ID
+					"modeVarName": "模式变量名称",
+					"varId": "实体变量ID"
+				}] ,
+			"trainModeGraphPrompt": "使用模式的graphprompt",
+			"generationPrompts":  [{  #"多种graphprompt"
+					"id": 123,
+					"trainId": 417,
+					"stepId": "1919683135748886528",
+					"generationType": "Chat|SVG|RDF",
+					"stepInVars": [],
+					"stepTerms": [],
+					"stepPrompt": "graphprompt",
+					"stepPromptOrg": "{\"root\":{\"children\":[{\"children\":[{\"detail\":0,\"format\":0,\"mode\":\"normal\",\"style\":\"\",\"text\":\"aaadfadfdfadf\",\"type\":\"text\",\"version\":1}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"paragraph\",\"version\":1,\"textFormat\":0,\"textStyle\":\"\"}],\"direction\":\"ltr\",\"format\":\"\",\"indent\":0,\"type\":\"root\",\"version\":1}}",
+					"editStatus": 1,
+					 
+				}]
+		} 
+	],
+	"varList": [{  #实体变量列表 步骤使用到的
+			"id": 15104,
+			"trainId": 417,
+			"parentId": null,
+			"stepId": "1909528709373546496",
+			"knowledgeId": null,
+			"varType": 1,
+			"varLevel": 0,
+			"dataName": null,
+			"varName": "ThinkPoint",
+			"varDescType": 0,
+			"varDesc": "Anything you wish to think about using a chain of thought.",
+			"varDescRefId": null,
+			"varFormat": "",
+			"defaultValue": null,
+			"userVarId": null,
+			"userVarParentId": null,
+			"deleted": 0,
+			"version": null,
+			"tmpDelete": 0,
+			"childs": null
+		}
+	],
+	"totalVarList": [{ #实体变量列表 当前思路定义的全量
+			"id": 15104,
+			"trainId": 417,
+			"parentId": null,
+			"stepId": "1909528709373546496",
+			"knowledgeId": null,
+			"dataName": null,
+			"varName": "ThinkPoint",
+			"varType": 1,
+			"varLevel": 0,
+			"userVarId": null,
+			"userVarParentId": null,
+			"varDescType": 0,
+			"varDesc": "Anything you wish to think about using a chain of thought.",
+			"varDescRefId": null,
+			"varFormat": "",
+			"defaultValue": null,
+			"childs": null
+		}
+	],
+	"termList": [{ #术语列表 当前思路使用到的
+		"id": 767,
+		"trainId": 417,
+		"name": "terrrrrr",
+		"description": "",
+	}],
+	"totalTermList": [{ #术语列表 当前思路定义的全量
+		"id": 767,
+		"trainId": 417,
+		"name": "terrrrrr",
+		"description": "",
+
+	}],
+	"tagIds": [ #思路标签
+		1,
+		2,
+		3
+	]
+}

@@ -76,9 +76,9 @@
 | 字段名称    | 数据类型 | 描述         | 默认值 | 说明                                                 | 例子            |
 | ----------- | -------- | ------------ | ------ | ---------------------------------------------------- | --------------- |
 | varName     | String   | 实体变量名   | 未指定 | 当前思路中定义的实体变量的名称。                     | "总结结果"      |
-| modeVarId   | String   | 模式变量ID   | 未指定 | 对应模式中定义的变量的ID，需要使用真实的模式变量ID。 | "mode_var_abc"  |
+| modeVarId   | Number   | 模式变量ID   | 未指定 | 对应模式中定义的变量的ID，需要使用真实的模式变量ID。 | "123"           |
 | modeVarName | String   | 模式变量名称 | 未指定 | 对应模式中定义的变量的名称。                         | "模式输出变量1" |
-| varId       | String   | 实体变量ID   | 未指定 | 当前思路中定义的实体变量的ID。                       | "var_xyz"       |
+| varId       | Number   | 实体变量ID   | 未指定 | 当前思路中定义的实体变量的ID。                       | "123"           |
 
 ## 生成提示对象 (Generation Prompt Object) (位于步骤对象的 `generationPrompts` 数组内)
 
@@ -116,9 +116,9 @@
 | defaultValue    | Null/String | 默认值。                  | `null`   | 变量的初始值或在未提供输入时的默认值。                           |                                                              |
 | userVarId       | Null/String | 用户变量ID。              | `null`   | 如果变量是用户自定义的，则可能有关联的用户变量ID。               |                                                              |
 | userVarParentId | Null/String | 用户变量父ID。            | `null`   | 如果用户自定义变量存在层级关系，则记录其父ID。                   |                                                              |
-| deleted         | Number      | 删除状态 (0 表示未删除)。 | `0`      | 标记变量是否已被删除（逻辑删除）。此字段主要出现在`varList` 中。 | `0` (未删除), `1` (已删除)                                   |
+| deleted         | Number      | 删除状态 (0 表示未删除)。 | `null`   | 标记变量是否已被删除（逻辑删除）。此字段主要出现在`varList` 中。 | `0` (未删除), `1` (已删除)                                   |
 | version         | Null/String | 版本。                    | `null`   | 变量的版本信息。此字段主要出现在`varList` 中。                   | "v1.2"                                                       |
-| tmpDelete       | Number      | 临时删除状态。            | `0`      | 标记变量是否被临时删除。此字段主要出现在`varList` 中。           | `0` (未临时删除), `1` (已临时删除)                           |
+| tmpDelete       | Number      | 临时删除状态。            | `null`   | 标记变量是否被临时删除。此字段主要出现在`varList` 中。           | `0` (未临时删除), `1` (已临时删除)                           |
 | childs          | Null/Array  | 子变量 (用于层级数据)。   | `null`   | 如果变量包含子变量，则在此处列出。                               | `[{"varName": "subPoint1", ...}]`                            |
 
 ## 术语对象 (Term Object) (位于 `termList` 和 `totalTermList` 内)
