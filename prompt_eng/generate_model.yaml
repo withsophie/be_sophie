@@ -396,8 +396,8 @@ model:
       inherits: base_entity
     - id: radius
       prototype: segment
-      define_baseset: [origin, boundary]
-      define_prompt: The expansion from the center to the boundary (radius).
+      define_baseset: [origin]
+      define_prompt: The radius starting from the center (origin) and extending toward the boundary.
       occur: 1
       inherits: base_relation
     - id: boundary
@@ -457,7 +457,7 @@ model:
   id: hybrid_matrix
   name: 2D Hybrid Matrix
   ref_domain: matrix
-  visual: grid
+  visual: matrix
   description: Matrix where row and column are defined by different sets, and each cell represents the intersection.
   inherits: base_model
   entities:
