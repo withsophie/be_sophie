@@ -289,22 +289,20 @@ model:
 # closure: Internal-External Set Structure Model
 #
 #   +-----------------------------------------+
-#   |              internal_set               |
-#   |            ● internal_entity            |
+#   |              set_a                      |
 #   |                                         |
-#   |    ↑                          |         |
-#   +----|--------------------------|---------+
+#   |                                         |
+#   |                                         |
+#   +-----------------------------------------+
 #        |                          |
-# external_to_internal         internal_to_external
 #        |                          |
-#        |       external_set       |
-#        |    ○ external_entity     ↓
+#        |       set_b              |
+#        |                          |
 #
 # Diagram notes:
-# - The box represents the internal_set, containing internal_entity.
-# - Outside the box is the external_set, containing external_entity.
-# - external_to_internal: Arrow from external_entity (outside) to internal_entity (inside).
-# - internal_to_external: Arrow from internal_entity (inside) to external_entity (outside).
+# - The box represents set_a.
+# - Outside the box is set_b.
+# - Relations describe intersection, union, and difference between the two sets.
 #
 model:
   index: G4
@@ -312,45 +310,45 @@ model:
   name: Closure Structure
   ref_domain: set         # Use "set" or "system" to match the prototype terms
   visual: set
-  description: Models internal vs external entities and their mutual influence.
+  description: Models the relationship between any two sets, including their intersection, union, and difference.
   inherits: base_model
   entities:
-    - id: internal_set
+    - id: set_a
       prototype: set
       define_baseset: [primitive]
-      define_prompt: The set that defines all internal entities (e.g., system, organization).
-      occur: 1
-      inherits: base_entity
-    - id: external_set
-      prototype: set
-      define_baseset: [internal_set]
-      define_prompt: The set that defines all external entities, defined relative to the internal set (e.g., environment outside the system).
-      occur: 1
-      inherits: base_entity
-    - id: internal_entity
-      prototype: element
-      define_baseset: [internal_set]
-      define_prompt: An entity from the internal set.
+      define_prompt: Any related set
       occur: n+
       inherits: base_entity
-    - id: external_entity
-      prototype: element
-      define_baseset: [external_set]
-      define_prompt: An entity from the external set.
+    - id: set_b
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: Any related set
       occur: n+
       inherits: base_entity
   relations:
-    - id: external_to_internal
-      prototype: relation
-      define_baseset: [external_entity, internal_entity]
-      define_prompt: Influence from external entity to internal entity.
-      occur: n*
+    - id: intersection
+      prototype: set_operation
+      define_baseset: [set_a, set_b]
+      define_prompt: Intersection of set_a and set_b
+      occur: 1*
       inherits: base_relation
-    - id: internal_to_external
-      prototype: relation
-      define_baseset: [internal_entity, external_entity]
-      define_prompt: Feedback or projection from internal entity to external entity.
-      occur: n*
+    - id: union
+      prototype: set_operation
+      define_baseset: [set_a, set_b]
+      define_prompt: Union of set_a and set_b
+      occur: 1*
+      inherits: base_relation
+    - id: difference
+      prototype: set_operation
+      define_baseset: [set_a, set_b]
+      define_prompt: Difference of set_a minus set_b
+      occur: 1*
+      inherits: base_relation
+    - id: difference_reverse
+      prototype: set_operation
+      define_baseset: [set_b, set_a]
+      define_prompt: Difference of set_b minus set_a
+      occur: 1*
       inherits: base_relation
 
 ---
@@ -396,8 +394,8 @@ model:
       inherits: base_entity
     - id: radius
       prototype: segment
-      define_baseset: [origin, boundary]
-      define_prompt: The expansion from the center to the boundary (radius).
+      define_baseset: [origin]
+      define_prompt: The radius starting from the center (origin) and extending toward the boundary.
       occur: 1
       inherits: base_relation
     - id: boundary
@@ -457,7 +455,7 @@ model:
   id: hybrid_matrix
   name: 2D Hybrid Matrix
   ref_domain: matrix
-  visual: grid
+  visual: matrix
   description: Matrix where row and column are defined by different sets, and each cell represents the intersection.
   inherits: base_model
   entities:
