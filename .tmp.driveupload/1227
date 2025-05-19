@@ -1,8 +1,0 @@
-0000000000000000000000000000000000000000 7b263f0c5d564b591e5a5a0c12aed414295a109c ariesduan002 <duan.aries@gmail.com> 1747290082 +0800	clone: from github.com:withsophie/be_sophie.git
-7b263f0c5d564b591e5a5a0c12aed414295a109c dd64dbbb7ca9a264a88337c576990556d58f761f ariesduan002 <duan.aries@gmail.com> 1747290124 +0800	commit: test
-dd64dbbb7ca9a264a88337c576990556d58f761f b4fe613b8abc1c9dd29fe91c1d2f5813d15f2542 ariesduan002 <duan.aries@gmail.com> 1747290222 +0800	commit: sss
-b4fe613b8abc1c9dd29fe91c1d2f5813d15f2542 885346d1c3b2c31ffab0a24679b6cf38e50af742 ariesduan002 <duan.aries@gmail.com> 1747290337 +0800	commit: test
-885346d1c3b2c31ffab0a24679b6cf38e50af742 e5e0d85a3a78f53235f0b6116b7182b3155d1c7d ariesduan002 <duan.aries@gmail.com> 1747291148 +0800	commit: create
-e5e0d85a3a78f53235f0b6116b7182b3155d1c7d b0c2487eb79ae16f4c4754c36eda6484e6cfe330 ariesduan002 <duan.aries@gmail.com> 1747385695 +0800	commit: generate chain with model successfully
-b0c2487eb79ae16f4c4754c36eda6484e6cfe330 b7b0e17c28c543fec8093288545b8980174697ef ariesduan002 <duan.aries@gmail.com> 1747386352 +0800	merge refs/remotes/origin/master: Merge made by the 'ort' strategy.
-b7b0e17c28c543fec8093288545b8980174697ef 6cb165b9a159c7e323142595c69904965553abb9 ariesduan002 <duan.aries@gmail.com> 1747640160 +0800	commit: add preview step
