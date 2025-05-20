@@ -53,18 +53,42 @@ model:
 #
 model:
   index: G1
-  id: binary_orthogonal  # Unique identifier for the model
-  name: Binary Orthogonal  # Model name
-  ref_domain: geometry     # Domain of reference, must use domain term
-  visual: quadrant         # Visualization type, must use a term from ref_domain, e.g., "quadrant"
+  id: binary_orthogonal     # Unique identifier for the model
+  name: Binary Orthogonal   # Model name
+  ref_domain: geometry      # Domain of reference, must use domain term
+  visual: quadrant          # Visualization type, must use a term from ref_domain, e.g., "quadrant"
+  visual_prompt: | 
+    Use a quadrant diagram with two orthogonal axes.
+
+    - Label the entity `axis_x` at the positive end of the horizontal axis with an arrowhead.
+    - Label the entity `axis_y` at the positive end of the vertical axis with an arrowhead.
+    - Do not label the negative ends of the axes.
+
+    Inside each quadrant:
+    - Display the quadrant ID (e.g., `quadrant_I`)
+    - Below it, list the two vector entity names on separate lines (e.g., `x_positive`, `y_positive`)
+    - Do not use brackets or commas.
+
+    Draw the following symmetry relations as dashed lines with arrowheads:
+    - `x_flip`: from `quadrant_III` to `quadrant_IV`, horizontal, placed below the quadrants
+    - `y_flip`: from `quadrant_III` to `quadrant_II`, vertical, placed to the left side
+    - `diagonal_reverse`: from `quadrant_III` to `quadrant_I`, diagonal, passing through the origin
+    - `diagonal_swap`: from `quadrant_II` to `quadrant_IV`, diagonal, passing through the origin
+
+    Drawing conventions:
+    - Relation lines should be shortened: trim approximately 25% from both ends to avoid overlapping quadrant labels.
+    - Label each relation with its ID (e.g., `x_flip`) in small font.
+    - Position the label about one-third of the way from the arrowhead back toward the start of the line.
+    - Offset the label slightly outward depending on direction: e.g., below for horizontal, left for vertical, etc.
+    - The entire diagram should be centered on canvas, with the coordinate origin at the center.
   description: A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.  # Model description
-  inherits: base_model     # Inherit from base_model
+  inherits: base_model      # Inherit from base_model
   entities:
-    - id: axis_x           # Unique identifier for the entity
-      prototype: axis      # Entity type, must use a term from ref_domain, e.g., "axis"
+    - id: axis_x            # Unique identifier for the entity
+      prototype: axis       # Entity type, must use a term from ref_domain, e.g., "axis"
       define_baseset: [primitive]  # Base set for the entity
       define_prompt: The X-axis representing opposing conceptual vectors.  # Entity description
-      occur: 1             # Must have exactly one
+      occur: 1              # Must have exactly one
       inherits: base_entity
     - id: axis_y
       prototype: axis
@@ -123,26 +147,26 @@ model:
   relations:
     - id: x_flip
       prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
-      define_baseset: [quadrant_I, quadrant_IV, quadrant_II, quadrant_III]
+      define_baseset: [axis_x]
       define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
       occur: 1+
       inherits: base_relation
     - id: y_flip
       prototype: symmetry
-      define_baseset: [quadrant_I, quadrant_II, quadrant_III, quadrant_IV]
+      define_baseset: [axis_y]
       define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
       occur: 1+
       inherits: base_relation
     - id: diagonal_reverse
       prototype: symmetry
-      define_baseset: [quadrant_I, quadrant_III]
-      define_prompt: Diagonal symmetry—conversion between Quadrant I (++), and Quadrant III (--).
+      define_baseset: [x_flip, y_flip]
+      define_prompt: Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.
       occur: 1+
       inherits: base_relation
     - id: diagonal_swap
       prototype: symmetry
-      define_baseset: [quadrant_II, quadrant_IV]
-      define_prompt: Diagonal symmetry—conversion between Quadrant II (-+), and Quadrant IV (+-).
+      define_baseset: [x_flip, y_flip]
+      define_prompt: Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.
       occur: 1+
       inherits: base_relation
 
