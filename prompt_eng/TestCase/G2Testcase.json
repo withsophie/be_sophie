@@ -1,0 +1,47 @@
+# G2模型实例：利率三元关系分析
+model:
+  index: G2R1
+  id: interest_rate_trinary_triangle
+  name: Interest Rate Trinary Interconnection
+  ref_domain: finance
+  visual: triangle
+  description: 用三元三角模型分析利率与通货膨胀、经济增长、货币政策三者之间的相互作用。
+  inherits: trinary_triangle
+  entities:
+    - id: inflation
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 通货膨胀（Inflation）
+      occur: 1
+      inherits: base_entity
+    - id: economic_growth
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 经济增长（Economic Growth）
+      occur: 1
+      inherits: base_entity
+    - id: monetary_policy
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 货币政策（Monetary Policy/Interest Rate）
+      occur: 1
+      inherits: base_entity
+  relations:
+    - id: inflation_to_growth
+      prototype: edge
+      define_baseset: [inflation, economic_growth]
+      define_prompt: 通胀对经济增长的影响（如高通胀抑制增长）
+      occur: 1+
+      inherits: base_relation
+    - id: growth_to_policy
+      prototype: edge
+      define_baseset: [economic_growth, monetary_policy]
+      define_prompt: 经济增长对货币政策的影响（如增长过快促使加息）
+      occur: 1+
+      inherits: base_relation
+    - id: policy_to_inflation
+      prototype: edge
+      define_baseset: [monetary_policy, inflation]
+      define_prompt: 货币政策对通胀的影响（如加息抑制通胀）
+      occur: 1+
+      inherits: base_relation
