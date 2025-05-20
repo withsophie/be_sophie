@@ -1,4 +1,4 @@
-# G2模型实例：利率三元关系分析
+
 model:
   index: G2R1
   id: interest_rate_trinary_triangle
