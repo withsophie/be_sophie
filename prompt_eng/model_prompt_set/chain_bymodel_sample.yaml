@@ -1,0 +1,122 @@
+# binary_orthogonal: A quadrant model with two orthogonal axes (X and Y), each with positive and negative directions.
+# The four quadrants represent all combinations of X/Y positive/negative.
+#
+#   axis_y
+#    ↑                    y_positive
+#   -+→ axis_x                  ↑
+#                 quadrant_II   |   quadrant_I
+#                 (x_negative,  |  (x_positive,
+#                  y_positive)  |   y_positive)
+#     x_negative ←--------------+--------------→ x_positive
+#                 quadrant_III  |   quadrant_IV
+#                 (x_negative,  |  (x_positive,
+#                  y_negative)  |   y_negative)
+#                               ↓
+#                         y_negative
+#
+#   x_flip:        quadrant_I  <-->  quadrant_IV
+#                  quadrant_II <--> quadrant_III
+#
+#   y_flip:        quadrant_I  <-->  quadrant_II
+#                  quadrant_IV <--> quadrant_III
+#
+#   diagonal_reverse: quadrant_I <--> quadrant_III
+#   diagonal_swap:    quadrant_II <--> quadrant_IV
+#
+# Each axis and vector is defined as an entity, and each quadrant is a composite entity.
+# Symmetry relations describe possible transformations between quadrants.
+#
+model:
+  index: G1
+  id: binary_orthogonal
+  name: Goal Pursuit Analysis
+  ref_domain: sociology
+  visual: quadrant
+  description: A quadrant model analyzing goal pursuit based on time orientation and source of power.
+  inherits: base_model
+  entities:
+    - id: time_axis
+      prototype: axis
+      define_baseset: [primitive]
+      define_prompt: The time dimension, representing orientation toward the past or future.
+      occur: 1
+      inherits: base_entity
+    - id: power_axis
+      prototype: axis
+      define_baseset: [primitive]
+      define_prompt: The power dimension, representing internal or external sources of power.
+      occur: 1
+      inherits: base_entity
+    - id: future_oriented
+      prototype: vector
+      define_baseset: [time_axis]
+      define_prompt: Orientation toward the future (e.g., planning, innovation).
+      occur: 1
+      inherits: base_entity
+    - id: past_oriented
+      prototype: vector
+      define_baseset: [time_axis]
+      define_prompt: Orientation toward the past (e.g., tradition, reflection).
+      occur: 1
+      inherits: base_entity
+    - id: internal_power
+      prototype: vector
+      define_baseset: [power_axis]
+      define_prompt: Power derived from internal sources (e.g., self-motivation, personal values).
+      occur: 1
+      inherits: base_entity
+    - id: external_power
+      prototype: vector
+      define_baseset: [power_axis]
+      define_prompt: Power derived from external sources (e.g., societal norms, external support).
+      occur: 1
+      inherits: base_entity
+    - id: quadrant_I
+      prototype: quadrant
+      define_baseset: [future_oriented, internal_power]
+      define_prompt: Future-oriented with internal power (e.g., self-driven innovators).
+      occur: 1
+      inherits: base_entity
+    - id: quadrant_II
+      prototype: quadrant
+      define_baseset: [past_oriented, internal_power]
+      define_prompt: Past-oriented with internal power (e.g., self-reflective traditionalists).
+      occur: 1
+      inherits: base_entity
+    - id: quadrant_III
+      prototype: quadrant
+      define_baseset: [past_oriented, external_power]
+      define_prompt: Past-oriented with external power (e.g., tradition-enforcing institutions).
+      occur: 1
+      inherits: base_entity
+    - id: quadrant_IV
+      prototype: quadrant
+      define_baseset: [future_oriented, external_power]
+      define_prompt: Future-oriented with external power (e.g., externally supported visionaries).
+      occur: 1
+      inherits: base_entity
+  relations:
+    - id: time_flip
+      prototype: symmetry
+      define_baseset: [quadrant_I, quadrant_IV, quadrant_II, quadrant_III]
+      define_prompt: Horizontal axis symmetry—conversion between past and future orientation.
+      occur: 1+
+      inherits: base_relation
+    - id: power_flip
+      prototype: symmetry
+      define_baseset: [quadrant_I, quadrant_II, quadrant_III, quadrant_IV]
+      define_prompt: Vertical axis symmetry—conversion between internal and external power sources.
+      occur: 1+
+      inherits: base_relation
+    - id: diagonal_reverse
+      prototype: symmetry
+      define_baseset: [quadrant_I, quadrant_III]
+      define_prompt: Diagonal symmetry—conversion between Quadrant I (future, internal) and Quadrant III (past, external).
+      occur: 1+
+      inherits: base_relation
+    - id: diagonal_swap
+      prototype: symmetry
+      define_baseset: [quadrant_II, quadrant_IV]
+      define_prompt: Diagonal symmetry—conversion between Quadrant II (past, internal) and Quadrant IV (future, external).
+      occur: 1+
+      inherits: base_relation

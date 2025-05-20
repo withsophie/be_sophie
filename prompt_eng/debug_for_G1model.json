@@ -1,0 +1,241 @@
+{
+    "id": "train_goal_pursuit_analyzer_v1",
+    "gptModel": "gpt-4o",
+    "gptTemperature": "0.7",
+    "trainName": "Goal Pursuit Analysis Prompt",
+    "trainDesc": "根据用户的问题判断其属于哪一个目标追求象限（时间取向 vs 权力来源）并进行分析",
+    "welcomeMessage": "你好！请输入你的问题或一段描述，我将帮你分析它所反映的目标追求模式，并提供相关的解读和建议。",
+    "summary": "此思路通过分析用户输入，识别其在时间取向和权力来源上的偏好，将其归类到四个目标追求象限之一，并提供归类理由、象限特征描述及行动建议。",
+    "stepList": [
+      {
+        "id": "s0_start",
+        "stepName": "开始节点",
+        "stepType": 9,
+        "nextId": "s1_time_orient,s2_locus_ctrl",
+        "stepOutVars": ["ThinkPoint"],
+       "stepInVars": [],
+        "stepDesc": "接收用户输入作为初始思考点。"
+      },
+      {
+        "id": "s1_time_orient",
+        "preId": "s0_start",
+        "nextId": "s3_determine_quadrant",
+        "stepName": "识别时间取向",
+        "stepType": 1,
+        "stepInVars": ["ThinkPoint"],
+        "stepOutVars": ["TimeOrientationPreference"],
+        "stepPrompt": "请仔细阅读用户的输入内容：\n```\n{{ThinkPoint}}\n```\n根据上述内容，分析用户在“时间取向”上更倾向于“未来”（future）还是“过去”（past）。仅输出 'future' 或 'past'。\nOutput: {{TimeOrientationPreference}} = (分析得出的时间取向)",
+        "stepDesc": "从用户输入中分析并提取其时间取向（未来或过去）。"
+      },
+      {
+        "id": "s2_locus_ctrl",
+        "preId": "s0_start",
+        "nextId": "s3_determine_quadrant",
+        "stepName": "识别权力来源",
+        "stepType": 1,
+        "stepInVars": ["ThinkPoint"],
+        "stepOutVars": ["LocusOfControlPreference"],
+        "stepPrompt": "请仔细阅读用户的输入内容：\n```\n{{ThinkPoint}}\n```\n根据上述内容，分析用户在“权力来源”上更倾向于“内部”（internal）还是“外部”（external）。仅输出 'internal' 或 'external'。\nOutput: {{LocusOfControlPreference}} = (分析得出的权力来源)",
+        "stepDesc": "从用户输入中分析并提取其权力来源偏好（内部或外部）。"
+      },
+      {
+        "id": "s3_determine_quadrant",
+        "preId": "s1_time_orient,s2_locus_ctrl",
+        "nextId": "s4_generate_reasoning",
+        "stepName": "确定象限",
+        "stepType": 1,
+        "stepInVars": ["TimeOrientationPreference", "LocusOfControlPreference"],
+        "stepOutVars": ["Quadrant"],
+        "stepPrompt": "已知用户的时间取向为 '{{TimeOrientationPreference}}'，权力来源为 '{{LocusOfControlPreference}}'。\n根据以下定义确定用户所属的目标追求象限：\n- 象限I (Quadrant_I): 未来取向 (future) & 内部权力来源 (internal)\n- 象限II (Quadrant_II): 未来取向 (future) & 外部权力来源 (external)\n- 象限III (Quadrant_III): 过去取向 (past) & 内部权力来源 (internal)\n- 象限IV (Quadrant_IV): 过去取向 (past) & 外部权力来源 (external)\n请输出对应的象限标识：'quadrant_I', 'quadrant_II', 'quadrant_III', 或 'quadrant_IV'。\nOutput: {{Quadrant}} = (确定的象限标识)",
+        "stepDesc": "根据时间取向和权力来源的组合，确定用户所属的目标追求象限。"
+      },
+      {
+        "id": "s4_generate_reasoning",
+        "preId": "s3_determine_quadrant",
+        "nextId": "s5_describe_quadrant",
+        "stepName": "生成归类理由",
+        "stepType": 1,
+        "stepInVars": ["ThinkPoint", "TimeOrientationPreference", "LocusOfControlPreference", "Quadrant"],
+        "stepOutVars": ["Reasoning"],
+        "stepPrompt": "用户信息如下：\n- 用户输入：{{ThinkPoint}}\n- 时间取向：{{TimeOrientationPreference}}\n- 权力来源：{{LocusOfControlPreference}}\n- 所属象限：{{Quadrant}}\n请基于上述信息，简洁地陈述将用户归类到 '{{Quadrant}}' 的主要理由 (1-2句话)。\nOutput: {{Reasoning}} = (生成的归类理由)",
+        "stepDesc": "解释为什么用户被归类到特定的象限。"
+      },
+      {
+        "id": "s5_describe_quadrant",
+        "preId": "s4_generate_reasoning",
+        "nextId": "s6_suggest_actions",
+        "stepName": "描述象限特征",
+        "stepType": 1,
+        "stepInVars": ["Quadrant"],
+        "stepOutVars": ["QuadrantDescription"],
+        "stepPrompt": "用户当前处于 '{{Quadrant}}'。\n请提供关于此象限内个体常见的行为模式、心态特征和典型表现的简要描述 (2-3句话)。\n参考信息：\n- quadrant_I (未来 & 内部): 积极主动，目标导向，相信通过自身努力改变未来，行动力强，有计划性。\n- quadrant_II (未来 & 外部): 关注机遇，依赖外部环境或他人支持实现目标，适应性强，可能随遇而安或等待时机。\n- quadrant_III (过去 & 内部): 重视经验，从历史中学习指导当前，偏好反思和总结，行为稳健，有时可能保守。\n- quadrant_IV (过去 & 外部): 易受过往经历影响，认为命运或环境主导结果，可能表现出宿命感或无力感，关注外部评价。\nOutput: {{QuadrantDescription}} = (生成的象限特征描述)",
+        "stepDesc": "提供所确定象限的行为模式和特征描述。"
+      },
+      {
+        "id": "s6_suggest_actions",
+        "preId": "s5_describe_quadrant",
+        "nextId": "s7_end",
+        "stepName": "提供行动建议",
+        "stepType": 1,
+        "stepInVars": ["Quadrant"],
+        "stepOutVars": ["PossibleActions"],
+        "stepPrompt": "用户当前处于 '{{Quadrant}}'。\n请针对此象限的特点，提供2-3条具体的、可操作的行动策略或建议，以帮助用户更好地发展或应对挑战。\n参考方向：\n- quadrant_I: 明确并细化目标，制定阶段性计划，注意平衡自信与风险评估，寻求反馈。\n- quadrant_II: 主动识别和争取外部资源与合作机会，提升个人能力以把握机遇，建立风险应对预案。\n- quadrant_III: 系统化总结过往经验教训，将其智慧应用于新情境，鼓励尝试新方法，避免过度沉湎过去。\n- quadrant_IV: 专注于可控的小范围行动，逐步建立成就感，寻求积极的社会支持和榜样，挑战消极信念。\nOutput: {{PossibleActions}} = (生成的行动建议列表，每条建议清晰列出)",
+        "stepDesc": "根据象限特征，给出针对性的行动策略建议。"
+      },
+      {
+        "id": "s7_end",
+        "preId": "s6_suggest_actions",
+        "stepName": "结束节点",
+        "stepType": 10,
+        "stepInVars": ["Quadrant", "Reasoning", "QuadrantDescription", "PossibleActions"],
+        "stepDesc": "汇总分析结果并结束流程。",
+        "modeVarMap": [
+          {
+            "varName": "Quadrant",
+            "modeVarId": 2001,
+            "modeVarName": "最终判定象限",
+            "varId": 1004
+          },
+          {
+            "varName": "Reasoning",
+            "modeVarId": 2002,
+            "modeVarName": "归类理由陈述",
+            "varId": 1005
+          },
+          {
+            "varName": "QuadrantDescription",
+            "modeVarId": 2003,
+            "modeVarName": "象限特征详解",
+            "varId": 1006
+          },
+          {
+            "varName": "PossibleActions",
+            "modeVarId": 2004,
+            "modeVarName": "推荐行动策略",
+            "varId": 1007
+          }
+        ]
+      }
+    ],
+    "varList": [
+      {
+        "id": 1001,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "ThinkPoint",
+        "varDesc": "用户输入的问题或描述，作为分析的起点。",
+        "varType": 1,
+        "stepId": "s0_start"
+      },
+      {
+        "id": 1002,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "TimeOrientationPreference",
+        "varDesc": "从用户输入中分析得出的时间取向（future 或 past）。",
+        "varType": 1,
+        "stepId": "s1_time_orient"
+      },
+      {
+        "id": 1003,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "LocusOfControlPreference",
+        "varDesc": "从用户输入中分析得出的权力来源偏好（internal 或 external）。",
+        "varType": 1,
+        "stepId": "s2_locus_ctrl"
+      },
+      {
+        "id": 1004,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "Quadrant",
+        "varDesc": "根据时间取向和权力来源确定的用户所属目标追求象限（quadrant_I, quadrant_II, quadrant_III, quadrant_IV）。",
+        "varType": 1,
+        "varFormat": "enum[quadrant_I, quadrant_II, quadrant_III, quadrant_IV]",
+        "stepId": "s3_determine_quadrant"
+      },
+      {
+        "id": 1005,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "Reasoning",
+        "varDesc": "将用户归类到特定象限的逻辑说明。",
+        "varType": 1,
+        "stepId": "s4_generate_reasoning"
+      },
+      {
+        "id": 1006,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "QuadrantDescription",
+        "varDesc": "对所确定象限的行为模式和人物特征的简要描述。",
+        "varType": 1,
+        "stepId": "s5_describe_quadrant"
+      },
+      {
+        "id": 1007,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "PossibleActions",
+        "varDesc": "针对该象限推荐的具体行为策略。",
+        "varType": 1,
+        "stepId": "s6_suggest_actions"
+      }
+    ],
+    "totalVarList": [
+      {
+        "id": 1001,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "ThinkPoint",
+        "varDesc": "用户输入的问题或描述，作为分析的起点。",
+        "varType": 1,
+        "stepId": "s0_start"
+      },
+      {
+        "id": 1002,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "TimeOrientationPreference",
+        "varDesc": "从用户输入中分析得出的时间取向（future 或 past）。",
+        "varType": 1,
+        "stepId": "s1_time_orient"
+      },
+      {
+        "id": 1003,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "LocusOfControlPreference",
+        "varDesc": "从用户输入中分析得出的权力来源偏好（internal 或 external）。",
+        "varType": 1,
+        "stepId": "s2_locus_ctrl"
+      },
+      {
+        "id": 1004,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "Quadrant",
+        "varDesc": "根据时间取向和权力来源确定的用户所属目标追求象限（quadrant_I, quadrant_II, quadrant_III, quadrant_IV）。",
+        "varType": 1,
+        "varFormat": "enum[quadrant_I, quadrant_II, quadrant_III, quadrant_IV]",
+        "stepId": "s3_determine_quadrant"
+      },
+      {
+        "id": 1005,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "Reasoning",
+        "varDesc": "将用户归类到特定象限的逻辑说明。",
+        "varType": 1,
+        "stepId": "s4_generate_reasoning"
+      },
+      {
+        "id": 1006,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "QuadrantDescription",
+        "varDesc": "对所确定象限的行为模式和人物特征的简要描述。",
+        "varType": 1,
+        "stepId": "s5_describe_quadrant"
+      },
+      {
+        "id": 1007,
+        "trainId": "train_goal_pursuit_analyzer_v1",
+        "varName": "PossibleActions",
+        "varDesc": "针对该象限推荐的具体行为策略。",
+        "varType": 1,
+        "stepId": "s6_suggest_actions"
+      }
+    ],
+    "termList": [],
+    "totalTermList": [],
+    "tagIds": []
+  }
