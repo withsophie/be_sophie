@@ -1,7 +1,7 @@
 
 model:
   index: G2R1
-  id: interest_rate_trinary_triangle
+  id: trinary_triangle
   name: Interest Rate Trinary Interconnection
   ref_domain: finance
   visual: triangle

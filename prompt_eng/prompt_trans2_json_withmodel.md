@@ -17,13 +17,12 @@
 **Step 1：通过Model说明，理解所选择的 Model**
 
 * 通过它的ref_domain确定这个思路的问题域
-* name作为这个思路的名称
+* name作为这个思路的名称，modeId使用选择的Model的id
 
 **Step 2：确认primitive实体变量**
 
 * 将所有entity中baseset为primitive的，都生成为变量，变量名称为entity的ID
 * 所有变量必须依次记录进 `varList`（即变量清单）。
-*
 * 用户提供的第一个变量固定命名为 `ThinkPoint`。
 
 **Step 3：理清变量生成的因果顺序**
@@ -49,6 +48,7 @@
 * 每一步的 Prompt 指令应根据输入/输出逻辑改写。
 * 每一步必须产出一个明确的结果，且这个结果需要赋值给输出变量，这个赋值动作需要在步骤的 prompt 写出来。
 * 每个变量生成完毕后写入 `varList`。
+* step中的最后一个步骤，其类型应该为10，且应该形成modeVarMap中对变量的映射，映射方式应参考模型中的描述，只选最必需的变量映射，无需将所有变量映射进去，modeVarMap中的ModeVarName，请根据{{Model说明}}中的对应id来生成。
 
 **Step 5：去除格式相关的规约**
 
