@@ -1,4 +1,4 @@
 | PromptName             | Description                          | Content                                                                                                                                        |
 | ---------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Generate_ModelInstance | 根据选择的model和构思生成model的实例 | 请用{{ModelName}}帮我生成使用该模型来分析{{Chain_draft}}的一个模型实例，模型实例中的entity和relations的id生成请将原id拼在生成的id后面，以_分隔 |
+| Generate_ModelInstance | 根据选择的model和构思生成model的实例 | 请用{{ModelName}}帮我生成使用该模型来分析{{Chain_draft}}的一个模型实例，模型实例中的entity和relations的id生成请将原id拼在生成的id后面，以:分隔 |
 |                        |                                      |                                                                                                                                                |
