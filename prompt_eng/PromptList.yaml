@@ -1,0 +1,18 @@
+Prompts:
+  - rules:
+      - rulename: trans2jsonRule1
+        File: prompt_trans2_json_withmodel.md
+      - rulename: trans2jsonRule2
+        File: prompt_trans2_json_withfreemodel.md
+
+  - PromptName: Generate_ModelInstance
+    Description: 根据选择的model和构思生成model的实例
+    Content: 请用{{ModelName}}帮我生成使用该模型来分析{{Chain_draft}}的一个模型实例，模型实例中的entity和relations的id生成请将原id拼在生成的id后面，以_分隔
+
+  - PromptName: Generate_Chain_withMode
+    Description: 根据选择的modelInstance和Datadic，遵循trans2jsonRule1生成chain_json
+    Content: 请用{{ModelInstance}}中的内容，遵循{{trans2jsonRule}}的规则，按照{{Datadic}}的格式，帮我生成一个chain_json
+
+  - PromptName: Generate_Chain_withfreeMode
+    Description: 根据chain_draft和Datadic，遵循trans2jsonRule2生成chain_json
+    Content: 请用{{Chain_draft}}中的内容，遵循{{trans2jsonRule}}的规则，按照{{Datadic}}的格式，帮我生成一个chain_json
