@@ -1,0 +1,158 @@
+{
+  "id": "gop_policy_analysis",
+  "trainName": "共和党政策倾向二元象限分析",
+  "trainDesc": "基于二元正交象限模型（G1），分析美国共和党的主要政策倾向在两个核心维度上的分布。",
+  "modeId": "binary_orthogonal",
+  "stepList": [
+    {
+      "id": "step1",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "确定分析核心点",
+      "stepDesc": "明确本次分析的核心议题或政策领域。",
+      "stepInVars": ["ThinkPoint"],
+      "stepOutVars": ["axis_x"],
+      "stepPrompt": "请根据输入的分析核心点（{{ThinkPoint}}），确定第一个分析维度（X轴），如“经济自由-政府干预”。将结果赋值给变量axis_x。",
+      "preId": "",
+      "nextId": "step2"
+    },
+    {
+      "id": "step2",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "确定第二分析维度",
+      "stepDesc": "基于核心点，确定第二个分析维度（Y轴）。",
+      "stepInVars": ["ThinkPoint"],
+      "stepOutVars": ["axis_y"],
+      "stepPrompt": "请根据输入的分析核心点（{{ThinkPoint}}），确定第二个分析维度（Y轴），如“社会保守-社会自由”。将结果赋值给变量axis_y。",
+      "preId": "step1",
+      "nextId": "step3"
+    },
+    {
+      "id": "step3",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "定义X轴正负方向",
+      "stepDesc": "明确X轴的正向与反向含义。",
+      "stepInVars": ["axis_x"],
+      "stepOutVars": ["x_positive"],
+      "stepPrompt": "请根据X轴定义（{{axis_x}}），明确其正向（如“经济自由”）的具体含义，并赋值给x_positive。",
+      "preId": "step2",
+      "nextId": "step4"
+    },
+    {
+      "id": "step4",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "定义X轴负方向",
+      "stepDesc": "明确X轴的负向含义。",
+      "stepInVars": ["axis_x"],
+      "stepOutVars": ["x_negative"],
+      "stepPrompt": "请根据X轴定义（{{axis_x}}），明确其负向（如“政府干预”）的具体含义，并赋值给x_negative。",
+      "preId": "step3",
+      "nextId": "step5"
+    },
+    {
+      "id": "step5",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "定义Y轴正方向",
+      "stepDesc": "明确Y轴的正向含义。",
+      "stepInVars": ["axis_y"],
+      "stepOutVars": ["y_positive"],
+      "stepPrompt": "请根据Y轴定义（{{axis_y}}），明确其正向（如“社会保守”）的具体含义，并赋值给y_positive。",
+      "preId": "step4",
+      "nextId": "step6"
+    },
+    {
+      "id": "step6",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "定义Y轴负方向",
+      "stepDesc": "明确Y轴的负向含义。",
+      "stepInVars": ["axis_y"],
+      "stepOutVars": ["y_negative"],
+      "stepPrompt": "请根据Y轴定义（{{axis_y}}），明确其负向（如“社会自由”）的具体含义，并赋值给y_negative。",
+      "preId": "step5",
+      "nextId": "step7"
+    },
+    {
+      "id": "step7",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "归纳四个象限的政策特征",
+      "stepDesc": "结合X、Y轴正负方向，归纳四个象限下共和党的典型政策表现。",
+      "stepInVars": ["x_positive", "x_negative", "y_positive", "y_negative"],
+      "stepOutVars": ["quadrant_I"],
+      "stepPrompt": "请结合X轴正向（{{x_positive}}）、Y轴正向（{{y_positive}}），归纳共和党在第一象限的政策特征，并赋值给quadrant_I。",
+      "preId": "step6",
+      "nextId": "step8"
+    },
+    {
+      "id": "step8",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "归纳第二象限政策特征",
+      "stepDesc": "归纳第二象限下的政策表现。",
+      "stepInVars": ["x_negative", "y_positive"],
+      "stepOutVars": ["quadrant_II"],
+      "stepPrompt": "请结合X轴负向（{{x_negative}}）、Y轴正向（{{y_positive}}），归纳共和党在第二象限的政策特征，并赋值给quadrant_II。",
+      "preId": "step7",
+      "nextId": "step9"
+    },
+    {
+      "id": "step9",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "归纳第三象限政策特征",
+      "stepDesc": "归纳第三象限下的政策表现。",
+      "stepInVars": ["x_negative", "y_negative"],
+      "stepOutVars": ["quadrant_III"],
+      "stepPrompt": "请结合X轴负向（{{x_negative}}）、Y轴负向（{{y_negative}}），归纳共和党在第三象限的政策特征，并赋值给quadrant_III。",
+      "preId": "step8",
+      "nextId": "step10"
+    },
+    {
+      "id": "step10",
+      "trainId": "gop_policy_analysis",
+      "stepType": 1,
+      "stepName": "归纳第四象限政策特征",
+      "stepDesc": "归纳第四象限下的政策表现。",
+      "stepInVars": ["x_positive", "y_negative"],
+      "stepOutVars": ["quadrant_IV"],
+      "stepPrompt": "请结合X轴正向（{{x_positive}}）、Y轴负向（{{y_negative}}），归纳共和党在第四象限的政策特征，并赋值给quadrant_IV。",
+      "preId": "step9",
+      "nextId": "step11"
+    },
+    {
+      "id": "step11",
+      "trainId": "gop_policy_analysis",
+      "stepType": 10,
+      "stepName": "输出象限分析结果",
+      "stepDesc": "将四个象限的分析结果输出并映射到模型变量。",
+      "stepInVars": ["quadrant_I", "quadrant_II", "quadrant_III", "quadrant_IV"],
+      "stepOutVars": [],
+      "modeVarMap": [
+        { "varName": "quadrant_I", "modeVarId": "quadrant_I", "modeVarName": "quadrant_I", "varId": "quadrant_I" },
+        { "varName": "quadrant_II", "modeVarId": "quadrant_II", "modeVarName": "quadrant_II", "varId": "quadrant_II" },
+        { "varName": "quadrant_III", "modeVarId": "quadrant_III", "modeVarName": "quadrant_III", "varId": "quadrant_III" },
+        { "varName": "quadrant_IV", "modeVarId": "quadrant_IV", "modeVarName": "quadrant_IV", "varId": "quadrant_IV" }
+      ],
+      "preId": "step10",
+      "nextId": ""
+    }
+  ],
+  "varList": [
+    { "id": "ThinkPoint", "varName": "ThinkPoint", "varDesc": "分析核心点", "varType": 1 },
+    { "id": "axis_x", "varName": "axis_x", "varDesc": "X轴分析维度", "varType": 1 },
+    { "id": "axis_y", "varName": "axis_y", "varDesc": "Y轴分析维度", "varType": 1 },
+    { "id": "x_positive", "varName": "x_positive", "varDesc": "X轴正向", "varType": 1 },
+    { "id": "x_negative", "varName": "x_negative", "varDesc": "X轴负向", "varType": 1 },
+    { "id": "y_positive", "varName": "y_positive", "varDesc": "Y轴正向", "varType": 1 },
+    { "id": "y_negative", "varName": "y_negative", "varDesc": "Y轴负向", "varType": 1 },
+    { "id": "quadrant_I", "varName": "quadrant_I", "varDesc": "第一象限政策特征", "varType": 1 },
+    { "id": "quadrant_II", "varName": "quadrant_II", "varDesc": "第二象限政策特征", "varType": 1 },
+    { "id": "quadrant_III", "varName": "quadrant_III", "varDesc": "第三象限政策特征", "varType": 1 },
+    { "id": "quadrant_IV", "varName": "quadrant_IV", "varDesc": "第四象限政策特征", "varType": 1 }
+  ]
+}

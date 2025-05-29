@@ -1,0 +1,70 @@
+---
+# Venn: Internal-External Set Structure Model
+#
+#
+#   ┌─────────────┐
+#   │   set_a     │
+#   │   ┌───────┐ │
+#   │   │   n   │ │
+#   └───│───────│─┘
+#       │ set_b │
+#       └───────┘
+#
+# Diagram notes:
+# - The two overlapping circles represent set_a and set_b.
+# - The overlapping area (∩) represents the intersection of set_a and set_b.
+# - The total area covered by both circles represents the union of set_a and set_b.
+# - Relations describe intersection and union between any sets.
+#
+model:
+  index: G4
+  id: Venn
+  name: Venn diagram
+  ref_domain: set
+  visual: circle
+  description: Models the relationship between any sets, focusing only on their intersections and unions.
+  inherits: base_model
+  entities:
+    - id: set
+      prototype: set
+      define_baseset: [primitive]
+      define_prompt: user defined set
+      occur: n+  # Any number of sets
+      inherits: base_entity
+  relations:
+    - id: intersection_pair
+      prototype: set_operation
+      define_baseset: [set_i, set_j]   # Any two sets
+      define_prompt: Intersection of any two sets
+      occur: n*                        # All pairwise combinations
+      inherits: base_relation
+    - id: intersection_n
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]  # Any number of sets
+      define_prompt: Intersection of any n sets
+      occur: n*                                   # All combinations
+      inherits: base_relation
+    - id: intersection_all
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]
+      define_prompt: Intersection of all sets
+      occur: 1  # Only one combination: all sets
+      inherits: base_relation
+    - id: union_pair
+      prototype: set_operation
+      define_baseset: [set_i, set_j]   # Any two sets
+      define_prompt: Union of any two sets
+      occur: n*                        # All pairwise combinations
+      inherits: base_relation
+    - id: union_n
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]  # Any number of sets
+      define_prompt: Union of any n sets
+      occur: n*                                   # All combinations
+      inherits: base_relation
+    - id: union_all
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]
+      define_prompt: Union of all sets
+      occur: 1  # Only one combination: all sets
+      inherits: base_relation

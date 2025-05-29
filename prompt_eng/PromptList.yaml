@@ -7,7 +7,43 @@ Prompts:
 
   - PromptName: Generate_ModelInstance
     Description: 根据选择的model和构思生成model的实例
-    Content: 请用{{ModelName}}帮我生成使用该模型来分析{{Chain_draft}}的一个模型实例，模型实例中的entity和relations的id生成请将原id拼在生成的id后面，以_分隔
+    Content: 请用{{Model}}帮我生成使用该模型来分析{{Chain_draft}}的一个模型实例，模型实例中的entity和relations的id生成请将Model的id拼在生成的id后面，以:分隔。根据{{Chain_draft}}的内容生成下列内容：1、判断其涉及的领域，生成ref_domain；2、根据ref_domain，寻找适合model所设定的prototype的元素，生成define_baseset为[primitive]的entity，并为其生成合适的define_prompt。3、根据使用的define_baseset的顺序，依次生成其余的entity；4、根据prototype和对应的baseset，生成relation和对应的define_prompt；5、请将生成的模型实例命名为{{ModelInstance}}。
+  - Example: |
+      ModelName: {{Model}}
+      Chain_draft: {{Chain_draft}}
+      ModelInstance: {{ModelInstance}}
+      entity:
+        - id: time_axis:{{Model.id}}
+          prototype: axis
+          define_baseset: [primitive]
+          define_prompt: The time dimension, representing orientation toward the past or future.
+          occur: 1
+          inherits: base_entity
+        - id: power_axis:{{Model.id}}
+          prototype: axis
+          define_baseset: [primitive]
+          define_prompt: The power dimension, representing internal or external sources of power.
+          occur: 1
+          inherits: base_entity
+        - id: past_oriented:{{Model.id}}
+          prototype: vector
+          define_baseset: [time_axis]
+          define_prompt: Orientation toward the past (e.g., tradition, reflection).
+          occur: 1
+          inherits: base_entity
+        - id: internal_power:{{Model.id}}
+          prototype: vector
+          define_baseset: [power_axis]
+          define_prompt: Power derived from internal sources (e.g., self-motivation, personal values).
+          occur: 1
+          inherits: base_entity
+      relations:
+        - id: future_oriented:{{Model.id}}
+          prototype: vector
+          define_baseset: [time_axis]
+          define_prompt: Orientation toward the future (e.g., planning, innovation).
+          occur: 1
+          inherits: base_entity
 
   - PromptName: Generate_Chain_withMode
     Description: 根据选择的modelInstance和Datadic，遵循trans2jsonRule1生成chain_json
@@ -16,3 +52,12 @@ Prompts:
   - PromptName: Generate_Chain_withfreeMode
     Description: 根据chain_draft和Datadic，遵循trans2jsonRule2生成chain_json
     Content: 请用{{Chain_draft}}中的内容，遵循{{trans2jsonRule}}的规则，按照{{Datadic}}的格式，帮我生成一个chain_json
+  
+  - PromptName: Generate_Chain_summary
+    Description: 根据chain_json生成chain_summary
+    Content: 请用{{Chain_json}}中的内容，帮我生成一个{{chain_summary}}，{{chain_summary}}的目的是为了让人快速了解该chain_json的内容，内容包括：1. chain_json的name；2.先解释axis_x和axis_y的含义；3.再解释quadrant_I、quadrant_II、quadrant_III、quadrant_IV的含义；4.最后解释x_flip、y_flip、diagonal_reverse和diagonal_swap的含义。
+    Example: |
+      1. chain_json的name是{{Chain_json.name}}，它是一个{{Chain_json.visual}}模型。
+      2. axis_x表示{{Chain_json.axis_x.define_prompt}}，axis_y表示{{Chain_json.axis_y.define_prompt}}。
+      3. quadrant_I表示{{Chain_json.quadrant_I.define_prompt}}，quadrant_II表示{{Chain_json.quadrant_II.define_prompt}}，quadrant_III表示{{Chain_json.quadrant_III.define_prompt}}，quadrant_IV表示{{Chain_json.quadrant_IV.define_prompt}}。
+      4. x_flip表示{{Chain_json.x_flip.define_prompt}}，y_flip表示{{Chain_json.y_flip.define_prompt}}，diagonal_reverse表示{{Chain_json.diagonal_reverse.define_prompt}}，diagonal_swap表示{{Chain_json.diagonal_swap.define_prompt}}。

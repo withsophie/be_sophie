@@ -14,9 +14,9 @@
 
 **Step 2：确认变量**
 
-* 根据{{Chain_draft}}，结合{{Model}}的结构，对这个思路构思进行深入理解，将所有可能用到的元素生成entity和relation，
+* 根据{{Chain_draft}}，结合{{Model}}的结构，对这个思路构思进行深入理解，将所有元素生成entity和relation，
 * 将所有entity和relation都生成为变量，
-* 变量的命名方法：名称为entity/relations的ID，ID由Model说明中的entity/relations的ID和Modelid共同组成，Modelid在后面，以:分割
+* 变量的命名方法：varName=entity/relationsID:Modelid
 * 所有变量必须依次记录进 `varList`（即变量清单）。
 * 用户提供的第一个变量固定命名为 `ThinkPoint`。
 

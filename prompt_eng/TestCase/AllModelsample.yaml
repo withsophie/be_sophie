@@ -1,0 +1,352 @@
+# -------------G7-------------------------------------
+entity:
+  - id: policy_topic_set:symmetric_matrix
+    prototype: set
+    define_baseset: [primitive]
+    define_prompt: 美国民主党主要政策议题集合（如医疗、教育、环境、经济、移民等）。
+    occur: 1
+    inherits: base_entity
+  - id: policy_topic:symmetric_matrix
+    prototype: dimension
+    define_baseset: [policy_topic_set:symmetric_matrix]
+    define_prompt: 民主党政策议题的维度，每个值代表一个具体政策议题。
+    occur: n+
+    inherits: base_entity
+  - id: policy_relation_cell:symmetric_matrix
+    prototype: cell
+    define_baseset: [policy_topic:symmetric_matrix, policy_topic:symmetric_matrix]
+    define_prompt: 由两个政策议题交叉定义的单元格，表示这两个议题之间的对比或协同关系。
+    occur: 1+
+    inherits: base_entity
+
+relation:
+  - id: matrix_comparison:symmetric_matrix
+    prototype: relation
+    define_baseset: [policy_topic:symmetric_matrix, policy_topic:symmetric_matrix]
+    define_prompt: 在对称矩阵中，不同政策议题之间的对比、协同或冲突关系分析。
+    occur: 1
+    inherits: base_relation
+
+# -------------G6-------------------------------------
+entity:
+  - id: policy_area_set:hybrid_matrix
+    prototype: set
+    define_baseset: [primitive]
+    define_prompt: 民主党政策涉及的主要领域集合（如经济、医疗、教育、环境、外交等）。
+    occur: 1
+    inherits: base_entity
+  - id: policy_time_set:hybrid_matrix
+    prototype: set
+    define_baseset: [primitive]
+    define_prompt: 民主党政策制定或实施的时间阶段集合（如2000年代、2010年代、2020年代等）。
+    occur: 1
+    inherits: base_entity
+  - id: policy_area:hybrid_matrix
+    prototype: dimension
+    define_baseset: [policy_area_set:hybrid_matrix]
+    define_prompt: 民主党政策的具体领域维度，每个值代表一个政策领域。
+    occur: n+
+    inherits: base_entity
+  - id: policy_time:hybrid_matrix
+    prototype: dimension
+    define_baseset: [policy_time_set:hybrid_matrix]
+    define_prompt: 民主党政策的具体时间阶段维度，每个值代表一个时间段。
+    occur: n+
+    inherits: base_entity
+  - id: policy_cell:hybrid_matrix
+    prototype: cell
+    define_baseset: [policy_area:hybrid_matrix, policy_time:hybrid_matrix]
+    define_prompt: 由特定政策领域和时间阶段交叉定义的单元格，代表该领域在该时间段的政策内容。
+    occur: n+
+    inherits: base_entity
+
+relation:
+  - id: matrix_cross:hybrid_matrix
+    prototype: relation
+    define_baseset: [policy_area:hybrid_matrix, policy_time:hybrid_matrix]
+    define_prompt: 在矩阵中，政策领域与时间阶段的交叉关系，揭示各领域在不同时间段的政策表现。
+    occur: 1
+    inherits: base_relation
+
+    # -------------G5-------------------------------------
+        entity:
+      - id: origin:central_expansion
+        prototype: point
+        define_baseset: [primitive]
+        define_prompt: 美国民主党政策的核心价值观（如平等、包容、社会正义等）的中心点。
+        occur: 1
+        inherits: base_entity
+      - id: radius:central_expansion
+        prototype: segment
+        define_baseset: [origin:central_expansion]
+        define_prompt: 从核心价值观向外扩展的政策路径，代表政策从核心理念向具体领域的延展。
+        occur: 1
+        inherits: base_relation
+      - id: boundary:central_expansion
+        prototype: circle
+        define_baseset: [origin:central_expansion, radius:central_expansion]
+        define_prompt: 民主党政策的边界，体现其政策影响力和包容范围的最大外延。
+        occur: 1
+        inherits: base_entity
+      - id: interior:central_expansion
+        prototype: region
+        define_baseset: [boundary:central_expansion]
+        define_prompt: 边界之内的政策领域，代表民主党主流和核心政策覆盖的范围。
+        occur: 1
+        inherits: base_entity
+      - id: exterior:central_expansion
+        prototype: region
+        define_baseset: [boundary:central_expansion]
+        define_prompt: 边界之外的领域，代表民主党政策尚未覆盖或不涉足的议题空间。
+        occur: 1
+        inherits: base_entity
+    
+    relation:
+      - id: expansion:central_expansion
+        prototype: function
+        define_baseset: [origin:central_expansion, boundary:central_expansion]
+        define_prompt: 从核心价值观向政策边界的扩展过程，体现政策影响力的外延扩张。
+        occur: 1
+        inherits: base_relation
+      - id: contraction:central_expansion
+        prototype: function
+        define_baseset: [boundary:central_expansion, origin:central_expansion]
+        define_prompt: 从政策边界向核心价值观的收缩过程，体现政策聚焦和回归核心的动态。
+        occur: 1
+        inherits: base_relation
+# -------------G4-------------------------------------
+entity:
+  - id: core_policies:closure
+    prototype: set
+    define_baseset: [primitive]
+    define_prompt: 美国民主党的核心政策集合（如社会平权、医疗改革、环保等）。
+    occur: 1+
+    inherits: base_entity
+  - id: extended_policies:closure
+    prototype: set
+    define_baseset: [primitive]
+    define_prompt: 美国民主党在特定时期或特定议题下扩展的政策集合（如贸易、外交、科技等）。
+    occur: 1+
+    inherits: base_entity
+
+relation:
+  - id: intersection:closure
+    prototype: set_operation
+    define_baseset: [core_policies:closure, extended_policies:closure]
+    define_prompt: 核心政策与扩展政策的交集，代表两者共同关注的政策领域。
+    occur: 1*
+    inherits: base_relation
+  - id: union:closure
+    prototype: set_operation
+    define_baseset: [core_policies:closure, extended_policies:closure]
+    define_prompt: 核心政策与扩展政策的并集，代表美国民主党整体政策覆盖范围。
+    occur: 1*
+    inherits: base_relation
+  - id: difference:closure
+    prototype: set_operation
+    define_baseset: [core_policies:closure, extended_policies:closure]
+    define_prompt: 核心政策中不包含于扩展政策的部分，代表民主党独有的核心立场。
+    occur: 1*
+    inherits: base_relation
+  - id: difference_reverse:closure
+    prototype: set_operation
+    define_baseset: [extended_policies:closure, core_policies:closure]
+    define_prompt: 扩展政策中不包含于核心政策的部分，代表民主党根据外部环境调整的新政策。
+    occur: 1*
+    inherits: base_relation
+# -------------G3-------------------------------------
+entity:
+  - id: progressive_policy:negative_feedback_opposition
+    prototype: point
+    define_baseset: [primitive]
+    define_prompt: 代表美国民主党倾向的进步政策（如社会平权、环保、医疗改革等）。
+    occur: 1
+    inherits: base_entity
+  - id: moderate_policy:negative_feedback_opposition
+    prototype: point
+    define_baseset: [primitive]
+    define_prompt: 代表美国民主党内的温和政策（如财政平衡、渐进改革、妥协性措施等）。
+    occur: 1
+    inherits: base_entity
+  - id: policy_change_path:negative_feedback_opposition
+    prototype: segment
+    define_baseset: [progressive_policy:negative_feedback_opposition, moderate_policy:negative_feedback_opposition]
+    define_prompt: 进步政策与温和政策之间的政策调整路径。
+    occur: 1
+    inherits: base_relation
+  - id: policy_equilibrium:negative_feedback_opposition
+    prototype: point
+    define_baseset: [progressive_policy:negative_feedback_opposition, moderate_policy:negative_feedback_opposition, policy_change_path:negative_feedback_opposition]
+    define_prompt: 民主党政策在进步与温和之间的动态平衡点。
+    occur: 1
+    inherits: base_entity
+
+relation:
+  - id: activation_progressive_to_moderate:negative_feedback_opposition
+    prototype: function
+    define_baseset: [progressive_policy:negative_feedback_opposition]
+    define_prompt: 进步政策对温和政策的激活或影响（如推动温和政策向进步方向调整）。
+    occur: 1
+    inherits: base_relation
+  - id: activation_moderate_to_progressive:negative_feedback_opposition
+    prototype: function
+    define_baseset: [moderate_policy:negative_feedback_opposition]
+    define_prompt: 温和政策对进步政策的激活或影响（如推动进步政策向温和方向调整）。
+    occur: 1
+    inherits: base_relation
+  - id: negative_feedback_progressive_to_moderate:negative_feedback_opposition
+    prototype: function
+    define_baseset: [progressive_policy:negative_feedback_opposition]
+    define_prompt: 当进步政策过度时的负反馈，促使政策向温和方向回调。
+    occur: 1
+    inherits: base_relation
+  - id: negative_feedback_moderate_to_progressive:negative_feedback_opposition
+    prototype: function
+    define_baseset: [moderate_policy:negative_feedback_opposition]
+    define_prompt: 当温和政策过度时的负反馈，促使政策向进步方向回调。
+    occur: 1
+    inherits: base_relation
+
+# -------------G2-------------------------------------
+---
+model:
+  id: ModelInstance
+  name: 美国民主党政策三元分析
+  ref_domain: policy      # 涉及领域为政策分析
+  visual: triangle
+  description: 使用三元三角模型分析美国民主党的三大核心政策取向及其相互关系。
+  inherits: trinary_triangle
+  entities:
+    - id: social_policy:trinary_triangle
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 社会政策节点，代表美国民主党在社会公平、福利、教育等方面的政策主张。
+      occur: 1
+      inherits: node_a:trinary_triangle
+    - id: economic_policy:trinary_triangle
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 经济政策节点，代表美国民主党在税收、就业、经济增长等方面的政策主张。
+      occur: 1
+      inherits: node_b:trinary_triangle
+    - id: environmental_policy:trinary_triangle
+      prototype: node
+      define_baseset: [primitive]
+      define_prompt: 环境政策节点，代表美国民主党在气候变化、可持续发展等方面的政策主张。
+      occur: 1
+      inherits: node_c:trinary_triangle
+  relations:
+    - id: social_economic_link:trinary_triangle
+      prototype: edge
+      define_baseset: [social_policy:trinary_triangle, economic_policy:trinary_triangle]
+      define_prompt: 社会政策与经济政策之间的相互影响与协调关系。
+      occur: 1
+      inherits: edge_ab:trinary_triangle
+    - id: economic_environmental_link:trinary_triangle
+      prototype: edge
+      define_baseset: [economic_policy:trinary_triangle, environmental_policy:trinary_triangle]
+      define_prompt: 经济政策与环境政策之间的平衡与冲突关系。
+      occur: 1
+      inherits: edge_bc:trinary_triangle
+    - id: environmental_social_link:trinary_triangle
+      prototype: edge
+      define_baseset: [environmental_policy:trinary_triangle, social_policy:trinary_triangle]
+      define_prompt: 环境政策与社会政策之间的协同与制约关系。
+      occur: 1
+      inherits: edge_ca:trinary_triangle
+
+# -------------G1-------------------------------------
+---
+model:
+  id: ModelInstance
+  name: 美国民主党政策二元正交分析
+  ref_domain: geometry
+  visual: quadrant
+  description: 使用二元正交象限模型分析美国民主党的两大政策主轴及其组合象限。
+  inherits: binary_orthogonal
+  entities:
+    - id: axis_x:ModelInstance
+      prototype: axis
+      define_baseset: [primitive]
+      define_prompt: 经济政策主轴，代表美国民主党在经济领域的政策取向（如税收、就业、福利等）。
+      occur: 1
+      inherits: axis_x:binary_orthogonal
+    - id: axis_y:ModelInstance
+      prototype: axis
+      define_baseset: [primitive]
+      define_prompt: 社会政策主轴，代表美国民主党在社会领域的政策取向（如平权、教育、医疗等）。
+      occur: 1
+      inherits: axis_y:binary_orthogonal
+    - id: x_positive:ModelInstance
+      prototype: vector
+      define_baseset: [axis_x:ModelInstance]
+      define_prompt: 经济政策积极方向（如扩大公共投资、提高最低工资）。
+      occur: 1
+      inherits: x_positive:binary_orthogonal
+    - id: x_negative:ModelInstance
+      prototype: vector
+      define_baseset: [axis_x:ModelInstance]
+      define_prompt: 经济政策保守方向（如减税、市场自由化）。
+      occur: 1
+      inherits: x_negative:binary_orthogonal
+    - id: y_positive:ModelInstance
+      prototype: vector
+      define_baseset: [axis_y:ModelInstance]
+      define_prompt: 社会政策进步方向（如推动平权、扩大医保覆盖）。
+      occur: 1
+      inherits: y_positive:binary_orthogonal
+    - id: y_negative:ModelInstance
+      prototype: vector
+      define_baseset: [axis_y:ModelInstance]
+      define_prompt: 社会政策保守方向（如限制移民、传统价值观）。
+      occur: 1
+      inherits: y_negative:binary_orthogonal
+    - id: quadrant_I:ModelInstance
+      prototype: quadrant
+      define_baseset: [x_positive:ModelInstance, y_positive:ModelInstance]
+      define_prompt: 经济进步+社会进步（美国民主党主流政策组合）。
+      occur: 1
+      inherits: quadrant_I:binary_orthogonal
+    - id: quadrant_II:ModelInstance
+      prototype: quadrant
+      define_baseset: [x_negative:ModelInstance, y_positive:ModelInstance]
+      define_prompt: 经济保守+社会进步（如财政保守但社会开放派）。
+      occur: 1
+      inherits: quadrant_II:binary_orthogonal
+    - id: quadrant_III:ModelInstance
+      prototype: quadrant
+      define_baseset: [x_negative:ModelInstance, y_negative:ModelInstance]
+      define_prompt: 经济保守+社会保守（与民主党主流立场相对）。
+      occur: 1
+      inherits: quadrant_III:binary_orthogonal
+    - id: quadrant_IV:ModelInstance
+      prototype: quadrant
+      define_baseset: [x_positive:ModelInstance, y_negative:ModelInstance]
+      define_prompt: 经济进步+社会保守（如经济左翼但社会保守派）。
+      occur: 1
+      inherits: quadrant_IV:binary_orthogonal
+  relations:
+    - id: x_flip:ModelInstance
+      prototype: symmetry
+      define_baseset: [axis_x:ModelInstance]
+      define_prompt: 沿经济政策主轴的对称变换（如经济立场正负切换）。
+      occur: 1
+      inherits: x_flip:binary_orthogonal
+    - id: y_flip:ModelInstance
+      prototype: symmetry
+      define_baseset: [axis_y:ModelInstance]
+      define_prompt: 沿社会政策主轴的对称变换（如社会立场正负切换）。
+      occur: 1
+      inherits: y_flip:binary_orthogonal
+    - id: diagonal_reverse:ModelInstance
+      prototype: symmetry
+      define_baseset: [x_flip:ModelInstance, y_flip:ModelInstance]
+      define_prompt: 对角线反转（经济与社会立场同时切换）。
+      occur: 1
+      inherits: diagonal_reverse:binary_orthogonal
+    - id: diagonal_swap:ModelInstance
+      prototype: symmetry
+      define_baseset: [x_flip:ModelInstance, y_flip:ModelInstance]
+      define_prompt: 对角线交换（交叉切换经济与社会立场）。
+      occur: 1
+      inherits: diagonal_swap:binary_orthogonal
