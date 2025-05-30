@@ -310,71 +310,75 @@ model:
       inherits: base_relation
 
 ---
-# closure: Internal-External Set Structure Model
+# Venn: Internal-External Set Structure Model
 #
-#   +-----------------------------------------+
-#   |              set_a                      |
-#   |                                         |
-#   |                                         |
-#   |                                         |
-#   +-----------------------------------------+
-#        |                          |
-#        |                          |
-#        |       set_b              |
-#        |                          |
+#
+#   ┌─────────────┐
+#   │   set_a     │
+#   │   ┌───────┐ │
+#   │   │   n   │ │
+#   └───│───────│─┘
+#       │ set_b │
+#       └───────┘
 #
 # Diagram notes:
-# - The box represents set_a.
-# - Outside the box is set_b.
-# - Relations describe intersection, union, and difference between the two sets.
+# - The two overlapping circles represent set_a and set_b.
+# - The overlapping area (∩) represents the intersection of set_a and set_b.
+# - The total area covered by both circles represents the union of set_a and set_b.
+# - Relations describe intersection and union between any sets.
 #
 model:
   index: G4
-  id: closure
-  name: Closure Structure
-  ref_domain: set         # Use "set" or "system" to match the prototype terms
-  visual: set
-  description: Models the relationship between any two sets, including their intersection, union, and difference.
+  id: Venn
+  name: Venn diagram
+  ref_domain: set
+  visual: circle
+  description: Models the relationship between any sets, focusing only on their intersections and unions.
   inherits: base_model
   entities:
-    - id: set_a
+    - id: set
       prototype: set
       define_baseset: [primitive]
-      define_prompt: Any related set
-      occur: n+
-      inherits: base_entity
-    - id: set_b
-      prototype: set
-      define_baseset: [primitive]
-      define_prompt: Any related set
-      occur: n+
+      define_prompt: user defined set
+      occur: n+  # Any number of sets
       inherits: base_entity
   relations:
-    - id: intersection
+    - id: intersection_pair
       prototype: set_operation
-      define_baseset: [set_a, set_b]
-      define_prompt: Intersection of set_a and set_b
-      occur: 1*
+      define_baseset: [set_i, set_j]   # Any two sets
+      define_prompt: Intersection of any two sets
+      occur: n*                        # All pairwise combinations
       inherits: base_relation
-    - id: union
+    - id: intersection_n
       prototype: set_operation
-      define_baseset: [set_a, set_b]
-      define_prompt: Union of set_a and set_b
-      occur: 1*
+      define_baseset: [set_1, set_2, ..., set_n]  # Any number of sets
+      define_prompt: Intersection of any n sets
+      occur: n*                                   # All combinations
       inherits: base_relation
-    - id: difference
+    - id: intersection_all
       prototype: set_operation
-      define_baseset: [set_a, set_b]
-      define_prompt: Difference of set_a minus set_b
-      occur: 1*
+      define_baseset: [set_1, set_2, ..., set_n]
+      define_prompt: Intersection of all sets
+      occur: 1  # Only one combination: all sets
       inherits: base_relation
-    - id: difference_reverse
+    - id: union_pair
       prototype: set_operation
-      define_baseset: [set_b, set_a]
-      define_prompt: Difference of set_b minus set_a
-      occur: 1*
+      define_baseset: [set_i, set_j]   # Any two sets
+      define_prompt: Union of any two sets
+      occur: n*                        # All pairwise combinations
       inherits: base_relation
-
+    - id: union_n
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]  # Any number of sets
+      define_prompt: Union of any n sets
+      occur: n*                                   # All combinations
+      inherits: base_relation
+    - id: union_all
+      prototype: set_operation
+      define_baseset: [set_1, set_2, ..., set_n]
+      define_prompt: Union of all sets
+      occur: 1  # Only one combination: all sets
+      inherits: base_relation
 ---
 # central_expansion: Central Expansion Model
 #

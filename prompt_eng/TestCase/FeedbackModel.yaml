@@ -1,0 +1,80 @@
+---
+# negative_feedback_opposition: A binary opposition model with negative feedback driving both nodes toward equilibrium.
+#
+#     (a excess)                          (b excess)
+#        ↑    ┌─────negative feedback──────┐   ↑
+#      node_a │        equilibrium         │ node_b
+#        ↓    └──←──────────────────────→──┘   ↓
+#                   
+#
+# - node_a and node_b are in opposition, each can be in excess.
+# - When node_a is in excess, negative feedback acts to reduce node_a and promote node_b, driving the system toward equilibrium.
+# - When node_b is in excess, negative feedback acts to reduce node_b and promote node_a, driving the system toward equilibrium.
+# - equilibrium is the dynamic balance point between node_a and node_b.
+#
+# Relations:
+#   - negative_feedback_a_to_b: node_a → node_b (negative feedback from a excess)
+#   - negative_feedback_b_to_a: node_b → node_a (negative feedback from b excess)
+#   - to_equilibrium_a: node_a → equilibrium (a adjusts toward equilibrium)
+#   - to_equilibrium_b: node_b → equilibrium (b adjusts toward equilibrium)
+#
+model:
+  index: G3
+  id: negative_feedback_opposition
+  name: Binary Negative Feedback Opposition
+  ref_domain: analytic_geometry
+  visual: line_with_center
+  description: Two opposing nodes interact via negative feedback functions, driving the system toward a dynamic equilibrium.
+  inherits: base_model
+  entities:
+    - id: node_a
+      prototype: point
+      define_baseset: [primitive]
+      define_prompt: Opposing Node A.
+      occur: 1
+      inherits: base_entity
+    - id: node_b
+      prototype: point
+      define_baseset: [primitive]
+      define_prompt: Opposing Node B.
+      occur: 1
+      inherits: base_entity
+    - id: change_path
+      prototype: segment
+      define_baseset: [node_a, node_b]
+      define_prompt: The path of change (line segment) connecting Node A and Node B.
+      occur: 1      
+      inherits: base_relation
+    - id: equilibrium
+      prototype: point
+      define_baseset: [node_a, node_b, change_path]
+      define_prompt: Dynamic equilibrium point between Node A and Node B.
+      occur: 1
+      inherits: base_entity
+  relations:
+    - id: activation_a_to_b
+      prototype: function
+      define_baseset: [node_a]
+      define_prompt: Function mapping from Node A to Node B (A influences B).
+      occur: 1
+      inherits: base_relation
+    - id: activation_b_to_a
+      prototype: function
+      define_baseset: [node_b]
+      define_prompt: Function mapping from Node B to Node A (B influences A).
+      occur: 1
+      inherits: base_relation
+    - id: negative_feedback_a_to_b
+      prototype: function
+      define_baseset: [node_a]
+      define_prompt: Negative feedback from Node A to Node B (suppresses A, promotes B).
+      occur: 1
+      inherits: base_relation
+    - id: negative_feedback_b_to_a
+      prototype: function
+      define_baseset: [node_b]
+      define_prompt: Negative feedback from Node B to Node A (suppresses B, promotes A).
+      occur: 1
+      inherits: base_relation
+
+---
