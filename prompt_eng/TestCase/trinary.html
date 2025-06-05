@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三元三角模型：美国加息与经济互动</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .model-section {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            gap: 20px;
+        }
+        .model-element {
+            background-color: #e8f0f2;
+            border: 2px solid #6cb3e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            width: calc(33% - 40px); /* Roughly one-third, accounting for gap */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            min-width: 220px; /* Ensure elements don't get too small */
+        }
+        .model-element:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .model-element h3 {
+            color: #1a5276;
+            margin-top: 0;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+        .arrow-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* Allow clicks through arrows */
+            z-index: 1; /* Ensure arrows are behind text */
+        }
+        .arrow {
+            position: absolute;
+            font-size: 3em; /* Larger arrow symbols */
+            color: #6cb3e0; /* Blue for arrows */
+            font-weight: bold;
+            opacity: 0.7;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        /* Positioning for arrows - these are approximate and might need fine-tuning */
+        .arrow.a1 { top: 380px; left: 20%; transform: rotate(30deg); } /* inflation to growth */
+        .arrow.a2 { top: 380px; right: 20%; transform: rotate(-30deg); } /* growth to policy */
+        .arrow.a3 { top: 520px; left: 50%; transform: rotate(90deg); margin-left: -20px; } /* policy to inflation */
+
+        .analysis-section {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #f9fbfb;
+            border-left: 5px solid #2874a6;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        .analysis-step {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .analysis-step::before {
+            content: '•';
+            color: #2874a6;
+            font-size: 1.5em;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+        .summary-box {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .bold-text {
+            font-weight: bold;
+            color: #2874a6;
+        }
+
+        @media (max-width: 768px) {
+            .model-element {
+                width: calc(50% - 20px); /* Two columns on smaller screens */
+            }
+            .arrow { display: none; } /* Hide arrows on very small screens for simplicity */
+            .container {
+                padding: 20px;
+            }
+        }
+        @media (max-width: 480px) {
+            .model-element {
+                width: 100%; /* Single column on smallest screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>经济三元三角模型：美国加息与经济互动分析</h1>
+
+        <p>此模型展示了<strong>通货膨胀</strong>、<strong>经济增长</strong>和<strong>货币政策（利率）</strong>三者之间的动态关系和相互影响。</p>
+
+        ---
+
+        <h2>模型中的关键关系</h2>
+        <div class="model-section">
+            <div class="model-element">
+                <h3>通胀对经济增长</h3>
+                <p><strong>inflation_to_growth</strong></p>
+                <p>高通胀通常会抑制经济增长，因为它会削弱购买力并增加企业成本。</p>
+            </div>
+            <div class="model-element">
+                <h3>经济增长对货币政策</h3>
+                <p><strong>growth_to_policy</strong></p>
+                <p>经济过热或增长过快可能促使央行通过加息来控制通胀风险。</p>
+            </div>
+            <div class="model-element">
+                <h3>货币政策对通胀</h3>
+                <p><strong>policy_to_inflation</strong></p>
+                <p>加息会提高借贷成本，减少市场流动性，从而抑制通货膨胀。</p>
+            </div>
+        </div>
+        <div class="arrow-container">
+             <span class="arrow a1">🠖</span> <span class="arrow a2">🠔</span> <span class="arrow a3">🠕</span> </div>
+
+        ---
+
+        <h2>美国加息时三因素互动分析</h2>
+        <div class="analysis-section">
+            <div class="analysis-step">
+                <p><span class="bold-text">1. 货币政策（加息）变化：</span> 美国加息属于 <span class="bold-text">monetary_policy</span> 的变化。</p>
+            </div>
+            <div class="analysis-step">
+                <p><span class="bold-text">2. policy_to_inflation（货币政策对通胀）：</span>
+                    加息通常会<span class="bold-text">抑制通胀</span>。加息提高了借贷成本，减少了市场流动性，导致需求下降，从而减小物价上涨压力。</p>
+            </div>
+            <div class="analysis-step">
+                <p><span class="bold-text">3. inflation_to_growth（通胀对经济增长）：</span>
+                    通胀被抑制后，短期内经济增长可能受到一定影响。虽然抑制高通胀有利于长期经济健康，但短期内可能因需求减少而导致<span class="bold-text">经济增速放缓</span>。</p>
+            </div>
+            <div class="analysis-step">
+                <p><span class="bold-text">4. growth_to_policy（经济增长对货币政策）：</span>
+                    如果加息导致经济增长放缓，未来货币政策可能会根据经济增长情况进行调整（例如，经济增长过慢时可能<span class="bold-text">降息</span>）。</p>
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <h3>互动总结（三角循环）：</h3>
+            <p>
+                <span class="bold-text">美国加息 (monetary_policy↑)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                <span class="bold-text">通胀下降 (inflation↓)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                <span class="bold-text">经济增长放缓 (economic_growth↓)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                <span class="bold-text">货币政策未来可能宽松 (monetary_policy↓)</span>
+            </p>
+            <p>这个模型清晰地展示了三者之间的动态反馈与循环影响。</p>
+        </div>
+    </div>
+</body>
+</html>
