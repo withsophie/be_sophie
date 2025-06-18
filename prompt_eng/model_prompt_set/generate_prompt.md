@@ -29,7 +29,8 @@
 <!-- component end: entity_yaml_of_model -->
 <!-- component start: GenModelInstanceRule -->
 ## GenModelInstanceRule
-根据<<Chain_draft>>的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
+<<component:HowtoMakeChain>>
+### 根据<<Chain_draft>>的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
 1、判断其涉及的领域，生成domain，这个领域应具备一定的抽象性；
 2、根据<Chain_draft>>来确定思路的类型<<chain_type>>：分类、排序、决策、组合
 * 分类（Categorize）：思考的目标是对对象或信息进行归类，以识别特征或结构。
@@ -38,7 +39,8 @@
 * 组合（Synthesize）：思考的目标是通过组合不同维度的元素，形成新的内容
 3、根据entity/relation的prototype确定其是否需要在step的prompt的执行后，生成输出值，将其LLM_output属性设置为true/false；
 * G1:if prototype=quadrant then LLM_output=true
-
+### 将ModelInstance生成更易读的agenda
+<<component:GenChainAgenda>>
 4、根据ref_domain，根据<<Model>>所设定的prototype的元素，并参考<<Model>>中的define_prompt，为其生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，为define_baseset为[primitive]的entity生成能表达其含义的ID。
 5、按照define_baseset的定义，结合<<Model>>中对应的define_prompt的定义，为后续的entities生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，依次生成其余的entities的ID，
 6、根据prototype和对应的baseset，依照<<Model>>中对应的define_prompt的定义，为其生成符合<<Chain_draft>>需要的define_prompt，并根据define_prompt生成relation的ID
@@ -106,12 +108,16 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 <!-- component end: ModelSchemaRule -->
 
 
-<!-- component start: HowtoThinkwithChain -->
+<!-- component start: HowtoMakeChain -->
 运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。
 思维模式的抽象层次分为如下几个级别：
 Model-ModelInstance（chain）-ThinkInstance（Thought）
+整体逐步具象化的过程为：
+1、根据Model的框架，将思路设计者的设计需求变成一个更为具体的ModelInstance
+2、将ModelInstance的内容，按照特定的格式，将所有的entity映射成变量，将为entity具体赋值的过程映射成步骤
+3、选择合适的显示方案和对应方案中需要展现的变量
 
-<!-- component end: HowtoThinkwithChain -->
+<!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
 ## GenChainRule
 
