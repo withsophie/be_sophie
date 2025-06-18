@@ -29,6 +29,20 @@
 <!-- component end: entity_yaml_of_model -->
 <!-- component start: GenModelInstanceRule -->
 ## GenModelInstanceRule
+根据<<Chain_draft>>的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
+1、判断其涉及的领域，生成domain，这个领域应具备一定的抽象性；
+2、根据<Chain_draft>>来确定思路的类型<<chain_type>>：分类、排序、决策、组合
+* 分类（Categorize）：思考的目标是对对象或信息进行归类，以识别特征或结构。
+* 排序（Prioritize）：思考的目标是对事物按某种标准进行排序，强调“先后、重要性、优劣”等
+* 决策（Evaluate）：思考的目标是通过权衡，得出最合适的结论
+* 组合（Synthesize）：思考的目标是通过组合不同维度的元素，形成新的内容
+3、根据entity/relation的prototype确定其是否需要在step的prompt的执行后，生成输出值，将其LLM_output属性设置为true/false；
+* G1:if prototype=quadrant then LLM_output=true
+
+4、根据ref_domain，根据<<Model>>所设定的prototype的元素，并参考<<Model>>中的define_prompt，为其生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，为define_baseset为[primitive]的entity生成能表达其含义的ID。
+5、按照define_baseset的定义，结合<<Model>>中对应的define_prompt的定义，为后续的entities生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，依次生成其余的entities的ID，
+6、根据prototype和对应的baseset，依照<<Model>>中对应的define_prompt的定义，为其生成符合<<Chain_draft>>需要的define_prompt，并根据define_prompt生成relation的ID
+7、ModelInstance中的entity和relations的id生成请将<<Model>>的id拼在生成的id后面，以:分隔。
 
 1、思路作者希望解决某一个领域的一类问题，他对这类问题的描述就是chain_draft，请根据他的需求，推测这个领域是什么，生成ref_domain，这个领域应是具备一定的抽象性的，并理解想解决的这类问题是什么，据此生成chain_object；
 2、假设作者是个对深度思考有着非常独特见解的人，他会用<<name_of_model>>和chain_object的现实问题建立映射的方式进行思考。他的映射方法是：找到这些现实问题中的一些关键元素，映射成Model中的entities。
