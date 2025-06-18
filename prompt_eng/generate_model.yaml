@@ -144,31 +144,30 @@ model:
         define_prompt: Fourth quadrant (X positive, Y negative).
         occur: 1
         inherits: base_entity
-  relations:
-    - id: {x_flip}
-      prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
-      define_baseset: [axis_x]
-      define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
-      occur: 1+
-      inherits: base_relation
-    - id: {y_flip}
-      prototype: symmetry
-      define_baseset: [axis_y]
-      define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
-      occur: 1+
-      inherits: base_relation
-    - id: {diagonal_reverse}
-      prototype: symmetry
-      define_baseset: [x_flip, y_flip]
-      define_prompt: Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.
-      occur: 1+
-      inherits: base_relation
-    - id: {diagonal_swap}
-      prototype: symmetry
-      define_baseset: [x_flip, y_flip]
-      define_prompt: Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.
-      occur: 1+
-      inherits: base_relation
+      - id: {x_flip}
+        prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
+        define_baseset: [axis_x]
+        define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
+        occur: 1+
+        inherits: base_relation
+      - id: {y_flip}
+        prototype: symmetry
+        define_baseset: [axis_y]
+        define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
+        occur: 1+
+        inherits: base_relation
+      - id: {diagonal_reverse}
+        prototype: symmetry
+        define_baseset: [x_flip, y_flip]
+        define_prompt: Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.
+        occur: 1+
+        inherits: base_relation
+      - id: {diagonal_swap}
+        prototype: symmetry
+        define_baseset: [x_flip, y_flip]
+        define_prompt: Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.
+        occur: 1+
+        inherits: base_relation
 
 ---
 # trinary_triangle: A triangle model with three nodes and three edges, representing trinary interconnection.
@@ -210,7 +209,6 @@ model:
       define_prompt: Vertex C in the triangle.
       occur: 1
       inherits: base_entity
-  relations:
     - id: {edge_ab}
       prototype: edge
       define_baseset: [{node_a}, {node_b}]

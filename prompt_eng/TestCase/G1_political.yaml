@@ -1,0 +1,79 @@
+model_instance:
+  id: binary_orthogonal_political_division
+  name: 美国两党政策分歧二元象限模型
+  ref_domain: 美国政治政策分析
+  visual: quadrant
+  description: 利用二元正交象限模型，分析美国两党（民主党与共和党）在经济与社会政策上的分歧与对立，揭示其核心分歧维度与典型立场组合。
+  inherits: binary_orthogonal
+  entities:
+    - id: axis_x
+      prototype: axis
+      inherits: base_entity
+      define_baseset: [primitive]
+      define_prompt: X轴代表美国两党在经济政策上的立场分歧（如政府干预 vs. 市场自由）。
+    - id: axis_y
+      prototype: axis
+      inherits: base_entity
+      define_baseset: [primitive]
+      define_prompt: Y轴代表美国两党在社会政策上的立场分歧（如社会进步 vs. 保守传统）。
+    - id: x_positive
+      prototype: vector
+      inherits: base_entity
+      define_baseset: [axis_x]
+      define_prompt: X轴正方向，代表支持政府干预、社会公平等经济政策（通常偏向民主党）。
+    - id: x_negative
+      prototype: vector
+      inherits: base_entity
+      define_baseset: [axis_x]
+      define_prompt: X轴负方向，代表强调市场自由、减税等经济政策（通常偏向共和党）。
+    - id: y_positive
+      prototype: vector
+      inherits: base_entity
+      define_baseset: [axis_y]
+      define_prompt: Y轴正方向，代表社会进步、包容等价值观（通常偏向民主党）。
+    - id: y_negative
+      prototype: vector
+      inherits: base_entity
+      define_baseset: [axis_y]
+      define_prompt: Y轴负方向，代表社会保守、传统等价值观（通常偏向共和党）。
+    - id: quadrant_I
+      prototype: quadrant
+      inherits: base_entity
+      define_baseset: [x_positive, y_positive]
+      define_prompt: 第一象限，经济上支持政府干预，社会上倾向进步（典型民主党立场）。
+    - id: quadrant_II
+      prototype: quadrant
+      inherits: base_entity
+      define_baseset: [x_negative, y_positive]
+      define_prompt: 第二象限，经济上偏市场自由，社会上倾向进步（自由派共和党或中间派）。
+    - id: quadrant_III
+      prototype: quadrant
+      inherits: base_entity
+      define_baseset: [x_negative, y_negative]
+      define_prompt: 第三象限，经济上偏市场自由，社会上倾向保守（典型共和党立场）。
+    - id: quadrant_IV
+      prototype: quadrant
+      inherits: base_entity
+      define_baseset: [x_positive, y_negative]
+      define_prompt: 第四象限，经济上支持政府干预，社会上倾向保守（少见但存在的立场组合）。
+  relations:
+    - id: x_flip
+      prototype: symmetry
+      inherits: base_relation
+      define_baseset: [axis_x]
+      define_prompt: 沿X轴对称，体现经济立场的正负转换（如民主党与共和党在经济议题上的对立）。
+    - id: y_flip
+      prototype: symmetry
+      inherits: base_relation
+      define_baseset: [axis_y]
+      define_prompt: 沿Y轴对称，体现社会立场的正负转换（如进步与保守的对立）。
+    - id: diagonal_reverse
+      prototype: symmetry
+      inherits: base_relation
+      define_baseset: [x_flip, y_flip]
+      define_prompt: 对角线反转，代表在经济与社会立场上均发生对立转换（如极端立场的对调）。
+    - id: diagonal_swap
+      prototype: symmetry
+      inherits: base_relation
+      define_baseset: [x_flip, y_flip]
+      define_prompt: 对角线交换，代表非主流组合间的转换。

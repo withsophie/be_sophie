@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "termList": {
+      "type": "array",
+      "items": {}
+    },
+    "totalTermList": {
+      "type": "array",
+      "items": {}
+    },
+    "totalVarList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "varType": { "type": "integer" },
+          "varName": { "type": "string" },
+          "varLevel": { "type": "integer" },
+          "varDesc": { "type": "string" },
+          "varFormat": { "type": ["string", "null"] },
+          "defaultValue": { "type": ["string", "null"] },
+          "stepId": { "type": ["string", "null"] },
+          "id": { "type": "integer" },
+          "childs": { "type": ["array", "null"], "items": {} },
+          "parentId": { "type": ["integer", "null"] }
+        },
+        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
+      }
+    },
+    "modelId": { "type": ["string", "integer"] },
+    "varList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "varType": { "type": "integer" },
+          "varName": { "type": "string" },
+          "varLevel": { "type": "integer" },
+          "varDesc": { "type": "string" },
+          "varFormat": { "type": ["string", "null"] },
+          "defaultValue": { "type": ["string", "null"] },
+          "stepId": { "type": ["string", "null"] },
+          "id": { "type": "integer" },
+          "childs": { "type": ["array", "null"], "items": {} },
+          "parentId": { "type": ["integer", "null"] }
+        },
+        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
+      }
+    },
+    "trainName": { "type": "string" },
+    "welcomeMessage": { "type": "string" },
+    "trainDesc": { "type": "string" },
+    "id": { "type": "string" },
+    "stepList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "preId": { "type": ["string", "null"] },
+          "stepType": { "type": "integer" },
+          "stepDesc": { "type": "string" },
+          "cases": { "type": "array" },
+          "stepInVars": { "type": "array", "items": { "type": "string" } },
+          "modelVarMap": { "type": "array" },
+          "stepOutVars": { "type": "array", "items": { "type": "string" } },
+          "nextId": { "type": ["string", "null"] },
+          "stepTerms": { "type": "array" },
+          "trainModelGraphPrompt": { "type": ["string", "null"] },
+          "stepName": { "type": "string" },
+          "generationPrompts": { "type": "array" },
+          "id": { "type": "string" },
+          "stepPrompt": { "type": "string" }
+        },
+        "required": ["trainId", "stepType", "stepDesc", "stepInVars", "stepOutVars", "id", "stepPrompt"]
+      }
+    }
+  },
+  "required": [
+    "termList",
+    "totalTermList",
+    "totalVarList",
+    "modelId",
+    "varList",
+    "trainName",
+    "welcomeMessage",
+    "trainDesc",
+    "id",
+    "stepList"
+  ]
+}

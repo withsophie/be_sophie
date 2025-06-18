@@ -1,0 +1,163 @@
+---
+model:
+  index: G0
+  id: base_model
+  name: Base Model
+  ref_domain: geometry
+  visual: none
+  description: Base structure for all models.
+  inherits: null
+  entities:
+    - id: base_entity
+      prototype: point
+      define_baseset: []
+      define_prompt: ""
+      occur: 1
+      inherits: null
+  relations:
+    - id: base_relation
+      prototype: edge
+      define_baseset: []
+      define_prompt: ""
+      occur: 1*
+      inherits: null
+  interaction_patterns:
+    - type: 结构围合
+      description: 基础模型支持通过节点和边的组合形成更复杂的结构。
+
+---
+model:
+  index: G1
+  id: binary_orthogonal
+  name: Binary Orthogonal
+  ref_domain: geometry
+  visual: quadrant
+  visual_prompt: | 
+    ...existing code...
+  description: A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 两条正交轴（axis_x, axis_y）将空间划分为四个象限（quadrant_I~IV），每个象限由两条轴的正负向量组合围合。
+    - type: 维度与分类
+      description: 通过X轴和Y轴对分析对象进行双维度分类定位。
+    - type: 运算与变换
+      description: 四个象限之间通过对称变换关系（x_flip, y_flip, diagonal_reverse, diagonal_swap）建立映射。
+
+---
+model:
+  index: G2
+  id: trinary_triangle
+  name: Trinary Interconnection
+  ref_domain: geometry
+  visual: triangle
+  description: A triangular model showing interaction among three conceptual entities.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 三个节点通过三条边相互连接，围合成一个三角形区域。
+    - type: 连接与网络
+      description: 节点之间通过边直接连接，形成闭环网络结构。
+
+---
+model:
+  index: G3
+  id: negative_feedback_opposition
+  name: Binary Negative Feedback Opposition
+  ref_domain: analytic_geometry
+  visual: line_with_center
+  description: Two opposing nodes interact via negative feedback functions, driving the system toward a dynamic equilibrium.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 连接与网络
+      description: 两个对立节点通过线段（change_path）直接连接，形成对立结构。
+    - type: 动态与调节
+      description: 节点间通过负反馈函数（negative_feedback_a_to_b, negative_feedback_b_to_a）实现动态调节，驱动系统向均衡点靠拢。
+
+---
+model:
+  index: G4
+  id: Venn
+  name: Venn diagram
+  ref_domain: set
+  visual: circle
+  description: Models the relationship between any sets, focusing only on their intersections and unions.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 多个集合通过交集、并集等集合运算围合出新的区域或集合。
+    - type: 运算与变换
+      description: 集合之间通过交集、并集等集合运算产生新的集合关系。
+
+---
+model:
+  index: G5
+  id: central_expansion
+  name: Central Expansion Model
+  ref_domain: geometry
+  visual: circle
+  description: A model with a center (origin), expansion (radius), boundary (circumference), interior, and exterior. Relations include expansion and contraction.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 圆心、半径和边界共同围合出内部和外部区域。
+    - type: 动态与调节
+      description: 通过扩张（expansion）和收缩（contraction）关系描述中心与边界之间的动态变化。
+
+---
+model:
+  index: G6
+  id: hybrid_matrix
+  name: 2D Hybrid Matrix
+  ref_domain: matrix
+  visual: matrix
+  description: Matrix where row and column are defined by different sets, and each cell represents the intersection.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 行维和列维交叉形成单元格，每个单元格代表一组特定的组合关系。
+    - type: 维度与分类
+      description: 通过行集合和列集合对数据进行双重分类和定位。
+
+---
+model:
+  index: G7
+  id: symmetric_matrix
+  name: 2D Symmetric Matrix
+  ref_domain: matrix
+  visual: grid
+  description: A symmetric matrix where both row and column are enumerations of the same set, and each cell represents a symmetric relationship.
+  inherits: base_model
+  entities:
+    ...existing code...
+  relations:
+    ...existing code...
+  interaction_patterns:
+    - type: 结构围合
+      description: 同一集合的两个维度交叉形成单元格，单元格代表对称关系。
+    - type: 维度与分类
+      description: 通过同一集合的不同维度对元素进行对称分类和比较。

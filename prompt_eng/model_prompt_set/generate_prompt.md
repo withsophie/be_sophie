@@ -1,85 +1,121 @@
 <!-- component start: main_prompt -->
 # Generate-Chain-withModel Prompt: <<name_of_chain>> (based on <<name_of_model>>)
 
-该prompt的功能是根据用户所选择的<<Model>>，对<<Chain_draft>>进行分析，并按照GenModelInstanceRule中的规则，生成<<ModelInstance>>。
-用<<ModelInstance>>的内容，遵循GenChainRule的规则，按照Datadic的格式，生成<<chain_json>>
-用<<chain_json>>，按照GenChainAgenda的规则，生成<<Chain_Agenda>>
+该prompt的功能是，对Chain_draft进行分析，并按照Model中定义的entity_yaml_of_model的内容，根据GenModelInstanceRule，生成ModelInstance。
+用ModelInstance的内容，遵循GenChainRule的规则，按照Datadic的格式，生成chain_json
+用ModelInstance的内容，按照GenChainAgenda的规则，生成Chain_Agenda，并将生成的内容存进chain_json的summary中。
 
-
+<<name_of_model>>
+<<component:Chain_draft>>
+<<component:ModelSchema>>
+<<component:entity_yaml_of_model>>
 <<component:GenModelInstanceRule>>
-
 <<component:GenChainRule>>
-
 <<component:Datadic>>
-
 <<component:GenChainAgenda>>
-<!-- component end: main_prompt -->
 
+<!-- component end: main_prompt -->
+<!-- component start: Chain_draft -->
+## chain_draft
+``` txt
+<<chain_draft>>
+```
+<!-- component end: Chain_draft -->
+<!-- component start: entity_yaml_of_model -->
+## entity_yaml_of_model
+``` json
+<<entity_yaml_of_model>>
+```
+<!-- component end: entity_yaml_of_model -->
 <!-- component start: GenModelInstanceRule -->
 ## GenModelInstanceRule
-根据<<Chain_draft>>的内容生成ModelInstance的内容：
-1、判断其涉及的领域，生成ref_domain，这个领域应具备一定的抽象性；
-2、根据<Chain_draft>>来确定思路的类型<<chain_type>>：分类、排序、决策、组合
-* 分类（Categorize）：思考的目标是对对象或信息进行归类，以识别特征或结构。
-* 排序（Prioritize）：思考的目标是对事物按某种标准进行排序，强调“先后、重要性、优劣”等
-* 决策（Evaluate）：思考的目标是通过权衡，得出最合适的结论
-* 组合（Synthesize）：思考的目标是通过组合不同维度的元素，形成新的内容
-3、根据entity/relation的prototype确定其是否需要在step的prompt的执行后，生成输出值，将其LLM_output属性设置为true/false；
-* G1:if prototype=quadrant then LLM_output=true
 
-4、根据ref_domain，根据<<Model>>所设定的prototype的元素，并参考<<Model>>中的define_prompt，为其生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，为define_baseset为[primitive]的entity生成能表达其含义的ID。
-5、按照define_baseset的定义，结合<<Model>>中对应的define_prompt的定义，为后续的entities生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，依次生成其余的entities的ID，
-6、根据prototype和对应的baseset，依照<<Model>>中对应的define_prompt的定义，为其生成符合<<Chain_draft>>需要的define_prompt，并根据define_prompt生成relation的ID
-7、ModelInstance中的entity和relations的id生成请将<<Model>>的id拼在生成的id后面，以:分隔。
+1、思路作者希望解决某一个领域的一类问题，他对这类问题的描述就是chain_draft，请根据他的需求，推测这个领域是什么，生成ref_domain，这个领域应是具备一定的抽象性的，并理解想解决的这类问题是什么，据此生成chain_object；
+2、假设作者是个对深度思考有着非常独特见解的人，他会用<<name_of_model>>和chain_object的现实问题建立映射的方式进行思考。他的映射方法是：找到这些现实问题中的一些关键元素，映射成Model中的entities。
+3、理解模型中的entity：通过各个entities的prototype，理解各个entity之间的结构关系。这个结构关系和要创建的思路的待解决问题的内容的结构有相似性。
+4、创建思路的顺序是：先映射chain_object中最关键的元素为define_baseset=primitive的，因为其他的元素都是基于这几个primitive元素生成的。映射的具体方法就是生成这些元素的define_prompt。这些元素的define_prompt的内容是：解释这些元素在chain_object这个解题过程中的含义和价值。
+5、其余entities的define_prompt内容，是用来定义这些元素的，而这个定义的构成是：描述这个元素是怎样通过它的baseset父元素生成或推导出来的，且生成出来的结果是符合prototype的特征的，理解prototype需要结合继承的model的ref_domain来综合理解，相同的prototype的entities应该有相同的特征。
+6、其他的内容，按照原model中的内容继承，结构要符合model的结构
+7、inherits=<<name_of_model>>
 <!-- component end: GenModelInstanceRule -->
 
 <!-- component start: GenChainAgenda -->
 ## GenChainAgenda
-用<<chain_json>>中的内容，帮我生成<<Chain_Agenda>>，<<Chain_Agenda>>的目的是为了让人快速了解该<<chain_json>>的内容，<<Chain_Agenda>>的内容包括：
-1. <<chain_json>>的name；
-2.根据对应的define_prompt解释baseset为[primitive]的entity的含义；
-3.依照baseset的顺序，根据对应的define_prompt解释其他entity的含义；
-4.根据对应的define_prompt解释relation的含义。
-    Example: |
-      1. chain_json的name是{{Chain_json.name}}，它是一个{{Chain_json.visual}}模型。
-      2. axis_x表示{{Chain_json.axis_x.define_prompt}}，axis_y表示{{Chain_json.axis_y.define_prompt}}。
-      3. quadrant_I表示{{Chain_json.quadrant_I.define_prompt}}，quadrant_II表示{{Chain_json.quadrant_II.define_prompt}}，quadrant_III表示{{Chain_json.quadrant_III.define_prompt}}，quadrant_IV表示{{Chain_json.quadrant_IV.define_prompt}}。
-      4. x_flip表示{{Chain_json.x_flip.define_prompt}}，y_flip表示{{Chain_json.y_flip.define_prompt}}，diagonal_reverse表示{{Chain_json.diagonal_reverse.define_prompt}}，diagonal_swap表示{{Chain_json.diagonal_swap.define_prompt}}。
-<!-- component end: GenChainAgenda -->
+通过理解ModelInstance中的内容，理解这个思路的目标和适用范围，并按下文形成一个介绍：
+通过对您构思的理解，我们会帮您创建一个解决这类问题的思路，并展现在画布中，您可以在这个基本思路的基础之上，进行进一步的修改。
+思路名称： <<name_of_chain>> 
+思路领域：ModelInstance中的ref_domain
+思路所采用的模型：<<name_of_model>>，并介绍一下这个模型的特点
+构建这个思路的关键因素为：ModelInstance中baseset为[primitive]的entity；
+关键因素介绍：根据关键因素的define_prompt，介绍关键因素
+其他因素介绍：根据其他的entities和relations的define_prompt,介绍其他因素
 
+<!-- component end: GenChainAgenda -->
+<!-- component start: ModelSchema -->
+``` json
+ "model": {
+      "id": "base_model",
+      "name": "Base Model",
+      "domain": "geometry",
+      "description": "Base structure for all models.",
+      "inherits": null,
+      "entities": [
+        {
+          "id": "base_entity",
+          "name": "base_entity",
+          "prototype": "point",
+          "define_baseset": [],
+          "define_prompt": "",
+          "occur": 1,
+          "Value": "",
+          "inherits": null
+        }
+      ]
+    }
+```
+<!-- component end: ModelSchema -->
+<!-- component start: ModelSchemaRule -->
+Model是所有思路（chain）的父类，Base Model会用来作为所有Model的基础，而使用这些Model所创建的ModelInstance则是这些Model在某个领域的实例化的结果。
+Model各字段的意义和用途：
+domain：代表问题所属的领域，会作为实例化时的关键参数参与到实例化的过程中
+inherits：代表其继承的父对象，继承者属于被继承的一次具象化的过程
+entities：代表思路中的各种实体，实例化的过程就是实体被逐渐具体化的过程,在Model中可以有多个entities
+entities.id:这个entity的ID，用作引用时的索引
+entities.name:entity的名称，会表达entity的含义
+entities.prototype:entity的类型，类型是一个父entity的prototype在ref_doamin这个领域的一个具体表达
+entities.define_baseset:形成entity的value的输入参数的定义，如果=primitive，则代表entity为常量，具体的值由define_prompt来决定
+entities.define_prompt:用来描述如何使用define_baseset的value来生成该entity的value
+entities.occur:Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
+entities.value:entity的value
+entities.inherits:代表这个entity的父entity，其来自其父model所对应的entity
+
+<!-- component end: ModelSchemaRule -->
+
+
+<!-- component start: HowtoThinkwithChain -->
+运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。
+思维模式的抽象层次分为如下几个级别：
+Model-ModelInstance（chain）-ThinkInstance（Thought）
+
+<!-- component end: HowtoThinkwithChain -->
 <!-- component start: GenChainRule -->
 ## GenChainRule
 
-### Step 1：通过<<ModelInstance>>，理解所选择的 Model和思路期待解决的问题
+### Step 1：通过ModelInstance，理解所选择的 Model和思路期待解决的问题
 
-* 通过<<ModelInstance>>的ref_domain确定这个思路的问题域
-* trainName是<<name_of_chain>>，modelId使用<<Model>>的ID
+* 通过ModelInstance的ref_domain确定这个思路的问题域
+* trainName是<<name_of_chain>>，modelId使用Model的ID
+* 根据chain_draft的内容，推测思路的思考目标
 
 
+#### Step 2：理解所有的entity，并根据Model建立变量
 
-### Step 2：理解所有的entity和relation，并根据Model建立变量
-
-* 
-* 将所有<<ModelInstance>>中的entity和relation都生成为变量，
-* 变量的命名方法：varName=entity/relationsID
-* 根据对应的define_prompt，和prototype类型，生成varDesc的内容，例子是：social_axis:binary_orthogonal是一个axis维度，它的含义是美国民主党在社会自由与保守之间的立场；pro_intervention:binary_orthogonal是一个vector，它的含义是倾向政府干预的经济政策方向；
-quadrant_I:binary_orthogonal是一个quadrant，它的含义是第一象限：经济上支持政府干预，社会上倾向进步
+* 将ModelInstance中的所有entity都生成为变量，
+* 变量的命名方法：varName=entityID
 * 所有变量必须依次记录进 `varList`（即变量清单）。
 * 用户提供的第一个变量固定命名为 `ThinkPoint`。
-
-### step 3:生成步骤
-
-* 为每一个LLM_output=true的entity和relation建立一个步骤（step）
-* 根据<<chain_type>>和define_prompt来创造stepPrompt，stepPrompt的目标是：将Thinkpoint的内容，根据define_prompt所设定的条件，按照<<chain_type>>的思考目标，进行对应的处理
-* stepPrompt的例子是：我希望对{{thinkpoint}}（美国民主党的政策）进行chain_type（分类）处理，当前的步骤需要处理的是define_prompt（第一象限：经济上支持政府干预，社会上倾向进步）,请将符合条件的值存进{{quadrant_I:binary_orthogonal}}
-
-### Step 4：理清变量生成的因果顺序
-
-* 以 `ThinkPoint` 为起点，构建变量之间的生成链。
-* 所有变量必须有清晰的前置依赖关系（除 `ThinkPoint`）。
-* 构成整个“思路”的路径（step-by-step chain），这个路径体现为变量间的依赖关系。
-
-  * 依赖关系的示例如下：
+* 根据ModelInstance的define_baseset的关联关系，找出各个变量的依赖关系
+* 依赖关系的示例如下：
     ```json
     dependencies = {
       "X": ["ThinkPoint"],
@@ -88,9 +124,25 @@ quadrant_I:binary_orthogonal是一个quadrant，它的含义是第一象限：�
     }
     ```
 
+### step 3:生成步骤
+
+* 从define_baseset=primitive的entities和relations开始建立步骤
+* 根据define_prompt来创造stepPrompt，stepPrompt的目标是：使用当前的entity对应的变量创造它的依赖变量，将所有拥有依赖变量的变量所对应的步骤都创建完成；
+* 所有没有被依赖的变量，被称为终点变量，终点变量所对应的stepPrompt的目标是：将Thinkpoint的内容，根据define_prompt所设定的条件，按照推测出的思考目标，进行对应的处理。这种stepPrompt的例子是：
+```prompt
+我希望对{{thinkpoint}}（美国民主党的政策）进行{{思考目标}}（分类处理），当前的步骤需要处理的是从{{ThinkPoint}}中找出define_prompt（第一象限：经济上支持政府干预，社会上倾向进步）的内容,请将符合条件的值存进{{quadrant_I:binary_orthogonal}}
+```
+
+
+### Step 4：理清变量生成的因果顺序
+
+* 以 `ThinkPoint` 为起点，构建变量之间的生成链。
+* 所有变量必须有清晰的前置依赖关系（除 `ThinkPoint`和define_baseset=primitive的变量）。
+* 构成整个“思路”的路径（step-by-step chain），这个路径体现为变量间的依赖关系。
+
+
 ### Step 5：构建分步逻辑链
 
-* 将整个 Prompt 拆解为多个步骤（step）。
 * 根据依赖关系来构建步骤和步骤之间的关系。
 * 每一步能使用多个输入变量，只能生成一个输出变量，输入变量和输出变量在 prompt 里面的使用需要符合格式规定，用 `{{}}` 扩起来。
 * 每一步的 Prompt 指令应根据输入/输出逻辑改写。
@@ -98,124 +150,120 @@ quadrant_I:binary_orthogonal是一个quadrant，它的含义是第一象限：�
 * 每个变量生成完毕后写入 `varList`。
 * step中的最后一个步骤，其类型应该为10，且应该形成modeVarMap中对变量的映射，映射方式应参考模型中的描述，只选最必需的变量映射，无需将所有变量映射进去，modeVarMap中的ModeVarName，请根据变量名称中的:后面的Modelid定义。
 
-**Step 6：去除格式相关的规约**
 
-* 只保留内容相关的生成规则。
-* 每一步只描述思维转换、生成机制。
+### Step 6：以符合数据字典的 JSON 输出结果**
 
-**Step 7：以符合数据字典的 JSON 输出结果**
-
-* 输出为一个整体思路级 JSON 对象，字段必须参考数据字典，只为必填字段赋值。
+* 输出为一个整体思路级 JSON 对象，字段必须参考Datadic，只为必填字段赋值。
 
   * 依赖关系不作为 JSON 内容输出。
   * 检查所有 step 中的 `preID` 和 `nextID`，如果出现不一致的情况，请参照依赖关系重新调整，确保 step 的顺序描述的一致性。
+* 最后做一次格式检查，要求输出的结果严格符合json的格式要求。
 
+### Final Output  
+请根据提供的信息生成结果，并严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
+ - format examples:
+     {
+         "rootObject": value is  chain_json
+     }
 
 <!-- component end: GenChainRule -->
 
 
 <!-- component start: Datadic -->
 ## Datadic
-
-### 根对象 (Root Object)
-
-| 字段名称       | 数据类型           | 描述                                    | 默认值          | 说明                                                                                                          | 例子                                   |
-| -------------- | ------------------ | --------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| id             | String             | 思路ID                                  | 未指定          | 唯一标识一个思路。                                                                                            | "思路ID"                               |
-| trainName      | String             | 思路名                                  | 未指定          | 根据 prompt 的作用，设计一个简短易记的名称。                                                                  | "内容总结助手"                         |
-| trainDesc      | String             | 思路描述                                | 未指定          | 根据 prompt 的作用，描述其具体功能和应用场景。                                                                | "此思路用于快速总结长文本的主要内容。" |
-| welcomeMessage | String             | 思路欢迎语                              | 未指定          | 主要向用户表达，希望他们输入的内容或如何开始使用该思路。                                                      | "请输入您想总结的文本内容："           |
-| summary        | String             | 思路总结                                | 未指定          | 对整个思路的功能或成果的总结性描述。                                                                          |                                        |
-| modelId        | String             | 模式ID                                  | 未指定          | 如果该思路是基于某个特定模式创建的，则记录模式的ID。                                                          | "模式ID"                               |
-| stepList       | Array `<Object>` | 思路过程中的步骤列表。                  | `[]` (空数组) | 定义了思路执行的具体步骤和逻辑。详细信息请参见下方的**步骤对象 (Step Object)** 部分。                   |                                        |
-| varList        | Array `<Object>` | 实体变量列表 - 步骤使用到的变量。       | `[]` (空数组) | 存储在思路执行过程中，步骤间传递和使用的变量。详细信息请参见下方的**变量对象 (Variable Object)** 部分。 |                                        |
-| totalVarList   | Array `<Object>` | 实体变量列表 - 当前思路定义的全量变量。 | `[]` (空数组) | 包含此思路中定义的所有变量的完整列表。详细信息请参见下方的**变量对象 (Variable Object)** 部分。         |                                        |
-| termList       | Array `<Object>` | 术语列表 - 当前思路使用到的术语。       | `[]` (空数组) | 定义在当前思路的 prompt 或步骤中明确使用的术语。详细信息请参见下方的**术语对象 (Term Object)** 部分。   |                                        |
-| totalTermList  | Array `<Object>` | 术语列表 - 当前思路定义的全量术语。     | `[]` (空数组) | 包含此思路中定义的所有术语的完整列表。详细信息请参见下方的**术语对象 (Term Object)** 部分。             |                                        |
-
-### 步骤对象 (Step Object) (位于 `stepList` 内)
-
-| 字段名称              | 数据类型           | 描述                                 | 默认值              | 说明                                                                                                                                                                          | 例子                                      |
-| --------------------- | ------------------ | ------------------------------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| id                    | String             | 步骤ID                               | 未指定              | 唯一标识一个步骤。                                                                                                                                                            | "步骤ID"                                  |
-| preId                 | String             | 前步骤ID,分隔多个                    | 空字符串或 `null` | 指向当前步骤的前一个或多个步骤的ID，用逗号分隔。                                                                                                                              | "stepId_A,stepId_B"                       |
-| nextId                | String             | 后步骤ID,分隔多个                    | 空字符串或 `null` | 指向当前步骤的后一个或多个步骤的ID，用逗号分隔。                                                                                                                              | "stepId_C,stepId_D"                       |
-| trainId               | String             | 思路标识                             | 未指定              | 所属思路的ID。                                                                                                                                                                | "思路ID"                                  |
-| stepType              | String/Number      | 步骤类型                             | 未指定              | 1-普通步骤, 2-总结, 3-取图步骤, 4-归纳步骤, 5-摘要步骤, 6-归属, 7-搜索步骤, 8-工具步骤, 9-起始节点, 10-结束节点, 11-知识库步骤, 12-if-else步骤。                              | `1` (普通步骤)                          |
-| stepName              | String             | 步骤名称                             | 未指定              | 当前步骤的名称。                                                                                                                                                              | "提取关键信息"                            |
-| stepDesc              | String             | 步骤描述                             | 未指定              | 对当前步骤功能的详细描述。                                                                                                                                                    | "此步骤用于从输入文本中提取关键信息点。"  |
-| stepInVars            | String/Array       | 输入变量数组                         | `[]`              | 步骤执行所需的输入变量名称列表。文档中描述为数组，示例中为字符串，应以实际JSON为准。                                                                                          | `["inputText"]`                         |
-| stepOutVars           | Array `<String>` | 输出变量数组                         | `[]`              | 步骤执行后产生的输出变量名称列表。                                                                                                                                            | `["keyInfo"]`                           |
-| stepTerms             | Array `<String>` | 步骤用到的术语数组                   | `[]`              | 此步骤的 prompt 或逻辑中用到的特定术语列表。                                                                                                                                  | `["核心观点", "主要论据"]`              |
-| stepPrompt            | String             | 步骤prompt                           | 未指定              | 用于指导大模型生成内容的具体提示文本。                                                                                                                                        | "请总结以下文本的主要观点：{{inputText}}" |
-| cases                 | Array `<Object>` | 条件列表 (if-else步骤类型的条件列表) | `[]`              | 仅当 `stepType` 为 12 (if-else步骤) 时适用。详细信息请参见下方的 **Case 对象 (Case Object)** 部分。                                                                   |                                           |
-| modelVarMap           | Array `<Object>` | 变量映射关系 (END类型的结点)         | 未指定              | 仅当 `stepType` 为 10 (结束节点) 时适用。定义了思路的输出变量如何映射到模式变量。详细信息请参见下方的 **模式变量映射对象 (Mode Variable Map Object)** 部分。          |                                           |
-| trainModelGraphPrompt | String             | 使用模式的graphprompt                | 未指定              | 仅当 `stepType` 为 10 (结束节点) 时适用。如果步骤使用了模式中的 graphprompt，在此处记录。                                                                                   |                                           |
-| generationPrompts     | Array `<Object>` | 多种graphprompt                      | `[]`              | 仅当 `stepType` 为 10 (结束节点) 时适用。如果一个步骤内有多种生成方式或 prompt 变体，在此定义。详细信息请参见下方的**生成提示对象 (Generation Prompt Object)** 部分。 |                                           |
-
-### Case 对象 (Case Object) (位于步骤对象的 `cases` 数组内, 当 `stepType` 为 12 时)
-
-| 字段名称        | 数据类型          | 描述                   | 默认值 | 说明                                                                                                   | 例子                                          |
-| --------------- | ----------------- | ---------------------- | ------ | ------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
-| nextId          | String            | 指向步骤ID             | 未指定 | 当前条件分支满足后，流程应跳转到的下一个步骤的ID。                                                     | "stepId_TrueBranch"                           |
-| logicalOperator | String            | 逻辑类型               | "and"  | 定义多个条件之间的逻辑关系。                                                                           | "and", "or"                                   |
-| id              | String            | if-else case的唯一ID。 | 未指定 | 当前 case（条件分支）的唯一标识符。                                                                    | "ifElse_688adffe-4d8d-4d16-8f20-20f2880f2587" |
-| conditions      | Array`<Object>` | 条件                   | `[]` | 定义了当前 case 的一个或多个具体条件。详细信息请参见下方的**条件对象 (Condition Object)** 部分。 |                                               |
-| caseType        | String/Number     | Case 类型。            | 未指定 | 标识当前 case 是 "if", "else_if" 还是 "else"。                                                         | `0` (if), `1` (else_if), `2` (else)     |
-
-### 条件对象 (Condition Object) (位于Case对象的 `conditions` 数组内)
-
-| 字段名称           | 数据类型 | 描述           | 默认值   | 说明                             | 例子             |
-| ------------------ | -------- | -------------- | -------- | -------------------------------- | ---------------- |
-| varType            | String   | 变量类型。     | 未指定   | 条件判断中涉及的变量的类型。     | "1"              |
-| varName            | String   | 变量名称。     | 未指定   | 条件判断中涉及的变量的名称。     | "ThinkPoint"     |
-| comparisonOperator | String   | 比较操作符。   | 未指定   | 用于比较变量值与目标值的操作符。 | "contains", "==" |
-| value              | String   | 用于比较的值。 | 空字符串 | 与变量值进行比较的目标值。       | "keyword"        |
-
-### 模式变量映射对象 (Mode Variable Map Object) (位于步骤对象的 `modeVarMap` 数组内, 当 `stepType` 为 10 时)
-
-| 字段名称     | 数据类型 | 描述         | 默认值 | 说明                                                 | 例子            |
-| ------------ | -------- | ------------ | ------ | ---------------------------------------------------- | --------------- |
-| varName      | String   | 实体变量名   | 未指定 | 当前思路中定义的实体变量的名称。                     | "总结结果"      |
-| modelVarId   | Number   | 模式变量ID   | 未指定 | 对应模式中定义的变量的ID，需要使用真实的模式变量ID。 | "123"           |
-| modelVarName | String   | 模式变量名称 | 未指定 | 对应模式中定义的变量的名称。                         | "模式输出变量1" |
-| varId        | Number   | 实体变量ID   | `[]` | 当前思路中定义的实体变量的ID。                       | "123"           |
-
-### 生成提示对象 (Generation Prompt Object) (位于步骤对象的 `generationPrompts` 数组内)
-
-| 字段名称       | 数据类型 | 描述                 | 默认值 | 说明                                 | 例子                                          |
-| -------------- | -------- | -------------------- | ------ | ------------------------------------ | --------------------------------------------- |
-| VarId          | Number   | 唯一ID。             | 未指定 | 当前生成提示配置的唯一标识。         | `123`                                       |
-| trainId        | Number   | 思路标识。           | 未指定 | 所属思路的ID。                       | `417`                                       |
-| stepId         | String   | 步骤ID。             | 未指定 | 所属步骤的ID。                       | "1919683135748886528"                         |
-| generationType | String   | 生成类型。           | 未指定 | 指定生成内容的类型或格式。           | "Chat", "SVG", "RDF"                          |
-| stepInVars     | Array    | 此提示的输入变量。   | `[]` | 此特定生成提示所使用的输入变量列表。 | `["sourceText"]`                            |
-| stepTerms      | Array    | 此提示中使用的术语。 | `[]` | 此特定生成提示中使用的术语列表。     | `["AI", "机器学习"]`                        |
-| stepPrompt     | String   | 提示文本。           | 未指定 | 用于指导模型生成内容的具体提示文本。 | "请根据以下内容生成一张SVG图：{{sourceText}}" |
-
-### 变量对象 (Variable Object) (位于 `varList` 和 `totalVarList` 内)
-
-| 字段名称     | 数据类型    | 描述                    | 默认值   | 说明                                                          | 例子                                                         |
-| ------------ | ----------- | ----------------------- | -------- | ------------------------------------------------------------- | ------------------------------------------------------------ |
-| id           | Number      | 唯一ID。                | 未指定   | 变量的唯一标识符。                                            | `15104`                                                    |
-| trainId      | Number      | 思路标识                | 未指定   | 所属思路的ID。                                                | `417`                                                      |
-| parentId     | Null/String | 父ID。                  | `null` | 如果变量具有层级关系，则记录其父变量的ID。                    |                                                              |
-| stepId       | String      | 与此变量关联的步骤ID。  | 未指定   | 标识此变量主要在哪个步骤中被定义或使用。                      | "1909528709373546496"                                        |
-| varType      | Number      | 变量类型。              | 未指定   | 标识变量的数据类型或用途分类。                                | `1`                                                        |
-| varLevel     | Number      | 变量级别。              | `0`    | 变量在层级结构中的级别。                                      | `0` (顶层), `1` (子层)                                   |
-| varName      | String      | 变量名称。              | 未指定   | 变量的正式名称，在prompt中通常用 `{{varName}}` 的形式引用。 | "ThinkPoint", "inputText"                                    |
-| varDesc      | String      | 变量描述。              | 未指定   | 对变量用途、内容或格式的详细说明。                            | "Anything you wish to think about using a chain of thought." |
-| varFormat    | String      | 变量格式。              | 空字符串 | 描述变量内容的具体格式，例如日期格式、JSON结构等。            | "YYYY-MM-DD"                                                 |
-| defaultValue | Null/String | 默认值。                | `null` | 变量的初始值或在未提供输入时的默认值。                        |                                                              |
-| childs       | Null/Array  | 子变量 (用于层级数据)。 | `null` | 如果变量包含子变量，则在此处列出。                            | `[{"varName": "subPoint1", ...}]`                          |
-
-### 术语对象 (Term Object) (位于 `termList` 和 `totalTermList` 内)
-
-| 字段名称    | 数据类型 | 描述       | 默认值   | 说明                         | 例子             |
-| ----------- | -------- | ---------- | -------- | ---------------------------- | ---------------- |
-| id          | Number   | 唯一ID。   | 未指定   | 术语的唯一标识符。           | `767`          |
-| trainId     | Number   | 思路标识。 | 未指定   | 所属思路的ID。               | `417`          |
-| name        | String   | 术语名称。 | 未指定   | 术语的具体名称。             | "terrrrrr", "AI" |
-| description | String   | 术语描述。 | 空字符串 | 对术语含义或用法的详细说明。 | "人工智能的简称" |
-
-<!-- component end: Datadic -->
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "termList": {
+      "type": "array",
+      "items": {}
+    },
+    "totalTermList": {
+      "type": "array",
+      "items": {}
+    },
+    "totalVarList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "varType": { "type": "integer" },
+          "varName": { "type": "string" },
+          "varLevel": { "type": "integer" },
+          "varDesc": { "type": "string" },
+          "varFormat": { "type": ["string", "null"] },
+          "defaultValue": { "type": ["string", "null"] },
+          "stepId": { "type": ["string", "null"] },
+          "id": { "type": "integer" },
+          "childs": { "type": ["array", "null"], "items": {} },
+          "parentId": { "type": ["integer", "null"] }
+        },
+        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
+      }
+    },
+    "modelId": { "type": ["string", "integer"] },
+    "varList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "varType": { "type": "integer" },
+          "varName": { "type": "string" },
+          "varLevel": { "type": "integer" },
+          "varDesc": { "type": "string" },
+          "varFormat": { "type": ["string", "null"] },
+          "defaultValue": { "type": ["string", "null"] },
+          "stepId": { "type": ["string", "null"] },
+          "id": { "type": "integer" },
+          "childs": { "type": ["array", "null"], "items": {} },
+          "parentId": { "type": ["integer", "null"] }
+        },
+        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
+      }
+    },
+    "trainName": { "type": "string" },
+    "welcomeMessage": { "type": "string" },
+    "trainDesc": { "type": "string" },
+    "id": { "type": "string" },
+    "stepList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "trainId": { "type": "string" },
+          "preId": { "type": ["string", "null"] },
+          "stepType": { "type": "integer" },
+          "stepDesc": { "type": "string" },
+          "cases": { "type": "array" },
+          "stepInVars": { "type": "array", "items": { "type": "string" } },
+          "modelVarMap": { "type": "array" },
+          "stepOutVars": { "type": "array", "items": { "type": "string" } },
+          "nextId": { "type": ["string", "null"] },
+          "stepTerms": { "type": "array" },
+          "trainModelGraphPrompt": { "type": ["string", "null"] },
+          "stepName": { "type": "string" },
+          "generationPrompts": { "type": "array" },
+          "id": { "type": "string" },
+          "stepPrompt": { "type": "string" }
+        },
+        "required": ["trainId", "stepType", "stepDesc", "stepInVars", "stepOutVars", "id", "stepPrompt"]
+      }
+    }
+  },
+  "required": [
+    "termList",
+    "totalTermList",
+    "totalVarList",
+    "modelId",
+    "varList",
+    "trainName",
+    "welcomeMessage",
+    "trainDesc",
+    "id",
+    "stepList"
+  ]
+<!-- component end: Datadic
