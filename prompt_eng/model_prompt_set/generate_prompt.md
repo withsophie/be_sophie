@@ -73,7 +73,14 @@
 关键实体介绍：根据关键实体的define_prompt，介绍关键实体的生成函数
 关键实体的默认值：baseset为[primitive]的entity的value
 处理思考输入的实体：actual_entity中的所有entity
+处理思考输入的实体的介绍：根据处理思考输入的实体的define_prompt，介绍它们的生成函数
+过渡实体：并未被列入actual_entity中的其它entity
+过渡实体的介绍：根据过渡实体的define_prompt，介绍过渡实体的生成函数
 
+这些内容将会在画布中创建成思路，实体会创建成变量，define_prompt会作为步骤的prompt，这些内容可以在画布中再次进行修改。
+如果您对这些内容不满意，也可以对chain_draft的描述进行修改，这些内容将会按照您的要求重新生成。
+对描述的修改可以继续细化您的需求，也可以直接指定思路的内容。
+如：请将axis_x中的define_prompt改为"The X-axis representing opposing conceptual vectors."
 
 <!-- component end: GenChainAgenda -->
 <!-- component start: ModelSchema -->
