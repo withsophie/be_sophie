@@ -38,6 +38,7 @@
 ### 根据<<Chain_draft>>的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
 1、判断其涉及的领域，生成domain，这个领域应具备一定的抽象性；
 2、深入理解<Chain_draft>>中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,为这些属性赋值
+* 顺序先从define_baseset为[primitive]的entity开始
 * id：在原entity的id的基础上增加一个可以表达该entity的实体的词，用_分割开
 * prototype：原prototype和domain融合而成的一个词，既能继承原prototype所表达的关系，又能体现domain的具体领域
 * define_baseset：按照原entity的规定，修改为实例化后的对应的entity的ID，如果原值为promitive，则不变
@@ -45,22 +46,18 @@
 * occur：和原entity一致
 * inherits：原entity的id
 * value：将define_baseset的值代入define_prompt中，得出的结果
-3、分析实例化完成后的ModelInstance，再根据chain_draft的内容，找出
-* G1:if prototype=quadrant then LLM_output=true
+3、分析实例化完成后的ModelInstance，再根据chain_draft的内容，找出这些entity中，所有需要和thinkpoint交互的，形成actual_entity。可以通过如下方法，判断entity是否存在和thinkpoint的交互关系：
+* chain_draft中显性说明的；
+* chain_draft中提出的要解决的问题中，解答问题明显需要的；
+* define_prompt中明显缺乏输入变量，无法直接得出结果的；
+### 设计main函数
+<<component:GenChainRule>>
+### 构建返回值
+
 ### 将ModelInstance生成更易读的agenda
 <<component:GenChainAgenda>>
-4、根据ref_domain，根据<<Model>>所设定的prototype的元素，并参考<<Model>>中的define_prompt，为其生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，为define_baseset为[primitive]的entity生成能表达其含义的ID。
-5、按照define_baseset的定义，结合<<Model>>中对应的define_prompt的定义，为后续的entities生成符合<<Chain_draft>>需要的define_prompt，并依据define_prompt，依次生成其余的entities的ID，
-6、根据prototype和对应的baseset，依照<<Model>>中对应的define_prompt的定义，为其生成符合<<Chain_draft>>需要的define_prompt，并根据define_prompt生成relation的ID
-7、ModelInstance中的entity和relations的id生成请将<<Model>>的id拼在生成的id后面，以:分隔。
 
-1、思路作者希望解决某一个领域的一类问题，他对这类问题的描述就是chain_draft，请根据他的需求，推测这个领域是什么，生成ref_domain，这个领域应是具备一定的抽象性的，并理解想解决的这类问题是什么，据此生成chain_object；
-2、假设作者是个对深度思考有着非常独特见解的人，他会用<<name_of_model>>和chain_object的现实问题建立映射的方式进行思考。他的映射方法是：找到这些现实问题中的一些关键元素，映射成Model中的entities。
-3、理解模型中的entity：通过各个entities的prototype，理解各个entity之间的结构关系。这个结构关系和要创建的思路的待解决问题的内容的结构有相似性。
-4、创建思路的顺序是：先映射chain_object中最关键的元素为define_baseset=primitive的，因为其他的元素都是基于这几个primitive元素生成的。映射的具体方法就是生成这些元素的define_prompt。这些元素的define_prompt的内容是：解释这些元素在chain_object这个解题过程中的含义和价值。
-5、其余entities的define_prompt内容，是用来定义这些元素的，而这个定义的构成是：描述这个元素是怎样通过它的baseset父元素生成或推导出来的，且生成出来的结果是符合prototype的特征的，理解prototype需要结合继承的model的ref_domain来综合理解，相同的prototype的entities应该有相同的特征。
-6、其他的内容，按照原model中的内容继承，结构要符合model的结构
-7、inherits=<<name_of_model>>
+
 <!-- component end: GenModelInstanceRule -->
 
 <!-- component start: GenChainAgenda -->
@@ -68,11 +65,15 @@
 通过理解ModelInstance中的内容，理解这个思路的目标和适用范围，并按下文形成一个介绍：
 通过对您构思的理解，我们会帮您创建一个解决这类问题的思路，并展现在画布中，您可以在这个基本思路的基础之上，进行进一步的修改。
 思路名称： <<name_of_chain>> 
-思路领域：ModelInstance中的ref_domain
+思路领域：ModelInstance中的domain
 思路所采用的模型：<<name_of_model>>，并介绍一下这个模型的特点
-构建这个思路的关键因素为：ModelInstance中baseset为[primitive]的entity；
-关键因素介绍：根据关键因素的define_prompt，介绍关键因素
-其他因素介绍：根据其他的entities和relations的define_prompt,介绍其他因素
+思路能处理的问题类型：根据chain_draft的描述和ModelInstance，推测这个思路能解决哪些类型的问题
+思考输入内容：请根据chain_draft的描述和ModelInstance,推测运行这个思路（思考）时期待的用户输入
+构建这个思路的关键实体为：ModelInstance中baseset为[primitive]的entity；
+关键实体介绍：根据关键实体的define_prompt，介绍关键实体的生成函数
+关键实体的默认值：baseset为[primitive]的entity的value
+处理思考输入的实体：actual_entity中的所有entity
+
 
 <!-- component end: GenChainAgenda -->
 <!-- component start: ModelSchema -->
@@ -115,17 +116,16 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 
 
 <!-- component start: HowtoMakeChain -->
-运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。整个过程可以理解为一个函数的执行过程，而思路就是这个函数中的函数体部分，构建思路就是构建其中的函数体。其中entity，则是这个函数体在执行过程中需要调用的常量和变量。整个函数的返回值就是这次思考的最终结果，思考时的背景信息被称作ThinkPoint，是这个函数执行的输入参数。
+运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。整个过程可以理解为一个main函数的执行过程，而思路就是这个main函数中的函数体部分，构建思路就是构建其中的函数体。其中entity的值，则是这个main函数在执行过程中需要调用的常量和变量，而赋值的过程则是entity函数。main函数的返回值就是这次思考的最终结果，思考时的背景信息被称作ThinkPoint，是main函数执行的输入参数。
 构建思路的过程是这样的：
-1、根据Model的框架，将思路设计者的设计需求变成一个更为具体的ModelInstance
-2、将ModelInstance的内容，按照特定的格式，将所有的entity映射成变量，将为entity具体赋值的过程映射成步骤
-3、选择合适的显示方案和对应方案中需要展现的变量
+1、根据Model的框架设计，实现所有的entity函数，这个具体实现的entity函数库，被称为ModelInstance
+2、选择在思路中需要使用的entity，设计这些entity的value是如何通过对thinkpoint的计算来最终实现问题答案的。（设计main函数的函数体）
+3、构建返回值，也就是针对计算后的entity的value，选择合适的显示方案。
 
 <!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
 
-
-### Step 1：通过ModelInstance，理解所选择的 Model和思路期待解决的问题
+#### Step 1：通过ModelInstance，理解所选择的 Model和思路期待解决的问题
 
 * 通过ModelInstance的ref_domain确定这个思路的问题域
 * trainName是<<name_of_chain>>，modelId使用Model的ID
@@ -148,7 +148,7 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
     }
     ```
 
-### step 3:生成步骤
+#### step 3:生成步骤
 
 * 从define_baseset=primitive的entities和relations开始建立步骤
 * 根据define_prompt来创造stepPrompt，stepPrompt的目标是：使用当前的entity对应的变量创造它的依赖变量，将所有拥有依赖变量的变量所对应的步骤都创建完成；
@@ -158,14 +158,14 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 ```
 
 
-### Step 4：理清变量生成的因果顺序
+#### Step 4：理清变量生成的因果顺序
 
 * 以 `ThinkPoint` 为起点，构建变量之间的生成链。
 * 所有变量必须有清晰的前置依赖关系（除 `ThinkPoint`和define_baseset=primitive的变量）。
 * 构成整个“思路”的路径（step-by-step chain），这个路径体现为变量间的依赖关系。
 
 
-### Step 5：构建分步逻辑链
+#### Step 5：构建分步逻辑链
 
 * 根据依赖关系来构建步骤和步骤之间的关系。
 * 每一步能使用多个输入变量，只能生成一个输出变量，输入变量和输出变量在 prompt 里面的使用需要符合格式规定，用 `{{}}` 扩起来。
@@ -175,7 +175,7 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 * step中的最后一个步骤，其类型应该为10，且应该形成modeVarMap中对变量的映射，映射方式应参考模型中的描述，只选最必需的变量映射，无需将所有变量映射进去，modeVarMap中的ModeVarName，请根据变量名称中的:后面的Modelid定义。
 
 
-### Step 6：以符合数据字典的 JSON 输出结果**
+#### Step 6：以符合数据字典的 JSON 输出结果**
 
 * 输出为一个整体思路级 JSON 对象，字段必须参考Datadic，只为必填字段赋值。
 
@@ -183,7 +183,7 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
   * 检查所有 step 中的 `preID` 和 `nextID`，如果出现不一致的情况，请参照依赖关系重新调整，确保 step 的顺序描述的一致性。
 * 最后做一次格式检查，要求输出的结果严格符合json的格式要求。
 
-### Final Output  
+#### Final Output  
 请根据提供的信息生成结果，并严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
  - format examples:
      {
