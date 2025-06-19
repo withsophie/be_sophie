@@ -85,8 +85,8 @@
         {
           "id": "{quadrant_I}",
           "prototype": "quadrant",
-          "define_baseset": ["{x_positive}", "{y_positive}"],
-          "define_prompt": "First quadrant (X positive, Y positive).",
+          "define_baseset": ["{x_positive}", "{y_positive}","{ThinkPoint}"],
+          "define_prompt": "Find all of {ThinkPoint}= {x_positive} and {y_positive} ",
           "occur": 1,
           "inherits": "base_entity",
           "value": ""

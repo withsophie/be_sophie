@@ -6,38 +6,46 @@
 用ModelInstance的内容，按照GenChainAgenda的规则，生成Chain_Agenda，并将生成的内容存进chain_json的summary中。
 
 <<name_of_model>>
+## chain_draft
 <<component:Chain_draft>>
+## ModelSchema
 <<component:ModelSchema>>
+## entity_yaml_of_model
 <<component:entity_yaml_of_model>>
+## GenModelInstanceRule
 <<component:GenModelInstanceRule>>
+## GenChainRule
 <<component:GenChainRule>>
+## Datadic
+```json
 <<component:Datadic>>
+```
 <<component:GenChainAgenda>>
 
 <!-- component end: main_prompt -->
 <!-- component start: Chain_draft -->
-## chain_draft
 ``` txt
 <<chain_draft>>
 ```
 <!-- component end: Chain_draft -->
 <!-- component start: entity_yaml_of_model -->
-## entity_yaml_of_model
 ``` json
 <<entity_yaml_of_model>>
 ```
 <!-- component end: entity_yaml_of_model -->
 <!-- component start: GenModelInstanceRule -->
-## GenModelInstanceRule
 <<component:HowtoMakeChain>>
 ### 根据<<Chain_draft>>的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
 1、判断其涉及的领域，生成domain，这个领域应具备一定的抽象性；
-2、根据<Chain_draft>>来确定思路的类型<<chain_type>>：分类、排序、决策、组合
-* 分类（Categorize）：思考的目标是对对象或信息进行归类，以识别特征或结构。
-* 排序（Prioritize）：思考的目标是对事物按某种标准进行排序，强调“先后、重要性、优劣”等
-* 决策（Evaluate）：思考的目标是通过权衡，得出最合适的结论
-* 组合（Synthesize）：思考的目标是通过组合不同维度的元素，形成新的内容
-3、根据entity/relation的prototype确定其是否需要在step的prompt的执行后，生成输出值，将其LLM_output属性设置为true/false；
+2、深入理解<Chain_draft>>中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,为这些属性赋值
+* id：在原entity的id的基础上增加一个可以表达该entity的实体的词，用_分割开
+* prototype：原prototype和domain融合而成的一个词，既能继承原prototype所表达的关系，又能体现domain的具体领域
+* define_baseset：按照原entity的规定，修改为实例化后的对应的entity的ID，如果原值为promitive，则不变
+* define_prompt：定义一种方法，这种方法是表达如何对define_baseset中的entities进行处理，得出该entity的值的
+* occur：和原entity一致
+* inherits：原entity的id
+* value：将define_baseset的值代入define_prompt中，得出的结果
+3、分析实例化完成后的ModelInstance，再根据chain_draft的内容，找出
 * G1:if prototype=quadrant then LLM_output=true
 ### 将ModelInstance生成更易读的agenda
 <<component:GenChainAgenda>>
@@ -68,7 +76,6 @@
 
 <!-- component end: GenChainAgenda -->
 <!-- component start: ModelSchema -->
-``` json
  "model": {
       "id": "base_model",
       "name": "Base Model",
@@ -88,7 +95,6 @@
         }
       ]
     }
-```
 <!-- component end: ModelSchema -->
 <!-- component start: ModelSchemaRule -->
 Model是所有思路（chain）的父类，Base Model会用来作为所有Model的基础，而使用这些Model所创建的ModelInstance则是这些Model在某个领域的实例化的结果。
@@ -109,17 +115,15 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 
 
 <!-- component start: HowtoMakeChain -->
-运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。
-思维模式的抽象层次分为如下几个级别：
-Model-ModelInstance（chain）-ThinkInstance（Thought）
-整体逐步具象化的过程为：
+运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。整个过程可以理解为一个函数的执行过程，而思路就是这个函数中的函数体部分，构建思路就是构建其中的函数体。其中entity，则是这个函数体在执行过程中需要调用的常量和变量。整个函数的返回值就是这次思考的最终结果，思考时的背景信息被称作ThinkPoint，是这个函数执行的输入参数。
+构建思路的过程是这样的：
 1、根据Model的框架，将思路设计者的设计需求变成一个更为具体的ModelInstance
 2、将ModelInstance的内容，按照特定的格式，将所有的entity映射成变量，将为entity具体赋值的过程映射成步骤
 3、选择合适的显示方案和对应方案中需要展现的变量
 
 <!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
-## GenChainRule
+
 
 ### Step 1：通过ModelInstance，理解所选择的 Model和思路期待解决的问题
 
@@ -190,8 +194,7 @@ Model-ModelInstance（chain）-ThinkInstance（Thought）
 
 
 <!-- component start: Datadic -->
-## Datadic
-```json
+
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
