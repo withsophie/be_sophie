@@ -132,11 +132,14 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 <!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
 
-#### Step 1：通过ModelInstance，理解所选择的 Model和思路期待解决的问题
+#### Step 1：重构ModelInstance中的actual_entity
 
-* 通过ModelInstance的ref_domain确定这个思路的问题域
-* trainName是<<name_of_chain>>，modelId使用Model的ID
-* 根据chain_draft的内容，推测思路的思考目标
+* 将ThinkPoint加入entity的define_baseset
+* 根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
+* 构建prompt的一些示例：
+ * thinkpoint可能是一个集合，原来的baseset是一种分类条件
+ * 将thinkpoint和原baseset以某种形式组合，综合形成一个新的内容
+ * 
 
 
 #### Step 2：理解所有的entity，并根据Model建立变量
