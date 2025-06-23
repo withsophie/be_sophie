@@ -2,7 +2,7 @@
 # Generate-Chain-withModel Prompt: <<name_of_chain>> (based on <<name_of_model>>)
 
 该prompt的功能是，对Chain_draft进行分析，并按照Model中定义的entity_yaml_of_model的内容，根据GenModelInstanceRule，生成ModelInstance。
-用ModelInstance的内容，遵循GenChainRule的规则，按照Datadic的格式，生成chain_json
+用ModelInstance的内容，遵循GenChainRule的规则，按照ChainSchema规定的格式，生成chain_json
 用ModelInstance的内容，按照GenChainAgenda的规则，生成Chain_Agenda，并将生成的内容存进chain_json的summary中。
 
 <<name_of_model>>
@@ -16,9 +16,9 @@
 <<component:GenModelInstanceRule>>
 ## GenChainRule
 <<component:GenChainRule>>
-## Datadic
+## ChainSchema
 ```json
-<<component:Datadic>>
+<<chain_schema>>
 ```
 <<component:GenChainAgenda>>
 
@@ -50,9 +50,13 @@
 * chain_draft中显性说明的；
 * chain_draft中提出的要解决的问题中，解答问题明显需要的；
 * define_prompt中明显缺乏输入变量，无法直接得出结果的；
-### 设计main函数
-<<component:GenChainRule>>
-### 构建返回值
+### 重构ModelInstance中的actual_entity
+* 将ThinkPoint加入entity的define_baseset
+* 根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
+* 构建prompt的一些示例：
+ * 将thinkpoint中符合baseset条件的内容筛选出，构建成列表，作为entity的value
+ * 将thinkpoint和原baseset以某种形式进行结合，综合形成一个新的内容，作为entity的value
+ * thinkpoint是待加工内容，baseset是加工方法，加工结果存入entity的value
 
 ### 将ModelInstance生成更易读的agenda
 <<component:GenChainAgenda>>
@@ -132,24 +136,12 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 <!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
 
-#### Step 1：重构ModelInstance中的actual_entity
-
-* 将ThinkPoint加入entity的define_baseset
-* 根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
-* 构建prompt的一些示例：
- * thinkpoint可能是一个集合，原来的baseset是一种分类条件
- * 将thinkpoint和原baseset以某种形式组合，综合形成一个新的内容
- * 
-
-
-#### Step 2：理解所有的entity，并根据Model建立变量
+#### Step 1：理解所有的entity，并根据Model建立变量
 
 * 将ModelInstance中的所有entity都生成为变量，
 * 变量的命名方法：varName=entityID
-* 所有变量必须依次记录进 `varList`（即变量清单）。
-* 用户提供的第一个变量固定命名为 `ThinkPoint`。
-* 根据ModelInstance的define_baseset的关联关系，找出各个变量的依赖关系
-* 依赖关系的示例如下：
+* 所有变量必须依次记录进 `TotalvarList`（即变量清单）。
+* 根据该entity的baseset确定该变量的依赖关系，依赖关系的示例如下：
     ```json
     dependencies = {
       "X": ["ThinkPoint"],
@@ -157,146 +149,28 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
       "Z": ["X", "Y"]
     }
     ```
+* 用户输入的变量命名为 `ThinkPoint`。
 
 #### step 3:生成步骤
-
-* 从define_baseset=primitive的entities和relations开始建立步骤
-* 根据define_prompt来创造stepPrompt，stepPrompt的目标是：使用当前的entity对应的变量创造它的依赖变量，将所有拥有依赖变量的变量所对应的步骤都创建完成；
-* 所有没有被依赖的变量，被称为终点变量，终点变量所对应的stepPrompt的目标是：将Thinkpoint的内容，根据define_prompt所设定的条件，按照推测出的思考目标，进行对应的处理。这种stepPrompt的例子是：
-```prompt
-我希望对{{thinkpoint}}（美国民主党的政策）进行{{思考目标}}（分类处理），当前的步骤需要处理的是从{{ThinkPoint}}中找出define_prompt（第一象限：经济上支持政府干预，社会上倾向进步）的内容,请将符合条件的值存进{{quadrant_I:binary_orthogonal}}
-```
-
-
-#### Step 4：理清变量生成的因果顺序
-
-* 以 `ThinkPoint` 为起点，构建变量之间的生成链。
-* 所有变量必须有清晰的前置依赖关系（除 `ThinkPoint`和define_baseset=primitive的变量）。
-* 构成整个“思路”的路径（step-by-step chain），这个路径体现为变量间的依赖关系。
-
-
-#### Step 5：构建分步逻辑链
-
-* 根据依赖关系来构建步骤和步骤之间的关系。
-* 每一步能使用多个输入变量，只能生成一个输出变量，输入变量和输出变量在 prompt 里面的使用需要符合格式规定，用 `{{}}` 扩起来。
-* 每一步的 Prompt 指令应根据输入/输出逻辑改写。
-* 每一步必须产出一个明确的结果，且这个结果需要赋值给输出变量，这个赋值动作需要在步骤的 prompt 写出来。
+* 为每一个entity所生成的变量建立一个步骤，这个变量就是这个步骤的输出变量，步骤会根据变量的依赖关系（输入变量），为变量赋值，赋值的方式是这个变量对应的entity的prompt所定义的，而这个prompt就会被定义为步骤的prompt。在Prompt中，所有的变量引用都会用{{}}括起。
+* 首先创建类型为初始节点的步骤，这个步骤的输出变量为ThinkPoint
+* 从define_baseset=primitive的entities开始，完成所有的步骤建立
+* 根据该步骤的输出变量之间的依赖关系，建立步骤之间的前后序关系
+* 每一步的 Prompt 指令应参考这样的形式进行改写：“通过{{输入变量1}}和{{输入变量2}}的XXX分析/综合等行为（按entity中的prompt的指引），生成{{输出变量}}“
 * 每个变量生成完毕后写入 `varList`。
-* step中的最后一个步骤，其类型应该为10，且应该形成modeVarMap中对变量的映射，映射方式应参考模型中的描述，只选最必需的变量映射，无需将所有变量映射进去，modeVarMap中的ModeVarName，请根据变量名称中的:后面的Modelid定义。
+* 最后一个步骤，其类型应该为10，且应该形成modeVarMap中对变量的映射，映射方式应参考模型中的描述，只选最必需的变量映射，无需将所有变量映射进去，modelVarMap中的ModelVarName，请根据ModelInstance所继承的Model中的entity的ID来确定。
 
 
-#### Step 6：以符合数据字典的 JSON 输出结果**
+#### Step 4：以符合schema的 JSON 输出结果**
 
-* 输出为一个整体思路级 JSON 对象，字段必须参考Datadic，只为必填字段赋值。
+* 输出为一个整体思路级 JSON 对象，字段必须按照ChainSchema的定义，所有变量的值来自于前面的赋值过程。
 
   * 依赖关系不作为 JSON 内容输出。
   * 检查所有 step 中的 `preID` 和 `nextID`，如果出现不一致的情况，请参照依赖关系重新调整，确保 step 的顺序描述的一致性。
 * 最后做一次格式检查，要求输出的结果严格符合json的格式要求。
 
-#### Final Output  
-请根据提供的信息生成结果，并严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
- - format examples:
-     {
-         "rootObject": value is  chain_json
-     }
-
 <!-- component end: GenChainRule -->
-
-
-<!-- component start: Datadic -->
-
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "properties": {
-    "termList": {
-      "type": "array",
-      "items": {}
-    },
-    "totalTermList": {
-      "type": "array",
-      "items": {}
-    },
-    "totalVarList": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "trainId": { "type": "string" },
-          "varType": { "type": "integer" },
-          "varName": { "type": "string" },
-          "varLevel": { "type": "integer" },
-          "varDesc": { "type": "string" },
-          "varFormat": { "type": ["string", "null"] },
-          "defaultValue": { "type": ["string", "null"] },
-          "stepId": { "type": ["string", "null"] },
-          "id": { "type": "integer" },
-          "childs": { "type": ["array", "null"], "items": {} },
-          "parentId": { "type": ["integer", "null"] }
-        },
-        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
-      }
-    },
-    "modelId": { "type": ["string", "integer"] },
-    "varList": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "trainId": { "type": "string" },
-          "varType": { "type": "integer" },
-          "varName": { "type": "string" },
-          "varLevel": { "type": "integer" },
-          "varDesc": { "type": "string" },
-          "varFormat": { "type": ["string", "null"] },
-          "defaultValue": { "type": ["string", "null"] },
-          "stepId": { "type": ["string", "null"] },
-          "id": { "type": "integer" },
-          "childs": { "type": ["array", "null"], "items": {} },
-          "parentId": { "type": ["integer", "null"] }
-        },
-        "required": ["trainId", "varType", "varName", "varLevel", "varDesc", "stepId", "id"]
-      }
-    },
-    "trainName": { "type": "string" },
-    "welcomeMessage": { "type": "string" },
-    "trainDesc": { "type": "string" },
-    "id": { "type": "string" },
-    "stepList": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "trainId": { "type": "string" },
-          "preId": { "type": ["string", "null"] },
-          "stepType": { "type": "integer" },
-          "stepDesc": { "type": "string" },
-          "cases": { "type": "array" },
-          "stepInVars": { "type": "array", "items": { "type": "string" } },
-          "modelVarMap": { "type": "array" },
-          "stepOutVars": { "type": "array", "items": { "type": "string" } },
-          "nextId": { "type": ["string", "null"] },
-          "stepTerms": { "type": "array" },
-          "trainModelGraphPrompt": { "type": ["string", "null"] },
-          "stepName": { "type": "string" },
-          "generationPrompts": { "type": "array" },
-          "id": { "type": "string" },
-          "stepPrompt": { "type": "string" }
-        },
-        "required": ["trainId", "stepType", "stepDesc", "stepInVars", "stepOutVars", "id", "stepPrompt"]
-      }
-    }
-  },
-  "required": [
-    "termList",
-    "totalTermList",
-    "totalVarList",
-    "modelId",
-    "varList",
-    "trainName",
-    "welcomeMessage",
-    "trainDesc",
-    "id",
-    "stepList"
-  ]
-<!-- component end: Datadic
+<!-- component start: ChainSchema -->
+## ChainSchema
+<<chain_schema>>
+<!-- component end: ChainSchema -->
