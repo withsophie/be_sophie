@@ -19,7 +19,12 @@
 ## ChainSchema
 <<component:ChainSchema>>
 <<component:GenChainAgenda>>
-
+## Final Output
+请根据提供的信息生成结果，并严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
+format examples:
+{
+  "rootObject": value is chain_json
+}
 <!-- component end: main_prompt -->
 <!-- component start: Chain_draft -->
 ``` txt
