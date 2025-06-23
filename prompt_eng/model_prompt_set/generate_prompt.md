@@ -17,9 +17,7 @@
 ## GenChainRule
 <<component:GenChainRule>>
 ## ChainSchema
-```json
-<<chain_schema>>
-```
+<<component:ChainSchema>>
 <<component:GenChainAgenda>>
 
 <!-- component end: main_prompt -->

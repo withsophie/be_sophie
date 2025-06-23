@@ -1,0 +1,430 @@
+ {
+  "rootObject": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "思路 ID，唯一标识一个思路",
+        "example": "思路 ID"
+      },
+      "trainName": {
+        "type": "string",
+        "description": "思路名，根据 prompt 的作用设计简短易记的名称",
+        "example": "内容总结助手"
+      },
+      "trainDesc": {
+        "type": "string",
+        "description": "思路描述，描述其具体功能和应用场景",
+        "example": "此思路用于快速总结长文本的主要内容。"
+      },
+      "welcomeMessage": {
+        "type": "string",
+        "description": "思路欢迎语，向用户表达输入内容或如何开始使用该思路",
+        "example": "请输入您想总结的文本内容："
+      },
+      "summary": {
+        "type": "string",
+        "description": "对整个思路的功能或成果的总结性描述"
+      },
+      "modelId": {
+        "type": "string",
+        "description": "模式 ID，基于特定模式创建时记录模式的 ID",
+        "example": "模式 ID"
+      },
+      "stepList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Step Object"
+        },
+        "description": "思路过程中的步骤列表",
+        "default": []
+      },
+      "varList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Variable Object"
+        },
+        "description": "实体变量列表，存储步骤间传递和使用的变量",
+        "default": []
+      },
+      "termList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/Term Object"
+        },
+        "description": "术语列表，定义在当前思路的 prompt 或步骤中明确使用的术语",
+        "default": []
+      }
+    }
+  },
+  "definitions": {
+    "Step Object": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "步骤 ID，唯一标识一个步骤",
+          "example": "步骤 ID"
+        },
+        "preId": {
+          "type": "string",
+          "description": "前步骤 ID，多个用逗号分隔",
+          "default": "",
+          "example": "stepId_A,stepId_B"
+        },
+        "nextId": {
+          "type": "string",
+          "description": "后步骤 ID，多个用逗号分隔; stepType != 10 时必须有有效的下一步步骤ID ",
+          "default": "",
+          "example": "stepId_C,stepId_D"
+        },
+        "trainId": {
+          "type": "string",
+          "description": "所属思路的 ID",
+          "example": "思路 ID"
+        },
+        "stepType": {
+          "type": "integer",
+          "description": "步骤类型（1-思考步骤,  9-起始节点, 10-结束节点,12-if-else步骤）",
+		  "example": 1,
+          "enum": [1, 9, 10, 12]
+        },
+        "stepName": {
+          "type": "string",
+          "description": "步骤名称",
+          "example": "提取关键信息"
+        },
+        "stepDesc": {
+          "type": "string",
+          "description": "步骤描述，对步骤功能的详细描述",
+          "example": "此步骤用于从输入文本中提取关键信息点。"
+        },
+        "stepInVars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "输入变量数组，步骤执行所需的输入变量名称列表",
+          "default": [],
+          "example": ["inputText"]
+        },
+        "stepOutVars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "输出变量数组，步骤执行后产生的输出变量名称列表,但每个步骤只有1个输出变量",
+          "default": [],
+          "example": ["keyInfo"]
+        },
+        "stepTerms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "步骤用到的术语数组",
+          "default": [],
+          "example": ["核心观点", "主要论据"]
+        } 
+      },
+      "anyOf": [
+		  {
+		   "if": {
+				"properties": {
+				  "stepType": {
+					"const": 1
+				  }
+				}
+			  },
+			  "then": {
+				"properties": {
+				  "stepPrompt": {
+					"type": "string",
+					"description": "步骤 prompt，用于指导大模型生成内容的具体提示文本",
+                    "example": "请总结以下文本的主要观点：{{inputText}}"
+				  }
+				}
+			  }
+			},
+         { 
+		   "if": {
+				"properties": {
+				  "stepType": {
+					"const": 12
+				  }
+				}
+           },
+          "then": {
+				"properties": {
+				  "cases": {
+					"type": "array",
+					"items": {
+					  "$ref": "#/definitions/Case Object"
+					},
+					"description": "条件列表（if-else 步骤类型的条件列表）",
+					"default": []
+				  }
+				}
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stepType": {
+                "const": 10
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "modelVarMap": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Mode Variable Map Object"
+                },
+                "description": "变量映射关系（结束节点时适用）"
+              },
+              "trainModelGraphPrompt": {
+                "type": "string",
+                "description": "使用模式的 graphprompt（结束节点时适用）"
+              },
+              "generationPrompts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Generation Prompt Object"
+                },
+                "description": "多种 graphprompt（结束节点时适用）",
+                "default": []
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Case Object": {
+      "type": "object",
+      "properties": {
+        "nextId": {
+          "type": "string",
+          "description": "指向步骤 ID，条件分支满足后流程应跳转到的下一步骤 ID",
+          "example": "stepId_TrueBranch"
+        },
+        "logicalOperator": {
+          "type": "string",
+          "description": "逻辑类型 (and | or)",
+		  "enum": ["and","or"],
+          "default": "and",
+          "example": "and"
+        },
+        "id": {
+          "type": "string",
+          "description": "if-else case 的唯一 ID",
+          "example": "ifElse_688adffe-4d8d-4d16-8f20-20f2880f2587"
+        },
+        "conditions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Condition Object"
+          },
+          "description": "条件数组，定义当前 case 的具体条件",
+          "default": []
+        },
+        "caseType": {
+          "type": "integer",
+          "description": "Case 类型（0 - if, 1 - else_if, 2 - else）",
+          "example": 0
+        }
+      }
+    },
+    "Condition Object": {
+      "type": "object",
+      "properties": {
+        "varType": {
+          "type": "string",
+          "description": "变量类型",
+          "example": "1"
+        },
+        "varName": {
+          "type": "string",
+          "description": "变量名称",
+          "example": "ThinkPoint"
+        },
+        "comparisonOperator": {
+          "type": "string",
+          "description": "比较操作符",
+          "enum": ["is","isNot","contains","notContains","startWith","endWith","isEmpty","isNotEmpty"],
+          "example": "contains"
+        },
+        "value": {
+          "type": "string",
+          "description": "用于比较的值",
+          "default": ""
+        }
+      }
+    },
+    "Mode Variable Map Object": {
+      "type": "object",
+      "properties": {
+        "varName": {
+          "type": "string",
+          "description": "实体变量名",
+          "example": "总结结果"
+        },
+        "modelVarId": {
+          "type": "integer",
+          "description": "模式变量 ID，对应模式中定义的变量 ID",
+          "example": 123
+        },
+        "modelVarName": {
+          "type": "string",
+          "description": "模式变量名称",
+          "example": "模式输出变量 1"
+        },
+        "varId": {
+          "type": "integer",
+          "description": "实体变量 ID",
+          "example": 123
+        }
+      }
+    },
+    "Generation Prompt Object": {
+      "type": "object",
+      "properties": {
+        "VarId": {
+          "type": "integer",
+          "description": "唯一 ID",
+          "example": 123
+        },
+        "trainId": {
+          "type": "integer",
+          "description": "思路标识",
+          "example": 417
+        },
+        "stepId": {
+          "type": "string",
+          "description": "步骤 ID",
+          "example": "1919683135748886528"
+        },
+        "generationType": {
+          "type": "string",
+          "description": "生成类型",
+          "example": "Chat"
+        },
+        "stepInVars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "此提示的输入变量",
+          "default": [],
+          "example": ["sourceText"]
+        },
+        "stepTerms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "此提示中使用的术语",
+          "default": [],
+          "example": ["AI", "机器学习"]
+        },
+        "stepPrompt": {
+          "type": "string",
+          "description": "提示文本",
+          "example": "请根据以下内容生成一张 SVG 图：{{sourceText}}"
+        }
+      }
+    },
+    "Variable Object": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "唯一 ID",
+          "example": 15104
+        },
+        "trainId": {
+          "type": "integer",
+          "description": "思路标识",
+          "example": 417
+        },
+        "parentId": {
+          "type": "string",
+          "nullable": true,
+          "description": "父 ID，变量具有层级关系时记录父变量 ID"
+        },
+        "stepId": {
+          "type": "string",
+          "description": "与此变量关联的步骤 ID",
+          "example": "1909528709373546496"
+        },
+        "varType": {
+          "type": "integer",
+          "description": "变量类型",
+          "example": 1
+        },
+        "varLevel": {
+          "type": "integer",
+          "description": "变量级别",
+          "default": 0,
+          "example": 0
+        },
+        "varName": {
+          "type": "string",
+          "description": "变量名称，在 prompt 中通常用 {{varName}} 的形式引用",
+          "example": "ThinkPoint"
+        },
+        "varDesc": {
+          "type": "string",
+          "description": "变量描述",
+          "example": "Anything you wish to think about using a chain of thought."
+        },
+        "varFormat": {
+          "type": "string",
+          "description": "变量格式",
+          "default": "",
+          "example": "YYYY-MM-DD"
+        },
+        "defaultValue": {
+          "type": "string",
+          "nullable": true,
+          "description": "默认值"
+        },
+        "childs": {
+          "type": "array",
+          "nullable": true,
+          "description": "子变量（用于层级数据）",
+          "items": {
+            "$ref": "#/definitions/Variable Object"
+          }
+        }
+      }
+    },
+    "Term Object": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "唯一 ID",
+          "example": 767
+        },
+        "trainId": {
+          "type": "integer",
+          "description": "思路标识",
+          "example": 417
+        },
+        "name": {
+          "type": "string",
+          "description": "术语名称",
+          "example": "terrrrrr"
+        },
+        "description": {
+          "type": "string",
+          "description": "术语描述",
+          "default": "",
+          "example": "人工智能的简称"
+        }
+      }
+    }
+  }
+}

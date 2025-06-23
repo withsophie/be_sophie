@@ -1,0 +1,182 @@
+```yaml
+
+  index: G1
+  name: Binary Orthogonal   # Model name
+  ref_domain: geometry      # Domain of reference, must use domain term
+  visual: quadrant          # Visualization type, must use a term from ref_domain, e.g., "quadrant"
+
+  description: A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.  # Model description
+
+  inherits: base_model      # Inherit from base_model
+
+  entities:
+
+      - id: {axis_x}            # Unique identifier for the entity
+
+        prototype: axis       # Entity type, must use a term from ref_domain, e.g., "axis"
+
+        define_baseset: [primitive]  # Base set for the entity
+
+        define_prompt: The X-axis representing opposing conceptual vectors.  # Entity description
+
+        occur: 1              # Must have exactly one
+
+        inherits: base_entity
+
+      - id: {axis_y}
+
+        prototype: axis
+
+        define_baseset: [primitive]
+
+        define_prompt: The Y-axis representing another set of conceptual vectors.
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {x_positive}
+
+        prototype: vector
+
+        define_baseset: [{axis_x}]
+
+        define_prompt: Positive direction on X-axis. (e.g., future on a time axis, advantage in a competition)
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {x_negative}
+
+        prototype: vector
+
+        define_baseset: [{axis_x}]
+
+        define_prompt: Negative direction on X-axis. (e.g., past on a time axis, disadvantage in a competition)
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {y_positive}
+
+        prototype: vector
+
+        define_baseset: [{axis_y}]
+
+        define_prompt: Positive direction on Y-axis. (e.g., growth, opportunity)
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {y_negative}
+
+        prototype: vector
+
+        define_baseset: [{axis_y}]
+
+        define_prompt: Negative direction on Y-axis. (e.g., decline, threat)
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {quadrant_I}
+
+        prototype: quadrant
+
+        define_baseset: [{x_positive}, {y_positive}]
+
+        define_prompt: First quadrant (X positive, Y positive).
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {quadrant_II}
+
+        prototype: quadrant
+
+        define_baseset: [{x_negative}, {y_positive}]
+
+        define_prompt: Second quadrant (X negative, Y positive).
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {quadrant_III}
+
+        prototype: quadrant
+
+        define_baseset: [{x_negative}, {y_negative}]
+
+        define_prompt: Third quadrant (X negative, Y negative).
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {quadrant_IV}
+
+        prototype: quadrant
+
+        define_baseset: [{x_positive}, {y_negative}]    
+
+        define_prompt: Fourth quadrant (X positive, Y negative).
+
+        occur: 1
+
+        inherits: base_entity
+
+      - id: {x_flip}
+
+        prototype: symmetry   # Relation type, must use a term from ref_domain, e.g., "symmetry"
+
+        define_baseset: [axis_x]
+
+        define_prompt: Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).
+
+        occur: 1+
+
+        inherits: base_relation
+
+      - id: {y_flip}
+
+        prototype: symmetry
+
+        define_baseset: [axis_y]
+
+        define_prompt: Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).
+
+        occur: 1+
+
+        inherits: base_relation
+
+      - id: {diagonal_reverse}
+
+        prototype: symmetry
+
+        define_baseset: [x_flip, y_flip]
+
+        define_prompt: Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.
+
+        occur: 1+
+
+        inherits: base_relation
+
+      - id: {diagonal_swap}
+
+        prototype: symmetry
+
+        define_baseset: [x_flip, y_flip]
+
+        define_prompt: Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.
+
+        occur: 1+
+
+        inherits: base_relation
+
+```
