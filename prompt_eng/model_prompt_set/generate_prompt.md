@@ -70,6 +70,7 @@ format examples:
 -评估与判断：评定价值或真伪
 -澄清与整合：化繁为简，理清思绪
 -预测与假设：推断未知或未来
+* 推测用户希望为哪些entities确定具体的值
 2、深入理解Chain_draft中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,为这些属性赋值
 * define_baseset为[primitive]的entity是最关键的实体，请根据chian_draft中的domain，ThoughtResultType和ThinkPoint，来选出最合适的entity作为构建整个思路的核心。
 * 从primitive的entity开始，按照define_baseset的顺序，逐个具象化entites
@@ -141,11 +142,18 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 
 
 <!-- component start: HowtoMakeChain -->
-运用合适的思维模式（思路）进行思考，是一个将抽象的Model和具体要解决的问题相结合，经过逐步的具象化，形成一个具体的关于这个问题的entity组，并将这些entity里面的value，组合成一个合适的答案的过程。整个过程可以理解为一个main函数的执行过程，而思路就是这个main函数中的函数体部分，构建思路就是构建其中的函数体。其中entity的值，则是这个main函数在执行过程中需要调用的常量和变量，而赋值的过程则是entity函数。main函数的返回值就是这次思考的最终结果，思考时的背景信息被称作ThinkPoint，是main函数执行的输入参数。
-构建思路的过程是这样的：
-1、根据Model的框架设计，实现所有的entity函数，这个具体实现的entity函数库，被称为ModelInstance
-2、选择在思路中需要使用的entity，设计这些entity的value是如何通过对thinkpoint的计算来最终实现问题答案的。（设计main函数的函数体）
-3、构建返回值，也就是针对计算后的entity的value，选择合适的显示方案。
+运用合适的思维模式（思路）进行思考，是一个将输入的观点（ThinkPoint），通过设计好的思考步骤（step），将ThinkPoint和各种思考步骤中包含的变量（var）处理成最终结果的过程。整个过程可以理解为一个main函数的执行过程，而思路就是这个main函数中的函数体部分，构建思路就是构建其中的函数体，而构建函数体的语句，则是思考步骤（step）。
+思考步骤本质是个prompt，在这个prompt中可能包含ThinkPoint或其他变量，这些变量都是这个思考步骤的输入变量，每个prompt的处理结果将会生成一个新的输出变量。思考的最终结果就是这些输入和输出变量的组合。
+构建思路是可以参考模型定义的。模型定义是一组entity实体的定义，这些实体之间有着相互的关联关系，这些关联关系由define_baseset和define_prompt定义。
+构建思路的最重要的工作是编写思路构思（chain_draft）和选择合适的模型定义（entity_yaml_of_model）：
+思路构思起到了定义这个思路的作用，这个定义越清晰，自动生成的思路效果就越好，需要定义的内容有：
+1、定义这个思路想解决的问题所涉及的领域
+2、定义这个思路想解决的问题，也就是用户在使用这个思路思考的时候，用什么来作为输入条件，启动这个思考
+3、定义这个思路的输出结果类型，也就是用户在使用这个思路完成思考的时候，会得到一个什么类型的答案。
+4、定义这个思路的适用范围，也就是定义这个思路所沿用的模型的entities。entities的value可以在思路构建时指定，也可以在思考时动态指定。在思路构建时指定的entities越多，思路适用范围越窄，在思考时动态指定的entities越多，思路适用范围越广。
+通过对思路构思的分析，加上选择的模型定义，会生成一个比模型定义更加具体的模型实例（ModelInstance），这个模型实例确定的内容就是思路的基础数据。
+将模型实例（ModelInstance）组成一个从ThinkPoint开始的思考步骤链条（StepList），就完成了整个思路（chain）的构建工作。
+
 
 <!-- component end: HowtoMakeChain -->
 <!-- component start: GenChainRule -->
