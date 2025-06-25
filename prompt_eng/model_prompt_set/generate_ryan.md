@@ -1,91 +1,81 @@
 <!-- component start: main_prompt -->
-# Generate-Chain-withModel Prompt
-## 综述
-这是一个通过预先设计好的思路模型，来辅助用户生成思路的prompt。在这个生成的过程中，需要用到的概念和定义请参考目录和构成。
+# 生成思路（“<<name_of_chain>>”）的提示词（基于Model“<<name_of_model>>”）
+
+## 概述
+思路（Chain）一个用多步骤和多变量的方式来解决问题的过程。它是一个基于抽象模型（Model）的具体应用实例，用户可以用一个思路Chain解决某个领域的问题（ThinkPoint）。
+思路构思和模型实例化：根据用户提供的“思路构思（chain_draft）”，参考将要生成的目标思路的抽象模型Model的实体定义（entity_yaml_of_model），根据实例化生成规则（GenModelInstanceRule），创建模型Model的本思路实例化内容（ModelInstance）。
+思路生成：基于思路构思和模型实例，并根据思路生成规则（GenChainRule），按照指令要求（FinalOutput），生成符合规范（ChainSchema）的思路JSON（chain_json）的部分内容或全部内容。
+案例：抽象模型（Model）定义了“几何领域”的三个点和边(点和边都是实体)构成的三角形模型。用户构思（Draft）希望借鉴这个模型，解决“经济领域”的“经济三角形”问题。思路生成过程将会抽象思路实例化这个思路的模型，生成一个“经济领域”的“经济三角形”思路模型实例（ModelInstance），经济指标和经济指标影响对应Model的点和边。并根据用户的构思，生成一个符合规范的思路，用JSON（chain_json）格式表达出来。
 
 ## 目录和构成
-### 思路构思（chain_draft）：用户创建思路的构思文本
-<<component:Chain_draft>>
-### 模型定义 （entity_of_model）：创建思路时，参考Model的实体定义，描述了思路中涉及的各种实体及其属性
-<<component:entity_of_model>>
-### 思路概述 （chain_agenda)
-<<component:GenChainAgenda>>
-### 模型实例生成规则(GenModelInstance)：生成思路模型实例的方法
-<<component:GenModelInstanceRule>>
-### 思路生成规则(GenChain)：思路生成的规则
-<<component:GenChainRule>>
-### 思路格式规约 ：思路的JSON格式规范
-<<component:ChainSchema>>
-### 思路文件（chain_json）
-思路文件是一个严格符合思路格式规约schema的json文件。
+- chain_draft ：用户创建思路的构思文本
+- entity_yaml_of_model ：创建思路时，参考Model的实体定义，描述了思路中涉及的各种实体及其属性
+- GenModelInstanceRule ：生成思路模型实例的方法
+- GenChainRule ：思路生成的规则
+- ChainSchema ：思路的JSON格式规范
+- FinalOutput ：最终生成的思路JSON结果
 
-## 生成步骤
-生成思路的具体步骤是：
-1、用户为该思路命名为： <<name_of_chain>> 
-2、用户选择合适的模型定义：<<name_of_model>>
-3、用户输入自己对这个思路的思路构思
-4、深入理解用户的思路构思，套用模型定义，将思路构思中的内容形成模型实例（ModelInstance），具体的套用方法需要遵循模型实例生成规则
-5、将模型实例根据思路概述的方法，形成思路概述（chain_agenda）
-<<component:Fatal_Output02>>
-<!-- component end: main_prompt -->
-
-<!-- component start: Fatal_Output01 -->
-6、将模型实例按照思路格式规约的要求，将思路概述（chain_agenda）放入思路文件（chain_json）的summary字段中，然后生成整个思路文件。
-7、请将思路文件（chain_json）严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
-format examples:
+## 思路生成要求
+- 模型的实例化（ModelInstance）：模型实例化是指满足用户构思Draft要求的抽象Model的。分析Chain_draft，并按照Model的实体定义（entity_yaml_of_model）的内容，根据GenModelInstanceRule，生成ModelInstance。保存到Json结果的`rootObject.summary`字段中。如：
+``` json
 {
-  "rootObject": value is chain_json
+  "rootObject": {"summary":"此处是ModelInstance的内容"}
 }
-<!-- component end: Fatal_Output01 -->
-
-<!-- component start: Fatal_Output02 -->
-6、将思路概述（chain_agenda）和模型实例（ModelInstance）严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
-format examples:
-{
-  "rootObject": {"summary":chain_agenda},{"welcomeMessage":ModelInstance}
-}
-<!-- component end: Fatal_Output02 -->
-
-<!-- component start: Chain_draft -->
-``` txt
-<<chain_draft>>
 ```
+- 用ModelInstance的内容，遵循GenChainRule的规则，按照ChainSchema规定的格式，生成chain_json
+用ModelInstance的内容，按照GenChainAgenda的规则，生成Chain_Agenda，并将生成的内容存进chain_json的summary中。此部分内容暂时不生成。
+
+<<name_of_model>>
+## chain_draft
+<<component:Chain_draft>>
+
+## entity_yaml_of_model
+<<component:entity_yaml_of_model>>
+
+## GenModelInstanceRule
+<<component:GenModelInstanceRule>>
+
+## GenChainRule
+<<component:GenChainRule>>
+
+## ChainSchema
+<<component:ChainSchema>>
+
+<<component:GenChainAgenda>>
+
+## FinalOutput
+<<component:FinalOutput>>
 <!-- component end: Chain_draft -->
-<!-- component start: entity_of_model -->
+
+
+
+<!-- component start: entity_yaml_of_model -->
 ``` json
 <<entity_yaml_of_model>>
 ```
-<!-- component end: entity_of_model -->
+<!-- component end: entity_yaml_of_model -->
+
+
+
 <!-- component start: GenModelInstanceRule -->
 <<component:HowtoMakeChain>>
-#### 根据Chain_draft的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
-1、分析chain_draft：
-* 判断chain_draft想解决的问题涉及的领域，得出chain_draft.domain，这个领域应具备一定的抽象性；
-* 推测使用这个思路思考时，用户的输入变量是什么，也就是用户在用这个思路思考时，提出的具体要解决的问题是什么，这个问题被称为ThinkPoint，作为思考的起始条件。
-* 推测用户希望得出的思考结果的类型是什么。思考结果的类型分为如下几种，结果为：chain_draft.ThoughtResultType
--解决方案与策略：解决问题，达成目标
--决策与选择：从多项中选一
--理解与洞察：深度认知，看透本质
--创造与构想：产生新事物
--评估与判断：评定价值或真伪
--澄清与整合：化繁为简，理清思绪
--预测与假设：推断未知或未来
+### 根据Chain_draft的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
+1、判断其涉及的领域，生成domain，这个领域应具备一定的抽象性；
 2、深入理解Chain_draft中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,为这些属性赋值
-* define_baseset为[primitive]的entity是最关键的实体，请根据chian_draft中的domain，ThoughtResultType和ThinkPoint，来选出最合适的entity作为构建整个思路的核心。
-* 从primitive的entity开始，按照define_baseset的顺序，逐个具象化entites
-  * id：在原entity的id的基础上增加一个可以表达该entity的实体的词，用_分割开
-  * name：能表达该entity的实体的词
-  * prototype：原prototype和domain融合而成的一个词，既能继承原prototype所表达的关系，又能体现domain的具体领域
-  * define_baseset：按照原entity的规定，修改为实例化后的对应的entity的ID，如果原值为promitive，则为空
-  * define_prompt：定义如何用baseset中的entity来生成entity的value。例如：找出axis_a和axis_b的相同之处，作为这个entity的value的值。
-  * occur：和原entity一致
-  * inherits：原entity的id
-  * value：将define_baseset的值代入define_prompt中，得出的结果
+* 顺序先从define_baseset为[primitive]的entity开始
+* id：在原entity的id的基础上增加一个可以表达该entity的实体的词，用_分割开
+* name：能表达该entity的实体的词
+* prototype：原prototype和domain融合而成的一个词，既能继承原prototype所表达的关系，又能体现domain的具体领域
+* define_baseset：按照原entity的规定，修改为实例化后的对应的entity的ID，如果原值为promitive，则不变
+* define_prompt：定义一种方法，这种方法是表达如何对define_baseset中的entities进行处理，得出该entity的值的
+* occur：和原entity一致
+* inherits：原entity的id
+* value：将define_baseset的值代入define_prompt中，得出的结果
 3、分析实例化完成后的ModelInstance，再根据chain_draft的内容，找出这些entity中，所有需要和thinkpoint交互的，形成actual_entity。可以通过如下方法，判断entity是否存在和thinkpoint的交互关系：
 * chain_draft中显性说明的；
 * chain_draft中提出的要解决的问题中，解答问题明显需要的；
 * define_prompt中明显缺乏输入变量，无法直接得出结果的；
-#### 重构ModelInstance中的actual_entity
+### 重构ModelInstance中的actual_entity
 * 将ThinkPoint加入entity的define_baseset
 * 根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
 * 构建prompt的一些示例：
@@ -93,14 +83,14 @@ format examples:
  * 将thinkpoint和原baseset以某种形式进行结合，综合形成一个新的内容，作为entity的value
  * thinkpoint是待加工内容，baseset是加工方法，加工结果存入entity的value
 
-#### 生成模型实例（ModelInstance）
-将上面生成的结果形成一个json格式的ModelInstance
-
+### GenChainAgenda：将ModelInstance生成更易读的agenda
+<<component:GenChainAgenda>>
 <!-- component end: GenModelInstanceRule -->
 
+
+
 <!-- component start: GenChainAgenda -->
-#### GenChainAgenda
-通过理解ModelInstance中的内容，生成思路概述(chain_agenda)，这个思路概述(chain_agenda)的格式是：
+通过理解ModelInstance中的内容，理解这个思路的目标和适用范围，并按下文形成一个介绍：
 通过对您构思的理解，我们会帮您创建一个解决这类问题的思路，并展现在画布中，您可以在这个基本思路的基础之上，进行进一步的修改。
 思路名称： <<name_of_chain>> 
 思路领域：ModelInstance中的domain
@@ -120,7 +110,11 @@ format examples:
 对描述的修改可以继续细化您的需求，也可以直接指定思路的内容。
 如：请将axis_x中的define_prompt改为"The X-axis representing opposing conceptual vectors."
 
+请根据以上的内容要求和格式，生成Chain_Agenda。
 <!-- component end: GenChainAgenda -->
+
+
+
 
 <!-- component start: ModelSchemaRule -->
 Model是所有思路（chain）的父类，Base Model会用来作为所有Model的基础，而使用这些Model所创建的ModelInstance则是这些Model在某个领域的实例化的结果。
@@ -136,8 +130,8 @@ entities.define_prompt:用来描述如何使用define_baseset的value来生成�
 entities.occur:Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
 entities.value:entity的value
 entities.inherits:代表这个entity的父entity，其来自其父model所对应的entity
-
 <!-- component end: ModelSchemaRule -->
+
 
 
 <!-- component start: HowtoMakeChain -->
@@ -146,12 +140,14 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 1、根据Model的框架设计，实现所有的entity函数，这个具体实现的entity函数库，被称为ModelInstance
 2、选择在思路中需要使用的entity，设计这些entity的value是如何通过对thinkpoint的计算来最终实现问题答案的。（设计main函数的函数体）
 3、构建返回值，也就是针对计算后的entity的value，选择合适的显示方案。
-
 <!-- component end: HowtoMakeChain -->
+
+
+
+
+
 <!-- component start: GenChainRule -->
-
 #### Step 1：理解所有的entity，并根据Model建立变量
-
 * 将ModelInstance中的所有entity都生成为变量，
 * 变量的命名方法：varName=entityID
 * 所有变量必须依次记录进 `TotalvarList`（即变量清单）。
@@ -184,7 +180,27 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 * 最后做一次格式检查，要求输出的结果严格符合json的格式要求。
 
 <!-- component end: GenChainRule -->
+
+
+
+
 <!-- component start: ChainSchema -->
-### ChainSchema
 <<chain_schema>>
 <!-- component end: ChainSchema -->
+
+
+<!-- component start: FinalOutput -->
+请根据提供的信息生成结果，并严格按照以下JSON格式返回结果，不要添加任何额外的解释、注释或markdown标记：
+format examples:
+{
+  "rootObject": value is chain_json
+}
+<!-- component end: main_prompt -->
+
+
+
+<!-- component start: Chain_draft -->
+``` txt
+<<chain_draft>>
+```
+`<!-- component end: FinalOutput -->

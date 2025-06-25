@@ -1,0 +1,190 @@
+{
+    "welcomeMessage": {
+        "model": {
+            "entities": [
+                {
+                    "define_prompt": "The X-axis representing the spectrum of innovation capabilities within the team.",
+                    "occur": 1,
+                    "name": "innovation",
+                    "define_baseset": [
+                        "primitive"
+                    ],
+                    "id": "axis_x_innovation",
+                    "prototype": "axis_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "The Y-axis representing the spectrum of execution capabilities within the team.",
+                    "occur": 1,
+                    "name": "execution",
+                    "define_baseset": [
+                        "primitive"
+                    ],
+                    "id": "axis_y_execution",
+                    "prototype": "axis_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify the positive direction on the X-axis, representing high innovation capability.",
+                    "occur": 1,
+                    "name": "high_innovation",
+                    "define_baseset": [
+                        "axis_x_innovation"
+                    ],
+                    "id": "x_positive_high_innovation",
+                    "prototype": "vector_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify the negative direction on the X-axis, representing low innovation capability.",
+                    "occur": 1,
+                    "name": "low_innovation",
+                    "define_baseset": [
+                        "axis_x_innovation"
+                    ],
+                    "id": "x_negative_low_innovation",
+                    "prototype": "vector_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify the positive direction on the Y-axis, representing high execution capability.",
+                    "occur": 1,
+                    "name": "high_execution",
+                    "define_baseset": [
+                        "axis_y_execution"
+                    ],
+                    "id": "y_positive_high_execution",
+                    "prototype": "vector_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify the negative direction on the Y-axis, representing low execution capability.",
+                    "occur": 1,
+                    "name": "low_execution",
+                    "define_baseset": [
+                        "axis_y_execution"
+                    ],
+                    "id": "y_negative_low_execution",
+                    "prototype": "vector_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who exhibit both high innovation and high execution capabilities.",
+                    "occur": 1,
+                    "name": "achievers",
+                    "define_baseset": [
+                        "x_positive_high_innovation",
+                        "y_positive_high_execution"
+                    ],
+                    "id": "quadrant_I_achievers",
+                    "prototype": "quadrant_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who exhibit low innovation but high execution capabilities.",
+                    "occur": 1,
+                    "name": "dreamers",
+                    "define_baseset": [
+                        "x_negative_low_innovation",
+                        "y_positive_high_execution"
+                    ],
+                    "id": "quadrant_II_dreamers",
+                    "prototype": "quadrant_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who exhibit both low innovation and low execution capabilities.",
+                    "occur": 1,
+                    "name": "strugglers",
+                    "define_baseset": [
+                        "x_negative_low_innovation",
+                        "y_negative_low_execution"
+                    ],
+                    "id": "quadrant_III_strugglers",
+                    "prototype": "quadrant_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who exhibit high innovation but low execution capabilities.",
+                    "occur": 1,
+                    "name": "pragmatists",
+                    "define_baseset": [
+                        "x_positive_high_innovation",
+                        "y_negative_low_execution"
+                    ],
+                    "id": "quadrant_IV_pragmatists",
+                    "prototype": "quadrant_team_performance",
+                    "inherits": "base_entity",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who have symmetrical innovation capabilities (high vs. low) but similar execution capabilities.",
+                    "occur": "1+",
+                    "name": "innovation_symmetry",
+                    "define_baseset": [
+                        "axis_x_innovation"
+                    ],
+                    "id": "x_flip_innovation_symmetry",
+                    "prototype": "symmetry_team_performance",
+                    "inherits": "base_relation",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who have symmetrical execution capabilities (high vs. low) but similar innovation capabilities.",
+                    "occur": "1+",
+                    "name": "execution_symmetry",
+                    "define_baseset": [
+                        "axis_y_execution"
+                    ],
+                    "id": "y_flip_execution_symmetry",
+                    "prototype": "symmetry_team_performance",
+                    "inherits": "base_relation",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who have diagonally opposite capabilities (e.g., high innovation/high execution vs. low innovation/low execution).",
+                    "occur": "1+",
+                    "name": "diagonal_reverse",
+                    "define_baseset": [
+                        "x_flip_innovation_symmetry",
+                        "y_flip_execution_symmetry"
+                    ],
+                    "id": "diagonal_reverse_relationship",
+                    "prototype": "symmetry_team_performance",
+                    "inherits": "base_relation",
+                    "value": null
+                },
+                {
+                    "define_prompt": "Identify team members who have diagonally swapped capabilities (e.g., low innovation/high execution vs. high innovation/low execution).",
+                    "occur": "1+",
+                    "name": "diagonal_swap",
+                    "define_baseset": [
+                        "x_flip_innovation_symmetry",
+                        "y_flip_execution_symmetry"
+                    ],
+                    "id": "diagonal_swap_relationship",
+                    "prototype": "symmetry_team_performance",
+                    "inherits": "base_relation",
+                    "value": null
+                }
+            ],
+            "visual_prompt": "",
+            "name": "Binary Orthogonal",
+            "index": "G1",
+            "visual": "quadrant",
+            "description": "A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.",
+            "id": "binary_orthogonal",
+            "inherits": "base_model",
+            "ref_domain": "geometry"
+        }
+    }
+}

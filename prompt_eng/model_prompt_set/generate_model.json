@@ -11,16 +11,16 @@
       "entities": [
         {
           "id": "base_entity",
+          "name": "base_entity",
           "prototype": "point",
           "define_baseset": [],
           "define_prompt": "",
           "occur": 1,
           "inherits": null
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "base_relation",
+          "name": "base_relation",
           "prototype": "edge",
           "define_baseset": [],
           "define_prompt": "",
@@ -43,6 +43,7 @@
       "entities": [
         {
           "id": "{{axis_x}}",
+          "name": "{{axis_x}}",
           "prototype": "axis",
           "define_baseset": ["primitive"],
           "define_prompt": "The X-axis representing opposing conceptual vectors.",
@@ -51,6 +52,7 @@
         },
         {
           "id": "{{axis_y}}",
+          "name": "{{axis_y}}",
           "prototype": "axis",
           "define_baseset": ["primitive"],
           "define_prompt": "The Y-axis representing another set of conceptual vectors.",
@@ -59,6 +61,7 @@
         },
         {
           "id": "{{x_positive}}",
+          "name": "{{x_positive}}",
           "prototype": "vector",
           "define_baseset": ["{{axis_x}}"],
           "define_prompt": "Positive direction on X-axis. (e.g., future on a time axis, advantage in a competition)",
@@ -67,6 +70,7 @@
         },
         {
           "id": "{{x_negative}}",
+          "name": "{{x_negative}}",
           "prototype": "vector",
           "define_baseset": ["{{axis_x}}"],
           "define_prompt": "Negative direction on X-axis. (e.g., past on a time axis, disadvantage in a competition)",
@@ -75,6 +79,7 @@
         },
         {
           "id": "{{y_positive}}",
+          "name": "{{y_positive}}",
           "prototype": "vector",
           "define_baseset": ["{{axis_y}}"],
           "define_prompt": "Positive direction on Y-axis. (e.g., growth, opportunity)",
@@ -83,6 +88,7 @@
         },
         {
           "id": "{{y_negative}}",
+          "name": "{{y_negative}}",
           "prototype": "vector",
           "define_baseset": ["{{axis_y}}"],
           "define_prompt": "Negative direction on Y-axis. (e.g., decline, threat)",
@@ -91,6 +97,7 @@
         },
         {
           "id": "{{quadrant_I}}",
+          "name": "{{quadrant_I}}",
           "prototype": "quadrant",
           "define_baseset": ["{{x_positive}}", "{{y_positive}}"],
           "define_prompt": "First quadrant (X positive, Y positive).",
@@ -99,6 +106,7 @@
         },
         {
           "id": "{{quadrant_II}}",
+          "name": "{{quadrant_II}}",
           "prototype": "quadrant",
           "define_baseset": ["{{x_negative}}", "{{y_positive}}"],
           "define_prompt": "Second quadrant (X negative, Y positive).",
@@ -107,6 +115,7 @@
         },
         {
           "id": "{{quadrant_III}}",
+          "name": "{{quadrant_III}}",
           "prototype": "quadrant",
           "define_baseset": ["{{x_negative}}", "{{y_negative}}"],
           "define_prompt": "Third quadrant (X negative, Y negative).",
@@ -115,6 +124,7 @@
         },
         {
           "id": "{{quadrant_IV}}",
+          "name": "{{quadrant_IV}}",
           "prototype": "quadrant",
           "define_baseset": ["{{x_positive}}", "{{y_negative}}"],
           "define_prompt": "Fourth quadrant (X positive, Y negative).",
@@ -123,6 +133,7 @@
         },
         {
           "id": "{{x_flip}}",
+          "name": "{{x_flip}}",
           "prototype": "symmetry",
           "define_baseset": ["axis_x"],
           "define_prompt": "Horizontal axis symmetry—conversion between positive and negative X (e.g., Quadrant I <-> IV, II <-> III).",
@@ -131,6 +142,7 @@
         },
         {
           "id": "{{y_flip}}",
+          "name": "{{y_flip}}",
           "prototype": "symmetry",
           "define_baseset": ["axis_y"],
           "define_prompt": "Vertical axis symmetry—conversion between positive and negative Y (e.g., Quadrant I <-> II, IV <-> III).",
@@ -139,6 +151,7 @@
         },
         {
           "id": "{{diagonal_reverse}}",
+          "name": "{{diagonal_reverse}}",
           "prototype": "symmetry",
           "define_baseset": ["x_flip", "y_flip"],
           "define_prompt": "Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.",
@@ -147,6 +160,7 @@
         },
         {
           "id": "{{diagonal_swap}}",
+          "name": "{{diagonal_swap}}",
           "prototype": "symmetry",
           "define_baseset": ["x_flip", "y_flip"],
           "define_prompt": "Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.",
@@ -168,6 +182,7 @@
       "entities": [
         {
           "id": "{{node_a}}",
+          "name": "{{node_a}}",
           "prototype": "node",
           "define_baseset": ["primitive"],
           "define_prompt": "Vertex A in the triangle.",
@@ -176,6 +191,7 @@
         },
         {
           "id": "{{node_b}}",
+          "name": "{{node_b}}",
           "prototype": "node",
           "define_baseset": ["primitive"],
           "define_prompt": "Vertex B in the triangle.",
@@ -184,6 +200,7 @@
         },
         {
           "id": "{{node_c}}",
+          "name": "{{node_c}}",
           "prototype": "node",
           "define_baseset": ["primitive"],
           "define_prompt": "Vertex C in the triangle.",
@@ -192,6 +209,7 @@
         },
         {
           "id": "{{edge_ab}}",
+          "name": "{{edge_ab}}",
           "prototype": "edge",
           "define_baseset": ["{{node_a}}", "{{node_b}}"],
           "define_prompt": "Edge between node A and node B.",
@@ -200,6 +218,7 @@
         },
         {
           "id": "{{edge_bc}}",
+          "name": "{{edge_bc}}",
           "prototype": "edge",
           "define_baseset": ["{{node_b}}", "{{node_c}}"],
           "define_prompt": "Edge between node B and node C.",
@@ -208,6 +227,7 @@
         },
         {
           "id": "{{edge_ca}}",
+          "name": "{{edge_ca}}",
           "prototype": "edge",
           "define_baseset": ["{{node_c}}", "{{node_a}}"],
           "define_prompt": "Edge between node C and node A.",
@@ -229,6 +249,7 @@
       "entities": [
         {
           "id": "{{node_a}}",
+          "name": "{{node_a}}",
           "prototype": "point",
           "define_baseset": ["primitive"],
           "define_prompt": "Opposing Node A.",
@@ -237,6 +258,7 @@
         },
         {
           "id": "{{node_b}}",
+          "name": "{{node_b}}",
           "prototype": "point",
           "define_baseset": ["primitive"],
           "define_prompt": "Opposing Node B.",
@@ -245,6 +267,7 @@
         },
         {
           "id": "{{change_path}}",
+          "name": "{{change_path}}",
           "prototype": "segment",
           "define_baseset": ["{{node_a}}", "{{node_b}}"],
           "define_prompt": "The path of change (line segment) connecting Node A and Node B.",
@@ -253,16 +276,16 @@
         },
         {
           "id": "{{equilibrium}}",
+          "name": "{{equilibrium}}",
           "prototype": "point",
           "define_baseset": ["{{node_a}}", "{{node_b}}", "{{change_path}}"],
           "define_prompt": "Dynamic equilibrium point between Node A and Node B.",
           "occur": 1,
           "inherits": "base_entity"
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "{{activation_a_to_b}}",
+          "name": "{{activation_a_to_b}}",
           "prototype": "function",
           "define_baseset": ["{{node_a}}"],
           "define_prompt": "Function mapping from Node A to Node B (A influences B).",
@@ -271,6 +294,7 @@
         },
         {
           "id": "{{activation_b_to_a}}",
+          "name": "{{activation_b_to_a}}",
           "prototype": "function",
           "define_baseset": ["{{node_b}}"],
           "define_prompt": "Function mapping from Node B to Node A (B influences A).",
@@ -279,6 +303,7 @@
         },
         {
           "id": "{{negative_feedback_a_to_b}}",
+          "name": "{{negative_feedback_a_to_b}}",
           "prototype": "function",
           "define_baseset": ["{{node_a}}"],
           "define_prompt": "Negative feedback from Node A to Node B (suppresses A, promotes B).",
@@ -287,6 +312,7 @@
         },
         {
           "id": "{{negative_feedback_b_to_a}}",
+          "name": "{{negative_feedback_b_to_a}}",
           "prototype": "function",
           "define_baseset": ["{{node_b}}"],
           "define_prompt": "Negative feedback from Node B to Node A (suppresses B, promotes A).",
@@ -308,16 +334,16 @@
       "entities": [
         {
           "id": "{{set}}",
+          "name": "{{set}}",
           "prototype": "set",
           "define_baseset": ["primitive"],
           "define_prompt": "user defined set",
           "occur": "n+",
           "inherits": "base_entity"
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "{{intersection_pair}}",
+          "name": "{{intersection_pair}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_i}}", "{{set_j}}"],
           "define_prompt": "Intersection of any two sets",
@@ -326,6 +352,7 @@
         },
         {
           "id": "{{intersection_n}}",
+          "name": "{{intersection_n}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_1}}", "{{set_2}}", "...", "{{set_n}}"],
           "define_prompt": "Intersection of any n sets",
@@ -334,6 +361,7 @@
         },
         {
           "id": "{{intersection_all}}",
+          "name": "{{intersection_all}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_1}}", "{{set_2}}", "...", "{{set_n}}"],
           "define_prompt": "Intersection of all sets",
@@ -342,6 +370,7 @@
         },
         {
           "id": "{{union_pair}}",
+          "name": "{{union_pair}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_i}}", "{{set_j}}"],
           "define_prompt": "Union of any two sets",
@@ -350,6 +379,7 @@
         },
         {
           "id": "{{union_n}}",
+          "name": "{{union_n}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_1}}", "{{set_2}}", "...", "{{set_n}}"],
           "define_prompt": "Union of any n sets",
@@ -358,6 +388,7 @@
         },
         {
           "id": "{{union_all}}",
+          "name": "{{union_all}}",
           "prototype": "set_operation",
           "define_baseset": ["{{set_1}}", "{{set_2}}", "...", "{{set_n}}"],
           "define_prompt": "Union of all sets",
@@ -379,6 +410,7 @@
       "entities": [
         {
           "id": "{{origin}}",
+          "name": "{{origin}}",
           "prototype": "point",
           "define_baseset": ["primitive"],
           "define_prompt": "The central point (origin) of the circle.",
@@ -387,6 +419,7 @@
         },
         {
           "id": "{{radius}}",
+          "name": "{{radius}}",
           "prototype": "segment",
           "define_baseset": ["{{origin}}"],
           "define_prompt": "The radius starting from the center (origin) and extending toward the boundary.",
@@ -395,6 +428,7 @@
         },
         {
           "id": "{{boundary}}",
+          "name": "{{boundary}}",
           "prototype": "circle",
           "define_baseset": ["{{origin}}", "{{radius}}"],
           "define_prompt": "The boundary (circumference) of the circle.",
@@ -403,6 +437,7 @@
         },
         {
           "id": "{{interior}}",
+          "name": "{{interior}}",
           "prototype": "region",
           "define_baseset": ["{{boundary}}"],
           "define_prompt": "The interior region within the boundary.",
@@ -411,16 +446,16 @@
         },
         {
           "id": "{{exterior}}",
+          "name": "{{exterior}}",
           "prototype": "region",
           "define_baseset": ["{{boundary}}"],
           "define_prompt": "The exterior region outside the boundary.",
           "occur": 1,
           "inherits": "base_entity"
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "{{expansion}}",
+          "name": "{{expansion}}",
           "prototype": "function",
           "define_baseset": ["{{origin}}", "{{boundary}}"],
           "define_prompt": "Expansion from the center toward the boundary.",
@@ -429,6 +464,7 @@
         },
         {
           "id": "{{contraction}}",
+          "name": "{{contraction}}",
           "prototype": "function",
           "define_baseset": ["{{boundary}}", "{{origin}}"],
           "define_prompt": "Contraction from the boundary toward the center.",
@@ -450,6 +486,7 @@
       "entities": [
         {
           "id": "{{row_define_set}}",
+          "name": "{{row_define_set}}",
           "prototype": "set",
           "define_baseset": ["primitive"],
           "define_prompt": "The set that defines all possible row entities (e.g., countries, products).",
@@ -458,6 +495,7 @@
         },
         {
           "id": "{{col_define_set}}",
+          "name": "{{col_define_set}}",
           "prototype": "set",
           "define_baseset": ["primitive"],
           "define_prompt": "The set that defines all possible column entities (e.g., years, indicators).",
@@ -466,6 +504,7 @@
         },
         {
           "id": "{{dimension_row}}",
+          "name": "{{dimension_row}}",
           "prototype": "dimension",
           "define_baseset": ["{{row_define_set}}"],
           "define_prompt": "Row dimension, each value is an entity from row_define_set.",
@@ -474,6 +513,7 @@
         },
         {
           "id": "{{dimension_col}}",
+          "name": "{{dimension_col}}",
           "prototype": "dimension",
           "define_baseset": ["{{col_define_set}}"],
           "define_prompt": "Column dimension, each value is an entity from col_define_set.",
@@ -482,16 +522,16 @@
         },
         {
           "id": "{{cell_entity}}",
+          "name": "{{cell_entity}}",
           "prototype": "cell",
           "define_baseset": ["{{dimension_row}}", "{{dimension_col}}"],
           "define_prompt": "A cell defined by the intersection of a row entity and a column entity.",
           "occur": "n+",
           "inherits": "base_entity"
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "{{matrix_cross}}",
+          "name": "{{matrix_cross}}",
           "prototype": "relation",
           "define_baseset": ["{{dimension_row}}", "{{dimension_col}}"],
           "define_prompt": "Cross-dimension relation between row and column in the matrix.",
@@ -513,6 +553,7 @@
       "entities": [
         {
           "id": "{{define_set}}",
+          "name": "{{define_set}}",
           "prototype": "set",
           "define_baseset": ["primitive"],
           "define_prompt": "The set that defines both row and column entities (e.g., countries, people).",
@@ -521,6 +562,7 @@
         },
         {
           "id": "{{dimension}}",
+          "name": "{{dimension}}",
           "prototype": "dimension",
           "define_baseset": ["{{define_set}}"],
           "define_prompt": "Both row and column dimensions, each value is an entity from define_set.",
@@ -529,16 +571,16 @@
         },
         {
           "id": "{{cell_entity}}",
+          "name": "{{cell_entity}}",
           "prototype": "cell",
           "define_baseset": ["{{dimension}}", "{{dimension}}"],
           "define_prompt": "Cell representing the symmetric relationship between two entities from define_set.",
           "occur": "1+",
           "inherits": "base_entity"
-        }
-      ],
-      "relations": [
+        },
         {
           "id": "{{matrix_comparison}}",
+          "name": "{{matrix_comparison}}",
           "prototype": "relation",
           "define_baseset": ["{{dimension}}", "{{dimension}}"],
           "define_prompt": "Symmetric comparison relation between two entities in each cell.",
