@@ -3,188 +3,192 @@
         "model": {
             "entities": [
                 {
-                    "define_prompt": "The X-axis representing the spectrum of innovation capabilities within the team.",
+                    "define_prompt": "The X-axis representing opposing conceptual vectors related to time.",
                     "occur": 1,
-                    "name": "innovation",
+                    "name": "时间维度",
                     "define_baseset": [
-                        "primitive"
+                        ""
                     ],
-                    "id": "axis_x_innovation",
-                    "prototype": "axis_team_performance",
+                    "id": "axis_x_time",
+                    "prototype": "dimension",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": "时间维度"
                 },
                 {
-                    "define_prompt": "The Y-axis representing the spectrum of execution capabilities within the team.",
+                    "define_prompt": "The Y-axis representing another set of conceptual vectors related to tasks.",
                     "occur": 1,
-                    "name": "execution",
+                    "name": "任务维度",
                     "define_baseset": [
-                        "primitive"
+                        ""
                     ],
-                    "id": "axis_y_execution",
-                    "prototype": "axis_team_performance",
+                    "id": "axis_y_task",
+                    "prototype": "dimension",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": "任务维度"
                 },
                 {
-                    "define_prompt": "Identify the positive direction on the X-axis, representing high innovation capability.",
+                    "define_prompt": "Positive direction on X-axis representing urgency. From ThinkPoint, extract tasks that are urgent.",
                     "occur": 1,
-                    "name": "high_innovation",
+                    "name": "紧急",
                     "define_baseset": [
-                        "axis_x_innovation"
+                        "axis_x_time",
+                        "ThinkPoint"
                     ],
-                    "id": "x_positive_high_innovation",
-                    "prototype": "vector_team_performance",
+                    "id": "x_positive_urgent",
+                    "prototype": "vector",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify the negative direction on the X-axis, representing low innovation capability.",
+                    "define_prompt": "Negative direction on X-axis representing non-urgency. From ThinkPoint, extract tasks that are not urgent.",
                     "occur": 1,
-                    "name": "low_innovation",
+                    "name": "不紧急",
                     "define_baseset": [
-                        "axis_x_innovation"
+                        "axis_x_time",
+                        "ThinkPoint"
                     ],
-                    "id": "x_negative_low_innovation",
-                    "prototype": "vector_team_performance",
+                    "id": "x_negative_not_urgent",
+                    "prototype": "vector",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify the positive direction on the Y-axis, representing high execution capability.",
+                    "define_prompt": "Positive direction on Y-axis representing importance. From ThinkPoint, extract tasks that are important.",
                     "occur": 1,
-                    "name": "high_execution",
+                    "name": "重要",
                     "define_baseset": [
-                        "axis_y_execution"
+                        "axis_y_task",
+                        "ThinkPoint"
                     ],
-                    "id": "y_positive_high_execution",
-                    "prototype": "vector_team_performance",
+                    "id": "y_positive_important",
+                    "prototype": "vector",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify the negative direction on the Y-axis, representing low execution capability.",
+                    "define_prompt": "Negative direction on Y-axis representing non-importance. From ThinkPoint, extract tasks that are not important.",
                     "occur": 1,
-                    "name": "low_execution",
+                    "name": "不重要",
                     "define_baseset": [
-                        "axis_y_execution"
+                        "axis_y_task",
+                        "ThinkPoint"
                     ],
-                    "id": "y_negative_low_execution",
-                    "prototype": "vector_team_performance",
+                    "id": "y_negative_not_important",
+                    "prototype": "vector",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who exhibit both high innovation and high execution capabilities.",
+                    "define_prompt": "First quadrant (Urgent, Important). Tasks that need immediate attention and contribute significantly to goals. Combine {{x_positive_urgent}} and {{y_positive_important}}.",
                     "occur": 1,
-                    "name": "achievers",
+                    "name": "紧急且重要",
                     "define_baseset": [
-                        "x_positive_high_innovation",
-                        "y_positive_high_execution"
+                        "x_positive_urgent",
+                        "y_positive_important"
                     ],
-                    "id": "quadrant_I_achievers",
-                    "prototype": "quadrant_team_performance",
+                    "id": "quadrant_I_urgent_important",
+                    "prototype": "quadrant",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who exhibit low innovation but high execution capabilities.",
+                    "define_prompt": "Second quadrant (Not Urgent, Important). Tasks that contribute significantly to goals but don't require immediate attention. Combine {{x_negative_not_urgent}} and {{y_positive_important}}.",
                     "occur": 1,
-                    "name": "dreamers",
+                    "name": "不紧急但重要",
                     "define_baseset": [
-                        "x_negative_low_innovation",
-                        "y_positive_high_execution"
+                        "x_negative_not_urgent",
+                        "y_positive_important"
                     ],
-                    "id": "quadrant_II_dreamers",
-                    "prototype": "quadrant_team_performance",
+                    "id": "quadrant_II_not_urgent_important",
+                    "prototype": "quadrant",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who exhibit both low innovation and low execution capabilities.",
+                    "define_prompt": "Third quadrant (Not Urgent, Not Important). Tasks that don't contribute significantly to goals and don't require immediate attention. Combine {{x_negative_not_urgent}} and {{y_negative_not_important}}.",
                     "occur": 1,
-                    "name": "strugglers",
+                    "name": "不紧急且不重要",
                     "define_baseset": [
-                        "x_negative_low_innovation",
-                        "y_negative_low_execution"
+                        "x_negative_not_urgent",
+                        "y_negative_not_important"
                     ],
-                    "id": "quadrant_III_strugglers",
-                    "prototype": "quadrant_team_performance",
+                    "id": "quadrant_III_not_urgent_not_important",
+                    "prototype": "quadrant",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who exhibit high innovation but low execution capabilities.",
+                    "define_prompt": "Fourth quadrant (Urgent, Not Important). Tasks that require immediate attention but don't contribute significantly to goals. Combine {{x_positive_urgent}} and {{y_negative_not_important}}.",
                     "occur": 1,
-                    "name": "pragmatists",
+                    "name": "紧急但不重要",
                     "define_baseset": [
-                        "x_positive_high_innovation",
-                        "y_negative_low_execution"
+                        "x_positive_urgent",
+                        "y_negative_not_important"
                     ],
-                    "id": "quadrant_IV_pragmatists",
-                    "prototype": "quadrant_team_performance",
+                    "id": "quadrant_IV_urgent_not_important",
+                    "prototype": "quadrant",
                     "inherits": "base_entity",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who have symmetrical innovation capabilities (high vs. low) but similar execution capabilities.",
+                    "define_prompt": "Horizontal axis symmetry—conversion between urgent and not urgent (e.g., Quadrant I <-> IV, II <-> III).",
                     "occur": "1+",
-                    "name": "innovation_symmetry",
+                    "name": "时间管理反转",
                     "define_baseset": [
-                        "axis_x_innovation"
+                        "axis_x_time"
                     ],
-                    "id": "x_flip_innovation_symmetry",
-                    "prototype": "symmetry_team_performance",
+                    "id": "x_flip_time_management",
+                    "prototype": "symmetry",
                     "inherits": "base_relation",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who have symmetrical execution capabilities (high vs. low) but similar innovation capabilities.",
+                    "define_prompt": "Vertical axis symmetry—conversion between important and not important (e.g., Quadrant I <-> II, IV <-> III).",
                     "occur": "1+",
-                    "name": "execution_symmetry",
+                    "name": "任务管理反转",
                     "define_baseset": [
-                        "axis_y_execution"
+                        "axis_y_task"
                     ],
-                    "id": "y_flip_execution_symmetry",
-                    "prototype": "symmetry_team_performance",
+                    "id": "y_flip_task_management",
+                    "prototype": "symmetry",
                     "inherits": "base_relation",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who have diagonally opposite capabilities (e.g., high innovation/high execution vs. low innovation/low execution).",
+                    "define_prompt": "Diagonal reverse—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant I (++) to Quadrant III (--), i.e., both axes flipped.",
                     "occur": "1+",
-                    "name": "diagonal_reverse",
+                    "name": "时间任务对角反转",
                     "define_baseset": [
-                        "x_flip_innovation_symmetry",
-                        "y_flip_execution_symmetry"
+                        "x_flip_time_management",
+                        "y_flip_task_management"
                     ],
-                    "id": "diagonal_reverse_relationship",
-                    "prototype": "symmetry_team_performance",
+                    "id": "diagonal_reverse_time_task",
+                    "prototype": "symmetry",
                     "inherits": "base_relation",
-                    "value": null
+                    "value": ""
                 },
                 {
-                    "define_prompt": "Identify team members who have diagonally swapped capabilities (e.g., low innovation/high execution vs. high innovation/low execution).",
+                    "define_prompt": "Diagonal swap—equivalent to applying both x_flip and y_flip in sequence. Maps Quadrant II (-+) to Quadrant IV (+-), i.e., both axes flipped but swaps the off-diagonal quadrants.",
                     "occur": "1+",
-                    "name": "diagonal_swap",
+                    "name": "时间任务对角交换",
                     "define_baseset": [
-                        "x_flip_innovation_symmetry",
-                        "y_flip_execution_symmetry"
+                        "x_flip_time_management",
+                        "y_flip_task_management"
                     ],
-                    "id": "diagonal_swap_relationship",
-                    "prototype": "symmetry_team_performance",
+                    "id": "diagonal_swap_time_task",
+                    "prototype": "symmetry",
                     "inherits": "base_relation",
-                    "value": null
+                    "value": ""
                 }
             ],
             "visual_prompt": "",
+            "domain": "时间管理",
             "name": "Binary Orthogonal",
             "index": "G1",
             "visual": "quadrant",
             "description": "A quadrant model using two conceptual axes (X and Y) to form four composite quadrant entities.",
             "id": "binary_orthogonal",
-            "inherits": "base_model",
-            "ref_domain": "geometry"
+            "inherits": "base_model"
         }
     }
 }

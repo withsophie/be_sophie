@@ -60,9 +60,9 @@ format examples:
 <<component:HowtoMakeChain>>
 #### 根据Chain_draft的内容对entity_yaml_of_model的内容进行实例化，生成ModelInstance的内容：
 1、分析chain_draft：
-* 判断chain_draft想解决的问题涉及的领域，得出chain_draft.domain，这个领域应具备一定的抽象性；
+* 判断chain_draft想解决的问题涉及的领域，为ModelInstance形成新的domain，这个领域应具备一定的抽象性；
 * 推测使用这个思路思考时，用户的输入变量是什么，也就是用户在用这个思路思考时，提出的具体要解决的问题是什么，这个问题被称为ThinkPoint，作为思考的起始条件。
-* 推测用户希望得出的思考结果的类型是什么。思考结果的类型分为如下几种，结果为：chain_draft.ThoughtResultType
+* 推测用户希望得出的思考结果的类型是什么。思考结果的类型分为如下几种，结果为：ThoughtResultType
 -解决方案与策略：解决问题，达成目标
 -决策与选择：从多项中选一
 -理解与洞察：深度认知，看透本质
@@ -70,25 +70,28 @@ format examples:
 -评估与判断：评定价值或真伪
 -澄清与整合：化繁为简，理清思绪
 -预测与假设：推断未知或未来
-* 推测用户希望为哪些entities确定具体的值
-2、深入理解Chain_draft中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,为这些属性赋值
+* 推测用户需要为哪些entities确定具体的值，这些entity被列入static_entities。可以通过如下方法，判断entity是否应该确定具体的值：
+  * chain_draft中显性说明的；
+  * chain_draft中提出的要解决的问题中，明显需要其有值的；
+  * 作为domain中显而易见应该成为默认已知的领域知识
+2、深入理解Chain_draft中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,以生成新的基于原Model的ModelInstance。
+* 根据domain，统一修改ModelInstance中的prototype：生成的新prototype需要遵循抽象结构映射 (Abstract Structural Mapping)规则，这个规则具体是：
+    * 此规则确保 prototype 的底层分类结构在继承时保持不变。具体包含以下三个约束：
+      * 数量对等 (Quantity Equivalence): 新模型中的 prototype 类型数量必须与原模型完全相同。
+      * 关系对等 (Relational Mapping): 新旧模型的 prototype 类型之间必须存在一个稳定的一对一对应关系。即原模型中的每一个类型，在新模型中都有且仅有一个功能对应的类型。
+      * 功能继承 (Functional Inheritance): 每个新类型必须继承其对应旧类型的抽象功能角色。例如，如果旧类型在系统中的角色是“催化剂”，那么其对应的新类型也必须扮演“催化剂”的角色，无论它最终被命名为什么。
+    * prototype的命名原则是：在domain的语境下，寻找一个最能体现其功能角色的词汇来命名。这个过程必须满足“新名称与新领域的关系”等同于“旧名称与旧领域的关系”。
 * define_baseset为[primitive]的entity是最关键的实体，请根据chian_draft中的domain，ThoughtResultType和ThinkPoint，来选出最合适的entity作为构建整个思路的核心。
 * 从primitive的entity开始，按照define_baseset的顺序，逐个具象化entites
   * id：在原entity的id的基础上增加一个可以表达该entity的实体的词，用_分割开
-  * name：能表达该entity的实体的词
-  * prototype：原prototype和domain融合而成的一个词，既能继承原prototype所表达的关系，又能体现domain的具体领域
-  * define_baseset：按照原entity的规定，修改为实例化后的对应的entity的ID，如果原值为promitive，则为空
+  * name：在domain的语境下，寻找一个最能体现其功能角色的词汇来命名
+  * define_baseset：按照原Model的define_baseset，对其进行生成，结构保持一致，名称替换为新的ModelInstance中的各个新entity。如果原Model中为primitive的，则为“”。
   * define_prompt：定义如何用baseset中的entity来生成entity的value。例如：找出axis_a和axis_b的相同之处，作为这个entity的value的值。
   * occur：和原entity一致
   * inherits：原entity的id
-  * value：将define_baseset的值代入define_prompt中，得出的结果
-3、分析实例化完成后的ModelInstance，再根据chain_draft的内容，找出这些entity中，所有需要和thinkpoint交互的，形成actual_entity。可以通过如下方法，判断entity是否存在和thinkpoint的交互关系：
-* chain_draft中显性说明的；
-* chain_draft中提出的要解决的问题中，解答问题明显需要的；
-* define_prompt中明显缺乏输入变量，无法直接得出结果的；
-#### 重构ModelInstance中的actual_entity
-* 将ThinkPoint加入entity的define_baseset
-* 根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
+  * value：将define_baseset的值代入define_prompt中，得出的结果.所有在static_entities里的entity，value的值要被具体生成出来，其它的为“”。
+3、分析实例化完成后的ModelInstance，找出这些entity中，不在static_entities中的，这些都是在思考时需要thinkpoint作为输入变量，才能得出结果的。这些entity，在它们的define_baseset后，增加ThinkPoint作为baseset中最后一个参数。
+4、根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
 * 构建prompt的一些示例：
  * 将thinkpoint中符合baseset条件的内容筛选出，构建成列表，作为entity的value
  * 将thinkpoint和原baseset以某种形式进行结合，综合形成一个新的内容，作为entity的value
@@ -98,6 +101,25 @@ format examples:
 将上面生成的结果形成一个json格式的ModelInstance
 
 <!-- component end: GenModelInstanceRule -->
+<!-- component start: TranslateRules -->
+
+这是一些常用的转换策略或生成规则的定义，可以在具体的生成场景中单独或组合使用：
+* 抽象结构保持（Abstract Structure Preservation）：
+规则：新模型的 prototype 分类体系，必须在数量、对应关系和功能角色上，与原模型形成严格的一对一映射。此规则不关心类型的具体名称。
+* 基于领域的语义重塑（Domain-based Semantic Re-contextualization）：
+规则：将一个领域的概念和关系，映射到另一个领域中功能对等的概念和关系上。
+* 语义等价转换 (Paraphrasing)
+规则: 改变表达方式（词汇、句式），但保持核心意义完全不变。
+* 泛化（Generalization）
+从具体到抽象 (例如：贵宾犬 -> 狗 -> 哺乳动物)。
+* 特化（Specialization）
+从抽象到具体 (例如：交通工具 -> 汽车 -> 电动汽车)。
+* 约束满足 (Constraint Satisfaction)
+规则: 在满足一系列给定约束条件的前提下，生成内容。
+* 因果与反事实推理 (Causal & Counterfactual Reasoning)
+规则: 根据现有情况，推断可能的原因、结果，或者在某个条件改变时可能发生的“平行宇宙”。
+
+<!-- component end: TranslateRules -->
 
 <!-- component start: GenChainAgenda -->
 #### GenChainAgenda
@@ -131,7 +153,7 @@ inherits：代表其继承的父对象，继承者属于被继承的一次具象
 entities：代表思路中的各种实体，实例化的过程就是实体被逐渐具体化的过程,在Model中可以有多个entities
 entities.id:这个entity的ID，用作引用时的索引
 entities.name:entity的名称，会表达entity的含义
-entities.prototype:entity的类型，类型是一个父entity的prototype在ref_doamin这个领域的一个具体表达
+entities.prototype:entity的类型，类型是一个父entity的prototype在doamin这个领域的一个具体表达
 entities.define_baseset:形成entity的value的输入参数的定义，如果=primitive，则代表entity为常量，具体的值由define_prompt来决定
 entities.define_prompt:用来描述如何使用define_baseset的value来生成该entity的value
 entities.occur:Occurrence constraint: 1 (exactly one), n (exactly n), n+ (at least n), n* (up to n, optional).
