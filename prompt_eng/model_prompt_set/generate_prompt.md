@@ -70,10 +70,6 @@ format examples:
 -评估与判断：评定价值或真伪
 -澄清与整合：化繁为简，理清思绪
 -预测与假设：推断未知或未来
-* 推测用户需要为哪些entities确定具体的值，这些entity被列入static_entities。可以通过如下方法，判断entity是否应该确定具体的值：
-  * chain_draft中显性说明的；
-  * chain_draft中提出的要解决的问题中，明显需要其有值的；
-  * 作为domain中显而易见应该成为默认已知的领域知识
 2、深入理解Chain_draft中的内容，并根据如下规则，实例化entity_yaml_of_model中的entites,以生成新的基于原Model的ModelInstance。
 * 根据domain，统一修改ModelInstance中的prototype：生成的新prototype需要遵循抽象结构映射 (Abstract Structural Mapping)规则，这个规则具体是：
     * 此规则确保 prototype 的底层分类结构在继承时保持不变。具体包含以下三个约束：
@@ -90,7 +86,8 @@ format examples:
   * occur：和原entity一致
   * inherits：原entity的id
   * value：将define_baseset的值代入define_prompt中，得出的结果.所有在static_entities里的entity，value的值要被具体生成出来，其它的为“”。
-3、分析实例化完成后的ModelInstance，找出这些entity中，不在static_entities中的，这些都是在思考时需要thinkpoint作为输入变量，才能得出结果的。这些entity，在它们的define_baseset后，增加ThinkPoint作为baseset中最后一个参数。
+3、分析实例化完成后的ModelInstance，根据chain_draft的内容，从所有的entity中，选出在chain_draft中已经可以通过prompt，无需外部输入则可以生成value的entity，这些entity被列入static_entities。用这些entity的name生成static_entities，并使ModelInstance的 "visual_prompt"的内容为static_entities。
+找出这些entity中，不在static_entities中的，这些都是在思考时需要thinkpoint作为输入变量，才能得出结果的。这些entity，在它们的define_baseset后，增加ThinkPoint作为baseset中最后一个参数。
 4、根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
 * 构建prompt的一些示例：
  * 将thinkpoint中符合baseset条件的内容筛选出，构建成列表，作为entity的value
@@ -130,13 +127,14 @@ format examples:
 思路所采用的模型：<<name_of_model>>，并介绍一下这个模型的特点
 思路能处理的问题类型：根据chain_draft的描述和ModelInstance，推测这个思路能解决哪些类型的问题
 思考输入内容：请根据chain_draft的描述和ModelInstance,推测运行这个思路（思考）时期待的用户输入
-构建这个思路的关键实体为：ModelInstance中baseset为[primitive]的entity；
+思路输出结果的类型： ThoughtResultType
+构建这个思路的关键实体为：ModelInstance中baseset为[primitive]的entity（显示name）；
 关键实体介绍：根据关键实体的define_prompt，介绍关键实体的生成函数
 关键实体的默认值：baseset为[primitive]的entity的value
-处理思考输入的实体：actual_entity中的所有entity
-处理思考输入的实体的介绍：根据处理思考输入的实体的define_prompt，介绍它们的生成函数
-过渡实体：并未被列入actual_entity中的其它entity
-过渡实体的介绍：根据过渡实体的define_prompt，介绍过渡实体的生成函数
+思路预设的实体：static_entities中的所有实体，显示它们的name和value
+思考输入的实体：不包含在static_entities中的entity，显示它们的name和value
+思考输入的实体的介绍：根据处理思考输入的实体的define_prompt，介绍它们的生成函数
+
 
 这些内容将会在画布中创建成思路，实体会创建成变量，define_prompt会作为步骤的prompt，这些内容可以在画布中再次进行修改。
 如果您对这些内容不满意，也可以对chain_draft的描述进行修改，这些内容将会按照您的要求重新生成。

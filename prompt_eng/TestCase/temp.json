@@ -1,0 +1,201 @@
+{
+    "rootObject": {
+        "summary": "通过对您构思的理解，我们会帮您创建一个解决这类问题的思路，并展现在画布中，您可以在这个基本思路的基础之上，进行进一步的修改。\n\n思路名称：高效时间管理法\n思路领域：时间管理\n思路所采用的模型：G1 (binary_orthogonal)，这是一个经典的二元正交象限模型。它通过设定两个相互垂直的评价轴，将问题空间划分为四个象限，非常适合对事物进行多维度分类和决策分析，其最经典的应用就是“艾森豪威尔矩阵”。\n思路能处理的问题类型：决策与选择。本思路旨在帮助您对繁杂的任务进行有效的优先级排序，清晰地识别出哪些任务需要立即处理（紧急且重要），哪些需要投入时间做长期规划（重要但不紧急），哪些可以授权他人（紧急但不重要），以及哪些可以暂时忽略（不紧急也不重要）。\n思考输入内容：您需要管理的待办事项列表（ThinkPoint）。\n思路输出结果的类型：解决方案与策略。\n\n构建这个思路的关键实体为：\n- 实体“时间维度”：作为模型的X轴，代表任务在时间上的属性。其默认值为“时间维度”。\n- 实体“任务维度”：作为模型的Y轴，代表任务对目标的重要性。其默认值为“任务维度”。\n\n思路预设的实体（静态实体）：\n- 时间维度: 其值为“时间维度”，是分类的基础坐标轴。\n- 任务维度: 其值为“任务维度”，是分类的另一个基础坐标轴。\n\n思考输入的实体（动态实体）：\n- 紧急/不紧急：根据“时间维度”，从您的待办事项（ThinkPoint）中筛选出具有相应时间属性的任务。\n- 重要/不重要：根据“任务维度”，从您的待办事项（ThinkPoint）中筛选出具有相应重要性属性的任务。\n- 四个象限（紧急且重要、不紧急但重要等）：这些实体将根据“紧急/不紧急”和“重要/不重要”的组合结果，对您的任务进行最终归类，形成具体的行动策略。\n\n这些内容将会在画布中创建成思路，实体会创建成变量，实体的生成规则（define_prompt）会作为步骤的prompt，这些内容可以在画布中再次进行修改。\n如果您对这些内容不满意，也可以对chain_draft的描述进行修改，这些内容将会按照您的要求重新生成。",
+        "welcomeMessage": {
+            "model": {
+                "index": "G1",
+                "id": "binary_orthogonal",
+                "name": "Binary Orthogonal",
+                "domain": "时间管理",
+                "visual": "quadrant",
+                "description": "基于二元正交模型，实例化一个时间管理四象限法则，帮助用户对任务进行分类和优先级排序。",
+                "inherits": "base_model",
+                "visual_prompt": "时间维度, 任务维度",
+                "static_entities": [
+                    "时间维度",
+                    "任务维度"
+                ],
+                "entities": [
+                    {
+                        "id": "axis_x_time",
+                        "name": "时间维度",
+                        "prototype": "dimension",
+                        "define_baseset": [
+                            "primitive"
+                        ],
+                        "define_prompt": "定义模型的X轴，代表任务在时间上的属性（紧急/不紧急）。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": "时间维度"
+                    },
+                    {
+                        "id": "axis_y_task",
+                        "name": "任务维度",
+                        "prototype": "dimension",
+                        "define_baseset": [
+                            "primitive"
+                        ],
+                        "define_prompt": "定义模型的Y轴，代表任务对目标的重要性（重要/不重要）。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": "任务维度"
+                    },
+                    {
+                        "id": "x_positive_urgent",
+                        "name": "紧急",
+                        "prototype": "vector",
+                        "define_baseset": [
+                            "axis_x_time",
+                            "ThinkPoint"
+                        ],
+                        "define_prompt": "在X轴上的正向向量，代表“紧急”。根据 {{ThinkPoint}} 提取出所有需要立即处理的任务。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "x_negative_not_urgent",
+                        "name": "不紧急",
+                        "prototype": "vector",
+                        "define_baseset": [
+                            "axis_x_time",
+                            "ThinkPoint"
+                        ],
+                        "define_prompt": "在X轴上的负向向量，代表“不紧急”。根据 {{ThinkPoint}} 提取出所有可以推迟处理的任务。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "y_positive_important",
+                        "name": "重要",
+                        "prototype": "vector",
+                        "define_baseset": [
+                            "axis_y_task",
+                            "ThinkPoint"
+                        ],
+                        "define_prompt": "在Y轴上的正向向量，代表“重要”。根据 {{ThinkPoint}} 提取出所有对实现目标有重大意义的任务。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "y_negative_not_important",
+                        "name": "不重要",
+                        "prototype": "vector",
+                        "define_baseset": [
+                            "axis_y_task",
+                            "ThinkPoint"
+                        ],
+                        "define_prompt": "在Y轴上的负向向量，代表“不重要”。根据 {{ThinkPoint}} 提取出所有价值较低、可以忽略或授权的任务。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "quadrant_I_urgent_important",
+                        "name": "紧急且重要",
+                        "prototype": "quadrant",
+                        "define_baseset": [
+                            "x_positive_urgent",
+                            "y_positive_important"
+                        ],
+                        "define_prompt": "第一象限（紧急，重要）。结合 {{x_positive_urgent}} 和 {{y_positive_important}} 的任务，形成需要立即集中精力完成的核心任务列表。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "quadrant_II_not_urgent_important",
+                        "name": "不紧急但重要",
+                        "prototype": "quadrant",
+                        "define_baseset": [
+                            "x_negative_not_urgent",
+                            "y_positive_important"
+                        ],
+                        "define_prompt": "第二象限（不紧急，重要）。结合 {{x_negative_not_urgent}} 和 {{y_positive_important}} 的任务，形成需要制定计划、长期投入的任务列表。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "quadrant_III_not_urgent_not_important",
+                        "name": "不紧急且不重要",
+                        "prototype": "quadrant",
+                        "define_baseset": [
+                            "x_negative_not_urgent",
+                            "y_negative_not_important"
+                        ],
+                        "define_prompt": "第三象限（不紧急，不重要）。结合 {{x_negative_not_urgent}} 和 {{y_negative_not_important}} 的任务，形成可以减少、授权或剔除的任务列表。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "quadrant_IV_urgent_not_important",
+                        "name": "紧急但不重要",
+                        "prototype": "quadrant",
+                        "define_baseset": [
+                            "x_positive_urgent",
+                            "y_negative_not_important"
+                        ],
+                        "define_prompt": "第四象限（紧急，不重要）。结合 {{x_positive_urgent}} 和 {{y_negative_not_important}} 的任务，形成可以快速处理或授权他人的任务列表。",
+                        "occur": 1,
+                        "inherits": "base_entity",
+                        "value": ""
+                    },
+                    {
+                        "id": "x_flip_time_management",
+                        "name": "时间属性反转",
+                        "prototype": "symmetry",
+                        "define_baseset": [
+                            "axis_x_time"
+                        ],
+                        "define_prompt": "X轴对称关系，代表任务在“紧急”与“不紧急”之间的状态转换，例如通过拖延，一个不紧急的任务会变为紧急任务。",
+                        "occur": "1+",
+                        "inherits": "base_relation",
+                        "value": ""
+                    },
+                    {
+                        "id": "y_flip_task_management",
+                        "name": "重要性反转",
+                        "prototype": "symmetry",
+                        "define_baseset": [
+                            "axis_y_task"
+                        ],
+                        "define_prompt": "Y轴对称关系，代表任务在“重要”与“不重要”之间的状态转换，例如通过重新评估，一个不重要的任务可能变得重要。",
+                        "occur": "1+",
+                        "inherits": "base_relation",
+                        "value": ""
+                    },
+                    {
+                        "id": "diagonal_reverse_time_task",
+                        "name": "对角反转",
+                        "prototype": "symmetry",
+                        "define_baseset": [
+                            "x_flip_time_management",
+                            "y_flip_task_management"
+                        ],
+                        "define_prompt": "对角线反转关系，将任务从“紧急且重要”(第一象限)映射到“不紧急且不重要”(第三象限)，代表优先级的完全颠覆。",
+                        "occur": "1+",
+                        "inherits": "base_relation",
+                        "value": ""
+                    },
+                    {
+                        "id": "diagonal_swap_time_task",
+                        "name": "对角交换",
+                        "prototype": "symmetry",
+                        "define_baseset": [
+                            "x_flip_time_management",
+                            "y_flip_task_management"
+                        ],
+                        "define_prompt": "对角线交换关系，将任务从“不紧急但重要”(第二象限)映射到“紧急但不重要”(第四象限)，代表任务性质的转变。",
+                        "occur": "1+",
+                        "inherits": "base_relation",
+                        "value": ""
+                    }
+                ]
+            }
+        }
+    }
+}
