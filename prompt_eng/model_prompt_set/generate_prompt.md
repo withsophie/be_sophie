@@ -26,7 +26,7 @@
 3、用户输入自己对这个思路的思路构思
 4、深入理解用户的思路构思，套用模型定义，将思路构思中的内容形成模型实例（ModelInstance），具体的套用方法需要遵循模型实例生成规则
 5、将模型实例根据思路概述的方法，形成思路概述（chain_agenda）
-<<component:Fatal_Output02>>
+<<component:Fatal_Output01>>
 <!-- component end: main_prompt -->
 
 <!-- component start: Fatal_Output01 -->
@@ -86,7 +86,7 @@ format examples:
   * occur：和原entity一致
   * inherits：原entity的id
   * value：将define_baseset的值代入define_prompt中，得出的结果.所有在static_entities里的entity，value的值要被具体生成出来，其它的为“”。
-3、分析实例化完成后的ModelInstance，根据chain_draft的内容，从所有的entity中，选出在chain_draft中已经可以通过prompt，无需外部输入则可以生成value的entity，这些entity被列入static_entities。用这些entity的name生成static_entities，并使ModelInstance的 "visual_prompt"的内容为static_entities。
+3、分析实例化完成后的ModelInstance，根据chain_draft的内容，从所有的entity中，选出在chain_draft中已经可以通过prompt，无需外部输入则可以生成value的entity，这些entity被列入static_entities。
 找出这些entity中，不在static_entities中的，这些都是在思考时需要thinkpoint作为输入变量，才能得出结果的。这些entity，在它们的define_baseset后，增加ThinkPoint作为baseset中最后一个参数。
 4、根据chain_draft的内容和新的define_baseset，重新构建entity的define_prompt
 * 构建prompt的一些示例：
@@ -132,8 +132,9 @@ format examples:
 关键实体介绍：根据关键实体的define_prompt，介绍关键实体的生成函数
 关键实体的默认值：baseset为[primitive]的entity的value
 思路预设的实体：static_entities中的所有实体，显示它们的name和value
-思考输入的实体：不包含在static_entities中的entity，显示它们的name和value
-思考输入的实体的介绍：根据处理思考输入的实体的define_prompt，介绍它们的生成函数
+思考阶段需要生成的实体：不包含在static_entities中的entity，显示它们的name和value
+思考阶段需要生成的实体的介绍：根据处理思考输入的实体的define_prompt，介绍它们的生成函数
+思考阶段的执行步骤：按照从ThinkPoint开始，到最终形成结论，将所有的不包含在static_entities中的entity排列先后执行的次序，表达方式为：1.X、entity.name(entity.define_prompt),其中前面的序号表示第一批执行的步骤，用X的序号表示同一批中平行执行的步骤。
 
 
 这些内容将会在画布中创建成思路，实体会创建成变量，define_prompt会作为步骤的prompt，这些内容可以在画布中再次进行修改。
@@ -193,21 +194,21 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
     ```
 * 用户输入的变量命名为 `ThinkPoint`。
 
-#### step 3:生成步骤
-* 为每一个entity所生成的变量建立一个步骤，这个变量就是这个步骤的输出变量，步骤会根据变量的依赖关系（输入变量），为变量赋值，赋值的方式是这个变量对应的entity的prompt所定义的，而这个prompt就会被定义为步骤的prompt。在Prompt中，所有的变量引用都会用{{}}括起。
-* 首先创建类型为初始节点的步骤，这个步骤的输出变量为ThinkPoint
-* 从define_baseset=primitive的entities开始，完成所有的步骤建立
-* 根据该步骤的输出变量之间的依赖关系，建立步骤之间的前后序关系
-* 每一步的 Prompt 指令应参考这样的形式进行改写：“通过{{输入变量1}}和{{输入变量2}}的XXX分析/综合等行为（按entity中的prompt的指引），生成{{输出变量}}“
+#### step 2:生成步骤
+* 步骤的作用是使用entity的define_prompt所定义的方法，代入define_baseset中的entity的value，得出当前entity的value的过程。
+* 为每一个entity的value为空的entity所生成的变量建立一个步骤，这个变量就是这个步骤的输出变量。根据这个变量的entity的define_prompt，生成这个步骤的prompt。这个步骤prompt需要包含define_baseset中的entity和本步骤的输出变量，将这些entity对应的变量当作输入变量，所有变量都用{{}}括起来。
 * 每个变量生成完毕后写入 `varList`。
-* 最后一个步骤，其类型应该为10，这个步骤的目的是建立Model中的各个entity和chain中使用的变量的对应关系，应该形成modeVarMap中的ModelVar和变量的对应关系，映射方式应参考模型中的描述和变量的真正作用，modelVarMap中的ModelVarName，请根据ModelInstance所继承的Model中的entity的ID来确定。
+
+#### step 3:生成映射关系
+* 最后一个步骤，其类型应该为10，这个步骤的目的是建立Model中的各个entity和chain中使用的变量的对应关系
+* 按照变量的name（实体变量名）和Model中entity的ID（模式变量ID）的对应关系，参考ChainSchema的定义，生成Mode Variable Map Object
 
 
 #### Step 4：以符合schema的 JSON 输出结果**
 
-* 输出为一个整体思路级 JSON 对象，字段必须按照ChainSchema的定义，所有变量的值来自于前面的赋值过程。
+* 将上面生成的变量，步骤和ode Variable Map Object输出为一个整体思路级 JSON 对象，字段必须按照ChainSchema的定义，所有变量的值来自于前面的赋值过程。
 
-  * 依赖关系不作为 JSON 内容输出。
+  * 依赖关系不作为 JSON 内容输出，仅作为构建步骤间先后关系的依据
   * 检查所有 step 中的 `preID` 和 `nextID`，如果出现不一致的情况，请参照依赖关系重新调整，确保 step 的顺序描述的一致性。
 * 最后做一次格式检查，要求输出的结果严格符合json的格式要求。
 
