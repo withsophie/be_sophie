@@ -104,7 +104,7 @@
           "items": {
             "type": "string"
           },
-          "description": "输入变量数组，步骤执行所需的输入变量名称列表",
+          "description": "输入变量数组，步骤执行所需的输入变量名称列表,输入变量必须是前面步骤已存在的变量",
           "default": [],
           "example": ["inputText"]
         },
@@ -113,7 +113,7 @@
           "items": {
             "type": "string"
           },
-          "description": "输出变量数组，步骤执行后产生的输出变量名称列表,但每个步骤只有1个输出变量",
+          "description": "输出变量数组，步骤执行后产生的输出变量名称列表,但每个步骤只有1个输出变量,且必须在stepPrompt 包含体现 如:{{变量名}}",
           "default": [],
           "example": ["keyInfo"]
         },
@@ -140,8 +140,8 @@
 				"properties": {
 				  "stepPrompt": {
 					"type": "string",
-					"description": "步骤 prompt，用于指导大模型生成内容的具体提示文本",
-                    "example": "请总结以下文本的主要观点：{{inputText}}"
+					"description": "步骤 prompt，用于指导大模型生成内容的具体提示文本,可以使用0个或多个输入变量，但只能有一个输出变量。变量在当前步骤之前没有定义则为输出变量，变量格式：{变量名}} ；stepOutVars,stepInVars 中的变量必须都要体现",
+                    "example": "请总结以下文本的主要观点：{{变量名A}}"
 				  }
 				}
 			  }
@@ -267,7 +267,7 @@
       "properties": {
         "varName": {
           "type": "string",
-          "description": "实体变量名",
+          "description": "实体变量名:  对应ChainSchema中：Variable Object->varName",
           "example": "总结结果"
         },
         "modelVarId": {
@@ -277,8 +277,8 @@
         },
         "modelVarName": {
           "type": "string",
-          "description": "模式变量名称",
-          "example": "模式输出变量 1"
+          "description": "模式变量名称，对应模型定义的变量 name",
+          "example": ""
         },
         "varId": {
           "type": "integer",
@@ -355,7 +355,7 @@
         },
         "stepId": {
           "type": "string",
-          "description": "与此变量关联的步骤 ID",
+          "description": "表示此变量是某一步骤的输出变量",
           "example": "1909528709373546496"
         },
         "varType": {

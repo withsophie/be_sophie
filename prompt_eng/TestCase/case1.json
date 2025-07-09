@@ -1,17 +1,527 @@
 {
-    "summary": "通过对您构思的理解，我们会帮您创建一个解决这类问题的思路，并展现在画布中，您可以在这个基本思路的基础之上，进行进一步的修改。\n思路名称： 测试1111 \n思路领域：时间管理\n思路所采用的模型：Binary Orthogonal Model，这是一个使用两个概念轴（X和Y）形成四个复合象限实体的象限模型。\n思路能处理的问题类型：帮助用户（特别是职场人士）对任务进行分类，明确优先级，从而高效地进行时间管理，制定工作策略，减少拖延，并寻求工作与生活的平衡。\n思考输入内容：用户需要输入的待办事项、任务列表或任何需要进行优先级排序和管理的工作/生活内容（我们称之为ThinkPoint）。\n思路输出结果的类型： 解决方案与策略\n构建这个思路的关键实体为：紧急性维度、重要性维度\n关键实体介绍：\n- 紧急性维度: 代表任务紧急程度的评估维度，从不紧急到紧急。\n- 重要性维度: 代表任务重要程度的评估维度，从不重要到重要。\n关键实体的默认值：\n- 紧急性维度: 紧急性\n- 重要性维度: 重要性\n思路预设的实体：\n- 紧急性维度: 紧急性\n- 重要性维度: 重要性\n- 紧急: 紧急\n- 不紧急: 不紧急\n- 重要: 重要\n- 不重要: 不重要\n- 紧急性管理策略: 描述一项策略，用于主动管理任务的紧急性。例如，通过'计划'（将象限I的任务移至象限II）或'预防'（防止象限II的任务演变为象限I的任务），来降低紧急任务的数量。\n- 重要性管理策略: 描述一项策略，用于重新评估任务的重要性。例如，通过'增值'（对象限II的任务投入更多资源，提升其价值）或'简化'（将象限IV的任务简化或自动化，降低其干扰）。\n- 核心焦点转移策略: 描述一种根本性的工作模式转变。它代表了从'救火模式'（处理紧急重要任务，象限I）到'精简模式'（削减不紧急不重要任务，象限III）的转变，旨在优化资源配置。\n- 预防性授权策略: 描述一种在'战略规划'和'日常干扰'之间的权衡与转换。它代表了将'计划任务'（象限II）与'干扰任务'（象限IV）进行有效管理和授权的策略，确保重要事务的优先性。\n思考阶段需要生成的实体：\n- 第一象限：立即执行: \n- 第二象限：计划执行: \n- 第三象限：委托或减少: \n- 第四象限：委托他人: \n思考阶段需要生成的实体的介绍：\n- 第一象限：立即执行: 从{{ThinkPoint}}中筛选出所有紧急且重要的任务，形成'立即执行'任务列表。\n- 第二象限：计划执行: 从{{ThinkPoint}}中筛选出所有不紧急但重要的任务，形成'计划执行'任务列表。\n- 第三象限：委托或减少: 从{{ThinkPoint}}中筛选出所有不紧急且不重要的任务，形成'委托或减少'任务列表。\n- 第四象限：委托他人: 从{{ThinkPoint}}中筛选出所有紧急但不重要的任务，形成'委托他人'任务列表。\n
-    
-    思考阶段的执行步骤：\n
-    1.1. 紧急性维度(代表任务紧急程度的评估维度，从不紧急到紧急。)\n
-    1.2. 重要性维度(代表任务重要程度的评估维度，从不重要到重要。)\n
-    2.1. 紧急(紧急性维度的正向，代表需要立即处理的任务。)\n
-    2.2. 不紧急(紧急性维度的负向，代表可以推迟处理的任务。)\n
-    2.3. 重要(重要性维度的正向，代表对长期目标有重大影响的任务。)\n
-    2.4. 不重要(重要性维度的负向，代表对长期目标影响较小的任务。)\n
-    3.1. 第一象限：立即执行(从{{ThinkPoint}}中筛选出所有{{紧急}}且{{重要}}的任务，形成'立即执行'任务列表。)\n
-    3.2. 第二象限：计划执行(从{{ThinkPoint}}中筛选出所有{{不紧急}}但{{重要}}的任务，形成'计划执行'任务列表。)\n
-    3.3. 第三象限：委托或减少(从{{ThinkPoint}}中筛选出所有{{不紧急}}且{{不重要}}的任务，形成'委托或减少'任务列表。)\n
-    3.4. 第四象限：委托他人(从{{ThinkPoint}}中筛选出所有{{紧急}}但{{不重要}}的任务，形成'委托他人'任务列表。)
-    
-    \n\n这些内容将会在画布中创建成思路，实体会创建成变量，define_prompt会作为步骤的prompt，这些内容可以在画布中再次进行修改。\n如果您对这些内容不满意，也可以对chain_draft的描述进行修改，这些内容将会按照您的要求重新生成。\n对描述的修改可以继续细化您的需求，也可以直接指定思路的内容。\n如：请将axis_x中的define_prompt改为\"The X-axis representing opposing conceptual vectors.\""
-  },
+  "termList": [],
+  "modelId": "binary_orthogonal",
+  "varList": [
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "team_member_descriptions",
+      "varLevel": 0,
+      "varDesc": "团队成员的创新能力和执行力描述",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_2",
+      "id": 1,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "innovation_axis",
+      "varLevel": 0,
+      "varDesc": "创新能力轴",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_3",
+      "id": 2,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "execution_axis",
+      "varLevel": 0,
+      "varDesc": "执行力轴",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_4",
+      "id": 3,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "high_innovation",
+      "varLevel": 0,
+      "varDesc": "高创新",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_5",
+      "id": 4,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "low_innovation",
+      "varLevel": 0,
+      "varDesc": "低创新",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_6",
+      "id": 5,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "high_execution",
+      "varLevel": 0,
+      "varDesc": "高执行",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_7",
+      "id": 6,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "low_execution",
+      "varLevel": 0,
+      "varDesc": "低执行",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_8",
+      "id": 7,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "quadrant_I",
+      "varLevel": 0,
+      "varDesc": "第一象限",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_9",
+      "id": 8,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "quadrant_II",
+      "varLevel": 0,
+      "varDesc": "第二象限",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_10",
+      "id": 9,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "quadrant_III",
+      "varLevel": 0,
+      "varDesc": "第三象限",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_11",
+      "id": 10,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "quadrant_IV",
+      "varLevel": 0,
+      "varDesc": "第四象限",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_12",
+      "id": 11,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "team_member_quadrant_positions",
+      "varLevel": 0,
+      "varDesc": "团队成员在象限中的位置",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_13",
+      "id": 12,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "x_axis_symmetry",
+      "varLevel": 0,
+      "varDesc": "X轴对称关系",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_14",
+      "id": 13,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "y_axis_symmetry",
+      "varLevel": 0,
+      "varDesc": "Y轴对称关系",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_15",
+      "id": 14,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "diagonal_reverse_relationship",
+      "varLevel": 0,
+      "varDesc": "对角线反转关系",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_16",
+      "id": 15,
+      "childs": null,
+      "parentId": null
+    },
+    {
+      "trainId": "test002",
+      "varType": 1,
+      "varName": "improvement_suggestions",
+      "varLevel": 0,
+      "varDesc": "提升团队整体表现的建议",
+      "varFormat": "",
+      "defaultValue": null,
+      "stepId": "step_17",
+      "id": 16,
+      "childs": null,
+      "parentId": null
+    }
+  ],
+  "trainName": "团队成员分析",
+  "welcomeMessage": "请输入团队成员的创新能力和执行力描述。",
+  "trainDesc": "使用二元正交象限模型分析团队成员在创新能力和执行力两个维度上的表现。",
+  "id": "test002",
+  "stepList": [
+    {
+      "trainId": "test002",
+      "preId": "",
+      "nextId": "step_2",
+      "stepTerms": [],
+      "stepType": 9,
+      "stepDesc": "思路起始节点",
+      "stepInVars": [],
+      "stepName": "起始节点",
+      "id": "step_1",
+      "stepOutVars": []
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_1",
+      "nextId": "step_3,step_4,step_5,step_6,step_7,step_8,step_9,step_10,step_11,step_12",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "获取用户输入的团队成员的创新能力和执行力描述。",
+      "stepInVars": [],
+      "stepName": "获取团队成员描述",
+      "id": "step_2",
+      "stepOutVars": [
+        "team_member_descriptions"
+      ],
+      "stepPrompt": "请输入团队成员的创新能力和执行力描述，例如：张三：善于提出新想法，但执行力一般；李四：创新能力一般，但执行力很强；王五：既有创新能力，也能很好地推动落地；赵六：创新和执行都比较弱。"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义创新能力轴的名称。",
+      "stepInVars": [],
+      "stepName": "定义创新能力轴",
+      "id": "step_3",
+      "stepOutVars": [
+        "innovation_axis"
+      ],
+      "stepPrompt": "创新能力"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义执行力轴的名称。",
+      "stepInVars": [],
+      "stepName": "定义执行力轴",
+      "id": "step_4",
+      "stepOutVars": [
+        "execution_axis"
+      ],
+      "stepPrompt": "执行力"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义高创新的名称。",
+      "stepInVars": [],
+      "stepName": "定义高创新",
+      "id": "step_5",
+      "stepOutVars": [
+        "high_innovation"
+      ],
+      "stepPrompt": "高创新"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义低创新的名称。",
+      "stepInVars": [],
+      "stepName": "定义低创新",
+      "id": "step_6",
+      "stepOutVars": [
+        "low_innovation"
+      ],
+      "stepPrompt": "低创新"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义高执行的名称。",
+      "stepInVars": [],
+      "stepName": "定义高执行",
+      "id": "step_7",
+      "stepOutVars": [
+        "high_execution"
+      ],
+      "stepPrompt": "高执行"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义低执行的名称。",
+      "stepInVars": [],
+      "stepName": "定义低执行",
+      "id": "step_8",
+      "stepOutVars": [
+        "low_execution"
+      ],
+      "stepPrompt": "低执行"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义第一象限的名称。",
+      "stepInVars": [],
+      "stepName": "定义第一象限",
+      "id": "step_9",
+      "stepOutVars": [
+        "quadrant_I"
+      ],
+      "stepPrompt": "创新高，执行高"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义第二象限的名称。",
+      "stepInVars": [],
+      "stepName": "定义第二象限",
+      "id": "step_10",
+      "stepOutVars": [
+        "quadrant_II"
+      ],
+      "stepPrompt": "创新低，执行高"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义第三象限的名称。",
+      "stepInVars": [],
+      "stepName": "定义第三象限",
+      "id": "step_11",
+      "stepOutVars": [
+        "quadrant_III"
+      ],
+      "stepPrompt": "创新低，执行低"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_2",
+      "nextId": "step_13",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "定义第四象限的名称。",
+      "stepInVars": [],
+      "stepName": "定义第四象限",
+      "id": "step_12",
+      "stepOutVars": [
+        "quadrant_IV"
+      ],
+      "stepPrompt": "创新高，执行低"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_3,step_4,step_5,step_6,step_7,step_8,step_9,step_10,step_11,step_12,step_2",
+      "nextId": "step_14,step_15,step_16,step_17",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "根据团队成员的创新能力和执行力，将其分配到对应的象限中。",
+      "stepInVars": [
+        "team_member_descriptions",
+        "innovation_axis",
+        "execution_axis",
+        "high_innovation",
+        "low_innovation",
+        "high_execution",
+        "low_execution",
+        "quadrant_I",
+        "quadrant_II",
+        "quadrant_III",
+        "quadrant_IV"
+      ],
+      "stepName": "分析团队成员在象限中的位置",
+      "id": "step_13",
+      "stepOutVars": [
+        "team_member_quadrant_positions"
+      ],
+      "stepPrompt": "根据以下团队成员的描述：{{team_member_descriptions}}，以及创新能力轴：{{innovation_axis}}，执行力轴：{{execution_axis}}，高创新：{{high_innovation}}，低创新：{{low_innovation}}，高执行：{{high_execution}}，低执行：{{low_execution}}，第一象限：{{quadrant_I}}，第二象限：{{quadrant_II}}，第三象限：{{quadrant_III}}，第四象限：{{quadrant_IV}}，将团队成员分配到合适的象限，并说明每个象限的典型特征。"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_13",
+      "nextId": "step_18",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "找出创新能力相反但执行力相同的成员。",
+      "stepInVars": [
+        "team_member_quadrant_positions",
+        "innovation_axis",
+        "execution_axis"
+      ],
+      "stepName": "找出X轴对称关系",
+      "id": "step_14",
+      "stepOutVars": [
+        "x_axis_symmetry"
+      ],
+      "stepPrompt": "根据团队成员在象限中的位置：{{team_member_quadrant_positions}}，以及创新能力轴：{{innovation_axis}}，执行力轴：{{execution_axis}}，找出创新能力相反但执行力相同的成员。"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_13",
+      "nextId": "step_18",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "找出执行力相反但创新能力相同的成员。",
+      "stepInVars": [
+        "team_member_quadrant_positions",
+        "innovation_axis",
+        "execution_axis"
+      ],
+      "stepName": "找出Y轴对称关系",
+      "id": "step_15",
+      "stepOutVars": [
+        "y_axis_symmetry"
+      ],
+      "stepPrompt": "根据团队成员在象限中的位置：{{team_member_quadrant_positions}}，以及创新能力轴：{{innovation_axis}}，执行力轴：{{execution_axis}}，找出执行力相反但创新能力相同的成员。"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_13",
+      "nextId": "step_18",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "找出创新能力和执行力都相反的成员。",
+      "stepInVars": [
+        "team_member_quadrant_positions",
+        "innovation_axis",
+        "execution_axis"
+      ],
+      "stepName": "找出对角线反转关系",
+      "id": "step_16",
+      "stepOutVars": [
+        "diagonal_reverse_relationship"
+      ],
+      "stepPrompt": "根据团队成员在象限中的位置：{{team_member_quadrant_positions}}，以及创新能力轴：{{innovation_axis}}，执行力轴：{{execution_axis}}，找出创新能力和执行力都相反的成员。"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_13",
+      "nextId": "step_18",
+      "stepTerms": [],
+      "stepType": 1,
+      "stepDesc": "分析如果要提升团队整体表现，建议优先关注哪个象限的成员，并说明原因。",
+      "stepInVars": [
+        "team_member_quadrant_positions",
+        "innovation_axis",
+        "execution_axis",
+        "high_innovation",
+        "low_innovation",
+        "high_execution",
+        "low_execution",
+        "quadrant_I",
+        "quadrant_II",
+        "quadrant_III",
+        "quadrant_IV"
+      ],
+      "stepName": "分析提升团队整体表现的建议",
+      "id": "step_17",
+      "stepOutVars": [
+        "improvement_suggestions"
+      ],
+      "stepPrompt": "根据团队成员在象限中的位置：{{team_member_quadrant_positions}}，以及创新能力轴：{{innovation_axis}}，执行力轴：{{execution_axis}}，高创新：{{high_innovation}}，低创新：{{low_innovation}}，高执行：{{high_execution}}，低执行：{{low_execution}}，第一象限：{{quadrant_I}}，第二象限：{{quadrant_II}}，第三象限：{{quadrant_III}}，第四象限：{{quadrant_IV}}，如果要提升团队整体表现，建议优先关注哪个象限的成员？为什么？"
+    },
+    {
+      "trainId": "test002",
+      "preId": "step_14,step_15,step_16,step_17",
+      "nextId": "",
+      "stepTerms": [],
+      "stepType": 10,
+      "stepDesc": "思路结束节点",
+      "stepInVars": [
+        "team_member_quadrant_positions",
+        "x_axis_symmetry",
+        "y_axis_symmetry",
+        "diagonal_reverse_relationship",
+        "improvement_suggestions"
+      ],
+      "stepName": "结束节点",
+      "modelVarMap": [],
+      "id": "step_18",
+      "stepOutVars": []
+    }
+  ]
+}

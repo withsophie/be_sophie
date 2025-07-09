@@ -52,6 +52,7 @@ format examples:
 ```
 <!-- component end: Chain_draft -->
 <!-- component start: entity_of_model -->
+
 ``` json
 <<entity_yaml_of_model>>
 ```
@@ -182,7 +183,7 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 #### Step 1：理解所有的entity，并根据Model建立变量
 
 * 将ModelInstance中的所有entity都生成为变量，
-* 变量的命名方法：varName=entityID
+* 变量的命名方法：varName=entityName
 * 所有变量必须依次记录进 `TotalvarList`（即变量清单）。
 * 根据该entity的baseset确定该变量的依赖关系，依赖关系的示例如下：
     ```json
@@ -196,12 +197,16 @@ entities.inherits:代表这个entity的父entity，其来自其父model所对应
 
 #### step 2:生成步骤
 * 步骤的作用是使用entity的define_prompt所定义的方法，代入define_baseset中的entity的value，得出当前entity的value的过程。
-* 为每一个entity的value为空的entity所生成的变量建立一个步骤，这个变量就是这个步骤的输出变量。根据这个变量的entity的define_prompt，生成这个步骤的prompt。这个步骤prompt需要包含define_baseset中的entity和本步骤的输出变量，将这些entity对应的变量当作输入变量，所有变量都用{{}}括起来。
+* 为每一个entity的value为空的entity所生成的变量建立一个步骤，这个变量就是这个步骤的输出变量。根据这个变量的entity的define_prompt，生成这个步骤的stepPrompt。这个stepPrompt中必须出现define_baseset中的entity和本步骤的stepOutVars，将这些entity对应的变量当作执行stepPrompt的输入变量，stepOutVars是stepPrompt的执行结果，step所有变量都用{{}}括起来。
 * 每个变量生成完毕后写入 `varList`。
 
 #### step 3:生成映射关系
 * 最后一个步骤，其类型应该为10，这个步骤的目的是建立Model中的各个entity和chain中使用的变量的对应关系
-* 按照变量的name（实体变量名）和Model中entity的ID（模式变量ID）的对应关系，参考ChainSchema的定义，生成Mode Variable Map Object
+* 如果step type为10，则必须按照变量的name（实体变量名）和Model中entity的ID（模式变量ID）建立对应关系。
+* 对应关系的建立规则是：
+  * 对应关系应该是一一对应的，也就是每个实体变量和每个模式变量相互只能唯一对应，不得重复
+  * 对应关系应尽量全面，所有的实体变量和模式变量应该尽量全覆盖
+  * 参考ChainSchema的定义，生成modelVarMap，作为这个步骤的一部分。modelVarMap中的modelVarName和modelVarId必须和entity_of_model中的保持一致。
 
 
 #### Step 4：以符合schema的 JSON 输出结果**

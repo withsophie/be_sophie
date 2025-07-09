@@ -1,0 +1,304 @@
+{
+    "termList": [],
+    "modelId": "35",
+    "varList": [
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "user_question",
+            "varLevel": 0,
+            "varDesc": "用户的问题或描述",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_0",
+            "id": 1,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "future_oriented",
+            "varLevel": 0,
+            "varDesc": "用户是否未来导向",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_1",
+            "id": 2,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "past_oriented",
+            "varLevel": 0,
+            "varDesc": "用户是否过去导向",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_2",
+            "id": 3,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "internal_power",
+            "varLevel": 0,
+            "varDesc": "用户权力来源是否为内部",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_3",
+            "id": 4,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "external_power",
+            "varLevel": 0,
+            "varDesc": "用户权力来源是否为外部",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_4",
+            "id": 5,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "identified_quadrant",
+            "varLevel": 0,
+            "varDesc": "识别出的目标追求象限",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_5",
+            "id": 6,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "quadrant_reasoning",
+            "varLevel": 0,
+            "varDesc": "象限归类的理由",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_6",
+            "id": 7,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "quadrant_behavior_description",
+            "varLevel": 0,
+            "varDesc": "象限内行为模式的简要描述",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_7",
+            "id": 8,
+            "childs": null,
+            "parentId": null
+        },
+        {
+            "trainId": "chain_test002",
+            "varType": 1,
+            "varName": "recommended_actions",
+            "varLevel": 0,
+            "varDesc": "针对该象限的推荐行为策略",
+            "varFormat": "",
+            "defaultValue": null,
+            "stepId": "step_8",
+            "id": 9,
+            "childs": null,
+            "parentId": null
+        }
+    ],
+    "trainName": "test002",
+    "welcomeMessage": "请输入您的问题或描述，我将为您分析其目标追求象限。",
+    "trainDesc": "根据用户的问题判断其属于哪一个目标追求象限（时间取向 vs 权力来源）并进行分析",
+    "id": "chain_test002",
+    "stepList": [
+        {
+            "trainId": "chain_test002",
+            "preId": "",
+            "nextId": "step_1,step_2,step_3,step_4",
+            "stepType": 9,
+            "stepDesc": "用户输入其问题或描述，作为分析的起点。",
+            "stepInVars": [],
+            "stepName": "用户问题输入",
+            "id": "step_0",
+            "stepOutVars": [
+                "user_question"
+            ]
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_0",
+            "nextId": "step_5",
+            "stepType": 1,
+            "stepDesc": "从用户问题中识别其是否具有未来导向。",
+            "stepInVars": [
+                "user_question"
+            ],
+            "stepName": "识别未来导向",
+            "id": "step_1",
+            "stepOutVars": [
+                "future_oriented"
+            ],
+            "stepPrompt": "Analyze the {{user_question}} to determine if the user's perspective is primarily focused on the future. Output 'future' if true, otherwise 'not future'. The result should be stored in {{future_oriented}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_0",
+            "nextId": "step_5",
+            "stepType": 1,
+            "stepDesc": "从用户问题中识别其是否具有过去导向。",
+            "stepInVars": [
+                "user_question"
+            ],
+            "stepName": "识别过去导向",
+            "id": "step_2",
+            "stepOutVars": [
+                "past_oriented"
+            ],
+            "stepPrompt": "Analyze the {{user_question}} to determine if the user's perspective is primarily focused on the past. Output 'past' if true, otherwise 'not past'. The result should be stored in {{past_oriented}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_0",
+            "nextId": "step_5",
+            "stepType": 1,
+            "stepDesc": "从用户问题中识别其权力来源是否为内部。",
+            "stepInVars": [
+                "user_question"
+            ],
+            "stepName": "识别内部权力来源",
+            "id": "step_3",
+            "stepOutVars": [
+                "internal_power"
+            ],
+            "stepPrompt": "Analyze the {{user_question}} to determine if the user perceives their power or control as originating from internal factors (e.g., personal effort, skills). Output 'internal' if true, otherwise 'not internal'. The result should be stored in {{internal_power}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_0",
+            "nextId": "step_5",
+            "stepType": 1,
+            "stepDesc": "从用户问题中识别其权力来源是否为外部。",
+            "stepInVars": [
+                "user_question"
+            ],
+            "stepName": "识别外部权力来源",
+            "id": "step_4",
+            "stepOutVars": [
+                "external_power"
+            ],
+            "stepPrompt": "Analyze the {{user_question}} to determine if the user perceives their power or control as originating from external factors (e.g., luck, other people, circumstances). Output 'external' if true, otherwise 'not external'. The result should be stored in {{external_power}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_1,step_2,step_3,step_4",
+            "nextId": "step_6,step_7,step_8",
+            "stepType": 1,
+            "stepDesc": "根据时间取向和权力来源，确定用户问题所属的象限。",
+            "stepInVars": [
+                "future_oriented",
+                "past_oriented",
+                "internal_power",
+                "external_power"
+            ],
+            "stepName": "确定目标追求象限",
+            "id": "step_5",
+            "stepOutVars": [
+                "identified_quadrant"
+            ],
+            "stepPrompt": "Based on whether the user's perspective is 'future' (from {{future_oriented}}) or 'past' (from {{past_oriented}}), and whether their power source is 'internal' (from {{internal_power}}) or 'external' (from {{external_power}}), determine which of the four quadrants (Quadrant I: Future-Internal, Quadrant II: Past-Internal, Quadrant III: Past-External, Quadrant IV: Future-External) the user's question falls into. Output the quadrant name (e.g., 'quadrant_I_future_internal'). The result should be stored in {{identified_quadrant}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_5",
+            "nextId": "step_9",
+            "stepType": 1,
+            "stepDesc": "为象限归类提供详细的逻辑说明。",
+            "stepInVars": [
+                "identified_quadrant",
+                "user_question",
+                "future_oriented",
+                "past_oriented",
+                "internal_power",
+                "external_power"
+            ],
+            "stepName": "生成归类理由",
+            "id": "step_6",
+            "stepOutVars": [
+                "quadrant_reasoning"
+            ],
+            "stepPrompt": "Based on the {{identified_quadrant}} for the {{user_question}}, explain the reasoning by referencing the identified time orientation ({{future_oriented}} or {{past_oriented}}) and power source ({{internal_power}} or {{external_power}}) aspects. The reasoning should be stored in {{quadrant_reasoning}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_5",
+            "nextId": "step_9",
+            "stepType": 1,
+            "stepDesc": "描述该象限内常见的行为模式和人物特征。",
+            "stepInVars": [
+                "identified_quadrant"
+            ],
+            "stepName": "生成象限行为模式描述",
+            "id": "step_7",
+            "stepOutVars": [
+                "quadrant_behavior_description"
+            ],
+            "stepPrompt": "Provide a brief description of the typical behavioral patterns and characteristics associated with the {{identified_quadrant}}. The description should be stored in {{quadrant_behavior_description}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_5",
+            "nextId": "step_9",
+            "stepType": 1,
+            "stepDesc": "针对该象限提供推荐的行动策略。",
+            "stepInVars": [
+                "identified_quadrant"
+            ],
+            "stepName": "生成推荐行动策略",
+            "id": "step_8",
+            "stepOutVars": [
+                "recommended_actions"
+            ],
+            "stepPrompt": "Suggest actionable strategies and recommendations tailored for individuals or situations that fall into the {{identified_quadrant}}. The recommendations should be stored in {{recommended_actions}}."
+        },
+        {
+            "trainId": "chain_test002",
+            "preId": "step_6,step_7,step_8",
+            "nextId": "",
+            "stepType": 10,
+            "stepDesc": "目标追求象限分析完成，输出结果。",
+            "stepInVars": [
+                "identified_quadrant",
+                "quadrant_reasoning",
+                "quadrant_behavior_description",
+                "recommended_actions"
+            ],
+            "trainModelGraphPrompt": "",
+            "stepName": "分析完成",
+            "modelVarMap": [
+                {
+                    "varName": "identified_quadrant",
+                    "modelVarId": "quadrant_I",
+                    "modelVarName": "{{quadrant_I}}",
+                    "varId": 6
+                }
+            ],
+            "generationPrompts": [],
+            "id": "step_9",
+            "stepOutVars": []
+        }
+    ]
+}
